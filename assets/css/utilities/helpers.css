@@ -217,7 +217,25 @@
 
 @media (max-width: 480px) {
   .carousel-item.active .quad {
-    padding: 6px;
+    padding: 4px;
+  }
+  
+  .carousel-item.active .quad h1 {
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  
+  .carousel-item.active .quad h2 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  
+  .carousel-item.active .quad p {
+    font-size: 0.7rem;
+    margin-bottom: 4px;
+    line-height: 1.3;
   }
 }
 

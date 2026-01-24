@@ -1,271 +1,214 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Melatonin">
-  <meta name="theme-color" content="#000000">
-  <title>Farewells</title>
-  
-  <!-- CSS Styles -->
-  <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=Syne:wght@700;800&display=swap">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Melatonin">
+    <meta name="theme-color" content="#000000">
+    <title>Farewells</title>
+
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=Syne:wght@700;800&display=swap">
 </head>
 <body>
-  <!-- Header -->
-  <header class="page-title page-title--top">
+<!-- Header -->
+<header class="page-title page-title--top">
     <h1 class="text-left large-heading">MELATONIN*</h1>
     <p class="text-right text-uppercase letter-spacing-wide accent-color">
-      <a href="https://t.me/melatoninm" target="_blank" rel="noopener">TELEGRAM</a> |
-      <a href="https://www.instagram.com/mellattonnin" target="_blank" rel="noopener">INSTAGRAM</a> |
-      <a href="https://vk.ru/club234429917" target="_blank" rel="noopener">VKONTAKTE</a>
+        <a href="https://t.me/melatoninm" target="_blank" rel="noopener">TELEGRAM</a> |
+        <a href="https://www.instagram.com/mellattonnin" target="_blank"
+           rel="noopener">INSTAGRAM</a> |
+        <a href="https://vk.ru/club234429917" target="_blank" rel="noopener">VKONTAKTE</a>
     </p>
-  </header>
+</header>
 
-  <!-- Background Layers -->
-  <div class="bg" aria-hidden="true">
+<!-- Background Layers -->
+<div class="bg" aria-hidden="true">
     <div class="bg__layer" id="bgA"></div>
     <div class="bg__layer" id="bgB"></div>
-  </div>
+</div>
 
-  <!-- Tiled Background Canvas -->
-  <div class="img-strip__grid" id="wall">
+<!-- Tiled Background Canvas -->
+<div class="img-strip__grid" id="wall">
     <div class="img-strip" id="strip">
-      <img id="srcImg" src="assets/img/mi(1).jpeg" alt="Background source image">
-      <canvas id="stripCanvas"></canvas>
+        <img id="srcImg" src="assets/img/mi(1).jpeg" alt="Background source image">
+        <canvas id="stripCanvas"></canvas>
     </div>
-  </div>
+</div>
 
-  <!-- Introduction Panel -->
-  <section class="panel">
+<!-- Introduction Panel -->
+<section class="panel">
     <div class="panel__inner">
-      <div class="panel__col reveal">
-        <h2>Альтернативная группа с элементами инди и шугейза. В основе звучания — женский вокал и экспериментальный инструментал с мягкой, спокойной атмосферой</h2>
-      </div>
+        <div class="panel__col reveal">
+            <h2>Альтернативная группа с элементами инди и шугейза. В основе звучания — женский вокал
+                и экспериментальный инструментал с мягкой, спокойной атмосферой</h2>
+        </div>
     </div>
-  </section>
+</section>
 
-  <!-- Album Information Panel -->
-  <section class="panel">
+<!-- Album Information Panel -->
+<section class="panel">
     <div class="panel__inner">
-      <div class="panel__col reveal">
-        <h1>Farewells</h1>
-        <p class="text-uppercase letter-spacing-wide accent-color mb-40">
-          Farewells — альбом о прощании со сном. Мы старались передать желание вернуться в теплое прошлое, в воспоминание, которое не получается забыть до конца. Многие сталкивались с моментом, когда невыразимо хотелось вернуться назад. Но прошлое осталось только начертанием в голове, почти забытым. Его больше не получится пережить, послушать, пересмотреть. Только вспоминать.
-        </p>
-      </div>
-      <div class="panel__col reveal">
-        <div class="grid-album">
-          <div class="custom-player">
-            <audio id="album-audio" preload="metadata">
-              <source src="assets/music/5+.mp3" type="audio/mpeg">
-            </audio>
-            <div class="player-artwork">
-              <img src="https://sun9-84.vkuserphoto.ru/s/v1/ig2/HydlIMpge91xdLHkWGkMR_BBhXzDZ4EX8GEUggolMnfXU_iw7oamAjkEnwGufQQ1_NkyIS2jEJ6p6aCRhpDjLf5C.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x161,240x241,360x362,480x482,540x543,640x643,720x723,1080x1085,1274x1280&from=bu&cs=1274x0" alt="Album Artwork" class="artwork-image">
-            </div>
-            <div class="player-controls">
-              <div class="track-info">
-                <h3 class="track-title">Farewells</h3>
-                <p class="track-artist">Melatonin</p>
-              </div>
-              <div class="control-buttons">
-                <button class="play-pause-btn" onclick="togglePlayer(this)" aria-label="Play/Pause">
-                  <span class="play-icon">▶</span>
-                  <span class="pause-icon" style="display:none;">⏸</span>
-                </button>
-                <div class="progress-container">
-                  <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%"></div>
-                  </div>
-                  <div class="time-display">
-                    <span class="current-time">0:00</span>
-                    <span class="total-time">0:00</span>
-                  </div>
+        <div class="panel__col reveal">
+            <h1>Farewells</h1>
+            <p class="text-uppercase letter-spacing-wide accent-color mb-40">
+                Farewells — альбом о прощании со сном. Мы старались передать желание вернуться в
+                теплое прошлое, в воспоминание, которое не получается забыть до конца. Многие
+                сталкивались с моментом, когда невыразимо хотелось вернуться назад. Но прошлое
+                осталось только начертанием в голове, почти забытым. Его больше не получится
+                пережить, послушать, пересмотреть. Только вспоминать.
+            </p>
+        </div>
+        <div class="panel__col reveal">
+            <div class="custom-player">
+                <audio id="album-audio" preload="metadata">
+                    <source src="assets/music/till_the_end.mp3" type="audio/mpeg">
+                </audio>
+                <div class="player-artwork" onclick="openLightbox(this)" role="button"
+                     tabindex="0" aria-label="Album cover photo">
+                    <img src="assets/img/album_cover.jpg"
+                         alt="Album Artwork" class="artwork-image">
+                    <button class="fullscreen-btn"
+                            onclick="toggleFullscreen(this.parentElement)"
+                            aria-label="Fullscreen">⛶
+                    </button>
                 </div>
-              </div>
+                <div class="player-controls">
+                    <div class="track-info">
+                        <h3 class="track-title text-center">Till The End</h3>
+                        <p class="track-artist text-center">Melatonin</p>
+                    </div>
+                    <div class="control-buttons">
+                        <button class="play-pause-btn" onclick="togglePlayer(this)"
+                                aria-label="Play/Pause">
+                            <span class="play-icon">▶</span>
+                            <span class="pause-icon" style="display:none;">⏸</span>
+                        </button>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <div class="time-display">
+                                <span class="current-time">0:00</span>
+                                <span class="total-time">0:00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="album-text">
-            <p>Музыка, которая погружает в атмосферу светлой грусти и ностальгии. Доступно на всех площадках.</p>
-          </div>
         </div>
-      </div>
     </div>
-  </section>
+</section>
 
-  <!-- Promo Videos Panel -->
-  <section class="panel">
+<!-- Promo Videos Panel -->
+<section class="panel">
     <div class="panel__inner panel__inner--quad">
-      <div class="quad reveal">
-        <h1>Promo</h1>
-        <p class="text-uppercase letter-spacing-wide accent-color mb-40">
-          В качестве промо для альбома мы выпустили серию роликов в социальных сетях со звуком с концертов
-        </p>
-      </div>
-
-      <div class="quad reveal">
-        <div class="media-wrapper ratio-16-9">
-          <button class="fullscreen-btn" onclick="toggleFullscreen(this.parentElement)" aria-label="Fullscreen">⛶</button>
-          <iframe src="https://vkvideo.ru/video_ext.php?oid=-234429917&id=456239017&hash=92c33ef843db6cf4&hd=3&js_api=1" class="media-content" frameborder="0" allowfullscreen title="Promo Video 1"></iframe>
+        <div class="quad reveal">
+            <h1>Promo</h1>
+            <p class="text-uppercase letter-spacing-wide accent-color mb-40">
+                В качестве промо для альбома мы выпустили серию роликов в социальных сетях со звуком
+                с концертов
+            </p>
         </div>
-      </div>
 
-      <div class="quad reveal">
-        <div class="media-wrapper ratio-16-9">
-          <button class="fullscreen-btn" onclick="toggleFullscreen(this.parentElement)" aria-label="Fullscreen">⛶</button>
-          <iframe src="https://vkvideo.ru/video_ext.php?oid=-234429917&id=456239019&hash=f589f9311f4cefd7&hd=3&js_api=1" class="media-content" frameborder="0" allowfullscreen title="Promo Video 2"></iframe>
+        <div class="quad reveal">
+            <div class="media-wrapper ratio-16-9">
+                <video src="assets/video/promo_1.MP4"
+                       autoplay muted controls playsinline loop
+                       preload="metadata"
+                       controlslist="nodownload noplaybackrate noremoteplayback disablepictureinpicture"
+                       class="media-content"></video>
+            </div>
         </div>
-      </div>
 
-      <div class="quad reveal">
-        <div class="grid-2-fill">
-          <div class="media-wrapper ratio-1-1" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View concert photo">
-            <img src="https://sun9-79.vkuserphoto.ru/s/v1/ig2/423T1eBPVQKuv0sa3xH9jTitZjlvjEBfCTzpKLiF20VGMYhQi8PI8AIkDhOLFkP0ngIDWqnVmgtYLwx79YyNATLH.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960&from=bu&cs=1280x0" alt="Concert Photo 1" class="media-content cover">
-            <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
-          </div>
-          <div class="media-wrapper ratio-1-1" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View concert photo">
-            <img src="https://sun9-25.vkuserphoto.ru/s/v1/ig2/q900seO1qA54_fAcm5MY8g9PakLQelJhlcEOQPpwK-7fBRQHQ2DhlU9XkGFaT7UJwuJcPR5NxFjXbZmPQLBKmWCu.jpg?quality=95&as=32x40,48x60,72x90,108x135,160x201,240x301,360x452,480x602,540x677,640x803,720x903,877x1100&from=bu&cs=877x0" alt="Concert Photo 2" class="media-content cover">
-            <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
-          </div>
+        <div class="quad reveal">
+            <div class="media-wrapper ratio-16-9">
+                <video src="assets/video/promo_2.mp4"
+                       autoplay muted controls playsinline loop
+                       preload="metadata"
+                       controlslist="nodownload noplaybackrate noremoteplayback disablepictureinpicture"
+                       class="media-content"></video>
+            </div>
         </div>
-      </div>
+
+        <div class="quad reveal">
+            <div class="grid-2-fill">
+                <div class="media-wrapper ratio-1-1" onclick="openLightbox(this)" role="button"
+                     tabindex="0" aria-label="View concert photo">
+                    <img src="assets/img/motri_afisha.JPG"
+                         alt="Concert Photo 1" class="media-content cover">
+                    <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)"
+                            aria-label="Fullscreen">⛶
+                    </button>
+                </div>
+                <div class="media-wrapper ratio-1-1" onclick="openLightbox(this)" role="button"
+                     tabindex="0" aria-label="View concert photo">
+                    <img src="assets/img/perspektiva_afisha.png"
+                         alt="Concert Photo 2" class="media-content cover">
+                    <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)"
+                            aria-label="Fullscreen">⛶
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-  </section>
+</section>
 
-  <!-- Live Performance Panel -->
-  <section class="panel">
+<!-- Live Performance Panel -->
+<section class="panel">
     <div class="panel__inner panel__inner--quad">
-      <div class="quad reveal">
-        <h1 class="large-heading">Live Performance</h1>
-        <p class="text-uppercase letter-spacing-wide accent-color mb-40">
-          Запись с презентации альбома, живой звук и атмосфера
-        </p>
-      </div>
-
-      <div class="quad reveal">
-        <div class="media-wrapper ratio-16-9">
-          <button class="fullscreen-btn" onclick="toggleFullscreen(this.parentElement)" aria-label="Fullscreen">⛶</button>
-          <iframe src="https://vkvideo.ru/video_ext.php?oid=-234429917&id=456239026&hash=0542bce15c999171&hd=3&js_api=1" class="media-content" frameborder="0" allowfullscreen title="Live Performance 1"></iframe>
+        <div class="quad reveal">
+            <h1 class="large-heading">Live Performance</h1>
+            <p class="text-uppercase letter-spacing-wide accent-color mb-40">
+                Запись с презентации альбома, живой звук и атмосфера
+            </p>
         </div>
-      </div>
 
-      <div class="quad reveal">
-        <div class="media-wrapper ratio-16-9">
-          <button class="fullscreen-btn" onclick="toggleFullscreen(this.parentElement)" aria-label="Fullscreen">⛶</button>
-          <iframe src="https://vkvideo.ru/video_ext.php?oid=-234429917&id=456239025&hash=6f0047861ee239d7&hd=3&js_api=1" class="media-content" frameborder="0" allowfullscreen title="Live Performance 2"></iframe>
+        <div class="quad reveal">
+            <div class="media-wrapper ratio-16-9">
+                <video src="assets/video/live_motri_1.mp4"
+                       autoplay muted controls playsinline loop
+                       preload="metadata"
+                       controlslist="nodownload noplaybackrate noremoteplayback disablepictureinpicture"
+                       class="media-content"></video>
+            </div>
         </div>
-      </div>
 
-      <div class="quad reveal">
-        <div class="media-wrapper ratio-16-9">
-          <button class="fullscreen-btn" onclick="toggleFullscreen(this.parentElement)" aria-label="Fullscreen">⛶</button>
-          <iframe src="https://vkvideo.ru/video_ext.php?oid=-234429917&id=456239024&hash=caa5b7b9fb708e76&hd=3&js_api=1" class="media-content" frameborder="0" allowfullscreen title="Live Performance 3"></iframe>
+        <div class="quad reveal">
+            <div class="media-wrapper ratio-16-9">
+                <video src="assets/video/live_perspektiva_1.MP4"
+                       autoplay muted controls playsinline loop
+                       preload="metadata"
+                       controlslist="nodownload noplaybackrate noremoteplayback disablepictureinpicture"
+                       class="media-content"></video>
+            </div>
         </div>
-      </div>
+
+        <div class="quad reveal">
+            <div class="media-wrapper ratio-16-9">
+                <video src="assets/video/live_perspektiva_2.MP4"
+                       autoplay muted controls playsinline loop
+                       preload="metadata"
+                       controlslist="nodownload noplaybackrate noremoteplayback disablepictureinpicture"
+                       class="media-content"></video>
+            </div>
+        </div>
     </div>
-  </section>
+</section>
 
-  <!-- Gallery Carousel Panel -->
-  <section class="panel">
-    <div class="carousel-container">
-      <button class="carousel-btn carousel-btn-prev" onclick="prevCarousel()" aria-label="Previous slide">❮</button>
-      <div class="carousel-wrapper">
-        <!-- Gallery Slide -->
-        <div class="carousel-item active">
-          <div class="quad reveal">
-            <h1>Gallery</h1>
-            <p class="text-uppercase letter-spacing-wide accent-color mb-40">
-              Фотографии с наших выступлений и репетиций
-            </p>
-          </div>
-          <div class="quad reveal">
-            <div class="media-wrapper ratio-16-10" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View performance photo">
-              <img src="https://sun9-79.vkuserphoto.ru/s/v1/ig2/423T1eBPVQKuv0sa3xH9jTitZjlvjEBfCTzpKLiF20VGMYhQi8PI8AIkDhOLFkP0ngIDWqnVmgtYLwx79YyNATLH.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960&from=bu&cs=1280x0" alt="Performance Photo 1" class="media-content cover">
-              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
-            </div>
-          </div>
-          <div class="quad reveal">
-            <div class="media-wrapper ratio-16-10" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View performance photo">
-              <img src="https://sun9-25.vkuserphoto.ru/s/v1/ig2/q900seO1qA54_fAcm5MY8g9PakLQelJhlcEOQPpwK-7fBRQHQ2DhlU9XkGFaT7UJwuJcPR5NxFjXbZmPQLBKmWCu.jpg?quality=95&as=32x40,48x60,72x90,108x135,160x201,240x301,360x452,480x602,540x677,640x803,720x903,877x1100&from=bu&cs=877x0" alt="Performance Photo 2" class="media-content cover">
-              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
-            </div>
-          </div>
-          <div class="quad reveal">
-            <div class="media-wrapper ratio-16-10" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View concert photo">
-              <img src="https://sun9-79.vkuserphoto.ru/s/v1/ig2/423T1eBPVQKuv0sa3xH9jTitZjlvjEBfCTzpKLiF20VGMYhQi8PI8AIkDhOLFkP0ngIDWqnVmgtYLwx79YyNATLH.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960&from=bu&cs=1280x0" alt="Concert Photo 1" class="media-content cover">
-              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Behind the Scenes Slide -->
-        <div class="carousel-item">
-          <div class="quad reveal">
-            <h1>Behind the Scenes</h1>
-            <p class="text-uppercase letter-spacing-wide accent-color mb-40">
-              Кадры из жизни коллектива за кулисами
-            </p>
-          </div>
-          <div class="quad reveal">
-            <div class="media-wrapper ratio-16-10" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View behind the scenes photo">
-              <img src="https://sun9-84.vkuserphoto.ru/s/v1/ig2/HydlIMpge91xdLHkWGkMR_BBhXzDZ4EX8GEUggolMnfXU_iw7oamAjkEnwGufQQ1_NkyIS2jEJ6p6aCRhpDjLf5C.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x161,240x241,360x362,480x482,540x543,640x643,720x723,1080x1085,1274x1280&from=bu&cs=1274x0" alt="Behind the Scenes 1" class="media-content cover">
-              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
-            </div>
-          </div>
-          <div class="quad reveal">
-            <div class="media-wrapper ratio-16-10" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View behind the scenes photo">
-              <img src="https://sun9-79.vkuserphoto.ru/s/v1/ig2/423T1eBPVQKuv0sa3xH9jTitZjlvjEBfCTzpKLiF20VGMYhQi8PI8AIkDhOLFkP0ngIDWqnVmgtYLwx79YyNATLH.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960&from=bu&cs=1280x0" alt="Behind the Scenes 2" class="media-content cover">
-              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
-            </div>
-          </div>
-          <div class="quad reveal">
-            <div class="media-wrapper ratio-16-10" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View band photo">
-              <img src="https://sun9-25.vkuserphoto.ru/s/v1/ig2/q900seO1qA54_fAcm5MY8g9PakLQelJhlcEOQPpwK-7fBRQHQ2DhlU9XkGFaT7UJwuJcPR5NxFjXbZmPQLBKmWCu.jpg?quality=95&as=32x40,48x60,72x90,108x135,160x201,240x301,360x452,480x602,540x677,640x803,720x903,877x1100&from=bu&cs=877x0" alt="Band Photo 1" class="media-content cover">
-              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Studio Sessions Slide -->
-        <div class="carousel-item">
-          <div class="quad reveal">
-            <h1>Studio Sessions</h1>
-            <p class="text-uppercase letter-spacing-wide accent-color mb-40">
-              Процесс записи альбома Farewells
-            </p>
-          </div>
-          <div class="quad reveal">
-            <div class="media-wrapper ratio-16-9" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View studio session photo">
-              <img src="https://sun9-25.vkuserphoto.ru/s/v1/ig2/q900seO1qA54_fAcm5MY8g9PakLQelJhlcEOQPpwK-7fBRQHQ2DhlU9XkGFaT7UJwuJcPR5NxFjXbZmPQLBKmWCu.jpg?quality=95&as=32x40,48x60,72x90,108x135,160x201,240x301,360x452,480x602,540x677,640x803,720x903,877x1100&from=bu&cs=877x0" alt="Studio Session 1" class="media-content cover">
-              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
-            </div>
-          </div>
-          <div class="quad reveal">
-            <div class="media-wrapper ratio-16-9" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View studio session photo">
-              <img src="https://sun9-84.vkuserphoto.ru/s/v1/ig2/HydlIMpge91xdLHkWGkMR_BBhXzDZ4EX8GEUggolMnfXU_iw7oamAjkEnwGufQQ1_NkyIS2jEJ6p6aCRhpDjLf5C.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x161,240x241,360x362,480x482,540x543,640x643,720x723,1080x1085,1274x1280&from=bu&cs=1274x0" alt="Studio Session 2" class="media-content cover">
-              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
-            </div>
-          </div>
-          <div class="quad reveal">
-            <div class="media-wrapper ratio-16-9" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View recording photo">
-              <img src="https://sun9-79.vkuserphoto.ru/s/v1/ig2/423T1eBPVQKuv0sa3xH9jTitZjlvjEBfCTzpKLiF20VGMYhQi8PI8AIkDhOLFkP0ngIDWqnVmgtYLwx79YyNATLH.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960&from=bu&cs=1280x0" alt="Recording Photo 1" class="media-content cover">
-              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button class="carousel-btn carousel-btn-next" onclick="nextCarousel()" aria-label="Next slide">❯</button>
-    </div>
-  </section>
-
-  <!-- Lightbox Modal -->
-  <div id="lightbox" class="lightbox" onclick="closeLightbox()" role="dialog" aria-modal="true" aria-label="Image viewer">
-    <span class="lightbox-close" onclick="closeLightbox()" role="button" tabindex="0" aria-label="Close">&times;</span>
+<!-- Lightbox Modal -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()" role="dialog" aria-modal="true"
+     aria-label="Image viewer">
+    <span class="lightbox-close" onclick="closeLightbox()" role="button" tabindex="0"
+          aria-label="Close">&times;</span>
     <img id="lightbox-img" src="" alt="Fullscreen image">
-  </div>
+</div>
 
-  <!-- JavaScript -->
-  <script src="src/js/main.js" type="module"></script>
+<!-- JavaScript -->
+<script src="src/js/main.js" type="module"></script>
 </body>
 </html>

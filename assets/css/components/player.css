@@ -89,6 +89,9 @@
   border-radius: 2px;
   margin-bottom: 8px;
   overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  touch-action: none;
 }
 
 .progress-fill {
@@ -109,11 +112,20 @@
 @media (max-width: 768px) {
   .custom-player {
     padding: 12px;
+    max-width: 100%;
+  }
+  
+  .player-artwork {
+    margin-bottom: 15px;
   }
   
   .player-artwork .artwork-image {
     max-width: 200px;
     margin: 0 auto;
+  }
+  
+  .track-info {
+    margin-bottom: 12px;
   }
   
   .track-info .track-title {
@@ -136,6 +148,11 @@
     min-height: 44px;
   }
   
+  .progress-bar {
+    height: 6px;
+    margin-bottom: 6px;
+  }
+  
   .time-display {
     font-size: 0.65rem;
   }
@@ -143,15 +160,19 @@
 
 @media (max-width: 480px) {
   .custom-player {
-    padding: 10px;
+    padding: 11px;
+    max-width: 100%;
+    width: 100%;
+    border: 1px solid var(--card-border);
   }
   
   .player-artwork {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
   
   .player-artwork .artwork-image {
-    max-width: 150px;
+    max-width: 140px;
+    margin: 0 auto;
   }
   
   .track-info {
@@ -160,6 +181,7 @@
   
   .track-info .track-title {
     font-size: 0.9rem;
+    line-height: 1.2;
   }
   
   .track-info .track-artist {
@@ -174,11 +196,13 @@
     width: 36px;
     height: 36px;
     font-size: 12px;
+    min-width: 36px;
+    min-height: 36px;
   }
   
   .progress-bar {
-    height: 2px;
-    margin-bottom: 5px;
+    height: 4px;
+    margin-bottom: 4px;
   }
   
   .time-display {
@@ -186,17 +210,29 @@
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 380px) {
   .custom-player {
     padding: 8px;
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .player-artwork {
+    margin-bottom: 8px;
   }
   
   .player-artwork .artwork-image {
     max-width: 120px;
+    margin: 0 auto;
+  }
+  
+  .track-info {
+    margin-bottom: 6px;
   }
   
   .track-info .track-title {
     font-size: 0.8rem;
+    line-height: 1.2;
   }
   
   .track-info .track-artist {
@@ -207,6 +243,13 @@
     width: 32px;
     height: 32px;
     font-size: 11px;
+    min-width: 32px;
+    min-height: 32px;
+  }
+  
+  .progress-bar {
+    height: 4px;
+    margin-bottom: 4px;
   }
   
   .time-display {
