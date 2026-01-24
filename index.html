@@ -1,460 +1,271 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns="http://www.w3.org/1999/html">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Melatonin">
+  <meta name="theme-color" content="#000000">
   <title>Farewells</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=Syne:wght@700;800&display=swap"
-      rel="stylesheet">
-  <style>
-    :root {
-        --bg-color: #0a0a0a;
-        --text-color: #e0e0e0;
-        --text-muted: #a0a0a0;
-        --card-bg: #111111;
-        --card-border: #333333;
-        --accent-color: #ffffff;
-        --spacing-unit: 32px;
-        --radius: 16px;
-    }
-
-    * {
-        box-sizing: border-box;
-    }
-
-    a {
-      color: #ffffff; /* Цвет обычных ссылок (например, синий) */
-    }
-
-    a:visited {
-      color: #ffffff; /* Цвет посещенных ссылок (например, серый) */
-    }
-
-    a:hover {
-      color: #ffffff; /* Цвет при наведении (темнее) */
-    }
-
-    a:active {
-      color: #ffffff; /* Цвет при клике (например, оранжевый) */
-    }
-
-    body {
-        margin: 0;
-        font-family: 'Space Grotesk', sans-serif;
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        line-height: 1.6;
-        -webkit-font-smoothing: antialiased;
-    }
-
-    .container {
-        max-width: 1100px;
-        margin: 0 auto;
-        padding: 60px 20px;
-    }
-
-    /* Типографика */
-    h1 {
-        font-family: 'Syne', sans-serif;
-        font-size: 4rem; /* Чуть меньше для безопасности */
-        font-weight: 800;
-        margin: 0 0 10px 0;
-        text-align: center;
-        color: var(--accent-color);
-        text-transform: uppercase;
-    }
-
-    h2 {
-        font-family: 'Syne', sans-serif;
-        font-size: 2rem; /* Чуть меньше для безопасности */
-        font-weight: 800;
-        margin: 0 0 10px 0;
-        text-align: center;
-        color: var(--accent-color);
-        text-transform: uppercase;
-    }
-
-    h3 {
-        font-family: 'Syne', sans-serif;
-        color: var(--accent-color);
-        margin-top: 0;
-    }
-
-    p {
-        font-size: 1.1rem;
-        color: var(--text-muted);
-        margin-bottom: 20px;
-    }
-
-    .text-center {
-        text-align: center;
-    }
-
-    .description {
-        max-width: 700px;
-        margin: 0 auto 60px auto;
-        text-align: center;
-    }
-
-    /* Медиа контейнеры */
-    .media-wrapper {
-        position: relative;
-        background-color: var(--bg-color);
-        border-radius: var(--radius);
-        overflow: hidden;
-        width: 100%;
-    }
-
-    /* Пропорции через padding-top (самый надежный способ) */
-    .ratio-21-9 { padding-top: 42.85%; } /* 9 / 21 */
-    .ratio-16-9 { padding-top: 56.25%; } /* 9 / 16 */
-    .ratio-4-3 { padding-top: 75%; }    /* 3 / 4 */
-    .ratio-1-1 { padding-top: 100%; }   /* 1 / 1 */
-    .ratio-3-4 { padding-top: 133.33%; } /* 4 / 3 */
-
-    .media-content {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: contain; /* Вписываем контент */
-        display: block;
-    }
-
-    .media-content.cover {
-        object-fit: cover; /* Заполняем контейнер */
-    }
-
-    /* Сетки */
-    .grid-2 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 30px;
-        margin-bottom: 60px;
-    }
-
-    .grid-album {
-        display: grid;
-        grid-template-columns: 350px 1fr;
-        gap: 40px;
-        align-items: center;
-        background-color: var(--card-bg);
-        padding: 40px;
-        border-radius: 24px;
-        border: 1px solid var(--card-border);
-        margin-bottom: 60px;
-    }
-
-    /* Кнопки и иконки */
-    .zoom-icon {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: rgba(0,0,0,0.7);
-        color: white;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        opacity: 0;
-        transition: opacity 0.2s;
-        cursor: pointer;
-        z-index: 10;
-    }
-
-    .media-wrapper:hover .zoom-icon {
-        opacity: 1;
-    }
-
-    .fullscreen-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: rgba(0,0,0,0.8);
-        color: white;
-        border: 1px solid rgba(255,255,255,0.2);
-        padding: 5px 10px;
-        border-radius: 4px;
-        cursor: pointer;
-        z-index: 20;
-        opacity: 0;
-        transition: opacity 0.2s;
-    }
-
-    .media-wrapper:hover .fullscreen-btn {
-        opacity: 1;
-    }
-
-    /* Lightbox */
-    .lightbox {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.95);
-        z-index: 9999;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
-
-    .lightbox.active {
-        display: flex;
-    }
-
-    .lightbox img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-    }
-
-    .lightbox-close {
-        position: absolute;
-        top: 20px;
-        right: 30px;
-        color: white;
-        font-size: 40px;
-        cursor: pointer;
-    }
-
-    /* Адаптивность */
-    @media (max-width: 768px) {
-        h1 { font-size: 2.5rem; }
-        .grid-2, .grid-album { grid-template-columns: 1fr; }
-        .grid-album { text-align: center; padding: 20px; }
-        .grid-album .media-wrapper { max-width: 300px; margin: 0 auto; }
-    }
-  </style>
+  
+  <!-- CSS Styles -->
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=Syne:wght@700;800&display=swap">
 </head>
 <body>
-
-<div class="container">
-
   <!-- Header -->
-  <header>
-    <h1>MELATONIN*</h1>
-    <p class="text-center"
-       style="text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin-bottom: 40px;">
-      Альтернативная группа с элементами инди и шугейза.
-      В основе звучания — женский вокал и экспериментальный инструментал с мягкой, спокойной
-      атмосферой.
+  <header class="page-title page-title--top">
+    <h1 class="text-left large-heading">MELATONIN*</h1>
+    <p class="text-right text-uppercase letter-spacing-wide accent-color">
+      <a href="https://t.me/melatoninm" target="_blank" rel="noopener">TELEGRAM</a> |
+      <a href="https://www.instagram.com/mellattonnin" target="_blank" rel="noopener">INSTAGRAM</a> |
+      <a href="https://vk.ru/club234429917" target="_blank" rel="noopener">VKONTAKTE</a>
     </p>
-
-    <div class="media-wrapper ratio-21-9">
-      <img
-          src="https://sun9-12.vkuserphoto.ru/s/v1/ig2/JNhDU_xBvzy0Zkzk2hcOG3x3Tg3d3stvvlqpLepX565Aicp4Ik5BHb18GPY4DcS1BDGk5PDm0uB_L1vOAd5RQBLg.jpg?quality=95&as=32x21,48x32,72x47,108x71,160x105,240x158,360x237,480x316,540x355,640x421,720x474,810x533&from=bu&cs=810x0"
-          alt="Main Banner" class="media-content cover">
-    </div>
   </header>
 
-  <!-- Description -->
-  <section class="description" style="margin-top: 40px;">
-    <p>
-      Farewells — альбом о прощании со сном.
-      Мы старались передать желание вернуться в теплое
-      прошлое, в воспоминание, которое не получается забыть
-      до конца. Многие сталкивались с моментом, когда
-      невыразимо хотелось вернуться назад. Но прошлое
-      осталось только начертанием в голове, почти забытым.
-      Его больше не получится пережить, послушать,
-      пересмотреть. Только вспоминать.
-    </p>
-  </section>
+  <!-- Background Layers -->
+  <div class="bg" aria-hidden="true">
+    <div class="bg__layer" id="bgA"></div>
+    <div class="bg__layer" id="bgB"></div>
+  </div>
 
-  <!-- Album Block -->
-  <section class="grid-album">
-    <div class="media-wrapper ratio-1-1" onclick="openLightbox(this)">
-      <img
-          src="https://sun9-84.vkuserphoto.ru/s/v1/ig2/HydlIMpge91xdLHkWGkMR_BBhXzDZ4EX8GEUggolMnfXU_iw7oamAjkEnwGufQQ1_NkyIS2jEJ6p6aCRhpDjLf5C.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x161,240x241,360x362,480x482,540x543,640x643,720x723,1080x1085,1274x1280&from=bu&cs=1274x0"
-          alt="Album Cover" class="media-content">
-      <div class="zoom-icon">🔍</div>
+  <!-- Tiled Background Canvas -->
+  <div class="img-strip__grid" id="wall">
+    <div class="img-strip" id="strip">
+      <img id="srcImg" src="assets/img/mi(1).jpeg" alt="Background source image">
+      <canvas id="stripCanvas"></canvas>
     </div>
-    <div>
-      <h2>Listen Now</h2>
-      <div style="margin: 20px 0;">
-        <iframe style="border: 0; width: 100%; height: 120px;"
-                src="https://bandcamp.com/EmbeddedPlayer/album=1741225307/size=large/bgcol=333333/linkcol=ffffff/tracklist=false/artwork=none/transparent=true/"
-                seamless></iframe>
-      </div>
-      <p>Музыка, которая погружает в атмосферу светлой грусти и ностальгии. Доступно на всех
-        площадках.</p>
-    </div>
-  </section>
+  </div>
 
-  <!-- Promo Section -->
-  <section>
-    <div class="text-center" style="margin-bottom: 40px;">
-      <h1>Promo</h1>
-      <p style="max-width: 600px; margin: 0 auto;">
-        В качестве промо для альбома мы выпустили серию роликов в социальных сетях со звуком с концертов.
-      </p>
-    </div>
-
-    <div class="grid-2">
-      <div class="media-wrapper ratio-16-9">
-        <button class="fullscreen-btn" onclick="toggleFullscreen(this.parentElement)">⛶</button>
-        <iframe
-            src="https://vkvideo.ru/video_ext.php?oid=-234429917&id=456239017&hash=92c33ef843db6cf4&hd=3&js_api=1"
-            class="media-content" frameborder="0" allowfullscreen></iframe>
-      </div>
-      <div class="media-wrapper ratio-16-9">
-        <button class="fullscreen-btn" onclick="toggleFullscreen(this.parentElement)">⛶</button>
-        <iframe
-            src="https://vkvideo.ru/video_ext.php?oid=-234429917&id=456239019&hash=f589f9311f4cefd7&hd=3&js_api=1"
-            class="media-content" frameborder="0" allowfullscreen></iframe>
-      </div>
-    </div>
-
-    <div class="grid-2">
-      <div class="media-wrapper ratio-1-1" onclick="openLightbox(this)">
-        <img
-            src="https://sun9-79.vkuserphoto.ru/s/v1/ig2/423T1eBPVQKuv0sa3xH9jTitZjlvjEBfCTzpKLiF20VGMYhQi8PI8AIkDhOLFkP0ngIDWqnVmgtYLwx79YyNATLH.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960&from=bu&cs=1280x0"
-            alt="Concert Photo 1" class="media-content cover">
-        <div class="zoom-icon">🔍</div>
-      </div>
-      <div class="media-wrapper ratio-1-1" onclick="openLightbox(this)">
-        <img
-            src="https://sun9-25.vkuserphoto.ru/s/v1/ig2/q900seO1qA54_fAcm5MY8g9PakLQelJhlcEOQPpwK-7fBRQHQ2DhlU9XkGFaT7UJwuJcPR5NxFjXbZmPQLBKmWCu.jpg?quality=95&as=32x40,48x60,72x90,108x135,160x201,240x301,360x452,480x602,540x677,640x803,720x903,877x1100&from=bu&cs=877x0"
-            alt="Concert Photo 2" class="media-content cover">
-        <div class="zoom-icon">🔍</div>
+  <!-- Introduction Panel -->
+  <section class="panel">
+    <div class="panel__inner">
+      <div class="panel__col reveal">
+        <h2>Альтернативная группа с элементами инди и шугейза. В основе звучания — женский вокал и экспериментальный инструментал с мягкой, спокойной атмосферой</h2>
       </div>
     </div>
   </section>
 
-  <!-- Presentation Section -->
-  <section>
-    <div class="text-center" style="margin-bottom: 40px;">
-      <h1>Live Performance</h1>
-      <p style="max-width: 600px; margin: 0 auto;">
-        Запись с презентации альбома. Живой звук и атмосфера.
-      </p>
-    </div>
-
-    <div class="grid-2">
-      <div class="media-wrapper ratio-16-9">
-        <button class="fullscreen-btn" onclick="toggleFullscreen(this.parentElement)">⛶</button>
-        <iframe
-            src="https://vkvideo.ru/video_ext.php?oid=-234429917&id=456239026&hash=0542bce15c999171&hd=3&js_api=1"
-            class="media-content" frameborder="0" allowfullscreen></iframe>
+  <!-- Album Information Panel -->
+  <section class="panel">
+    <div class="panel__inner">
+      <div class="panel__col reveal">
+        <h1>Farewells</h1>
+        <p class="text-uppercase letter-spacing-wide accent-color mb-40">
+          Farewells — альбом о прощании со сном. Мы старались передать желание вернуться в теплое прошлое, в воспоминание, которое не получается забыть до конца. Многие сталкивались с моментом, когда невыразимо хотелось вернуться назад. Но прошлое осталось только начертанием в голове, почти забытым. Его больше не получится пережить, послушать, пересмотреть. Только вспоминать.
+        </p>
       </div>
-      <div style="display: flex; flex-direction: column; justify-content: center; gap: 20px;">
-        <iframe style="border: 0; width: 100%; height: 120px;"
-                src="https://bandcamp.com/EmbeddedPlayer/album=1741225307/size=large/bgcol=333333/linkcol=ffffff/track=898256961/tracklist=false/artwork=small/transparent=true/"
-                seamless></iframe>
-      </div>
-    </div>
-
-    <div class="grid-2">
-      <div class="media-wrapper ratio-16-9">
-        <button class="fullscreen-btn" onclick="toggleFullscreen(this.parentElement)">⛶</button>
-        <iframe
-            src="https://vkvideo.ru/video_ext.php?oid=-234429917&id=456239025&hash=6f0047861ee239d7&hd=3&js_api=1"
-            class="media-content" frameborder="0" allowfullscreen></iframe>
-      </div>
-      <div class="media-wrapper ratio-16-9">
-        <button class="fullscreen-btn" onclick="toggleFullscreen(this.parentElement)">⛶</button>
-        <iframe
-            src="https://vkvideo.ru/video_ext.php?oid=-234429917&id=456239024&hash=caa5b7b9fb708e76&hd=3&js_api=1"
-            class="media-content" frameborder="0" allowfullscreen></iframe>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="text-center" style="margin-bottom: 40px;">
-      <h1>Us & Contacts</h1>
-      <p class="text-center"
-         style="text-transform: uppercase; letter-spacing: 2px; color: var(--accent-color); margin-bottom: 40px;">
-        <a href="https://t.me/melatoninm">TELEGRAM</a> |
-        <a href="https://www.instagram.com/mellattonnin">INSTAGRAM</a> |
-        <a href="https://vk.ru/club234429917">VKONTAKTE</a>
-      </p>
-    </div>
-
-    <div class="grid-2">
-      <div class="media-wrapper ratio-4-3" style="margin-top: 60px;" onclick="openLightbox(this)">
-        <img
-            src="https://sun9-61.vkuserphoto.ru/s/v1/ig2/l1NgM3D_v39YgLvi0tTaQ02h5yJxTkNFfObtvxEt3i7sARetc3TLxiIDLG0kebXAi1kKDXxYVeATYiOZceN0GTff.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960,1440x1080,2560x1920&from=bu&cs=2560x0"
-            alt="Final Photo" class="media-content">
-        <div class="zoom-icon">🔍</div>
-      </div>
-      <div class="media-wrapper ratio-4-3" style="margin-top: 60px;" onclick="openLightbox(this)">
-        <img
-            src="https://sun9-47.vkuserphoto.ru/s/v1/ig2/hiwBH5YUJUNnMV0oWNawG0CulpZGOc6-9y_pEnfMNqAjGIQywggkl0SuJkRMktyuH81PNp-l6ou59rokZtmvLNvV.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960,1440x1080,2560x1920&from=bu&cs=2560x0"
-            alt="Final Photo" class="media-content">
-        <div class="zoom-icon">🔍</div>
-      </div>
-    </div>
-
-    <div class="media-wrapper ratio-21-9" onclick="openLightbox(this)">
-      <img
-          src="https://sun9-28.vkuserphoto.ru/s/v1/ig2/eTFw9zNX5lkO7oBlPQRdUFmwBURN8uHnKFk_zN1MV06r02_l16u1a_22JjdVhmfd2HSqbbdRiy3TTLOPqpGgHzHT.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960,1440x1080,2560x1920&from=bu&cs=2560x0"
-          alt="Main Banner" class="media-content cover">
-    </div>
-
-    <div class="grid-2">
-      <div class="media-wrapper ratio-4-3" style="margin-top: 60px;" onclick="openLightbox(this)">
-        <img
-            src="https://sun9-61.vkuserphoto.ru/s/v1/ig2/SwB1Dteom0J-342B8SIDXzSDWiQr8UZ_b0f9UEmJtvKsuCay6KhkfWsJkNxnL-jDNS-kyz_0e4Wvd2WEFibfCxkT.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960,1440x1080,2560x1920&from=bu&cs=2560x0"
-            alt="Final Photo" class="media-content">
-        <div class="zoom-icon">🔍</div>
-      </div>
-      <div class="media-wrapper ratio-4-3" style="margin-top: 60px;" onclick="openLightbox(this)">
-        <img
-            src="https://sun9-68.vkuserphoto.ru/s/v1/ig2/dSxMbSJ9U3WeARmn3JWqIgNL2w_dUXBwVFpV8YJuFLTYnbcha62qB36ZSt3KPo3zV1fpj9nD6dVoseJCaVqmMQdH.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960&from=bu&cs=1280x0"
-            alt="Final Photo" class="media-content">
-        <div class="zoom-icon">🔍</div>
+      <div class="panel__col reveal">
+        <div class="grid-album">
+          <div class="custom-player">
+            <audio id="album-audio" preload="metadata">
+              <source src="assets/music/5+.mp3" type="audio/mpeg">
+            </audio>
+            <div class="player-artwork">
+              <img src="https://sun9-84.vkuserphoto.ru/s/v1/ig2/HydlIMpge91xdLHkWGkMR_BBhXzDZ4EX8GEUggolMnfXU_iw7oamAjkEnwGufQQ1_NkyIS2jEJ6p6aCRhpDjLf5C.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x161,240x241,360x362,480x482,540x543,640x643,720x723,1080x1085,1274x1280&from=bu&cs=1274x0" alt="Album Artwork" class="artwork-image">
+            </div>
+            <div class="player-controls">
+              <div class="track-info">
+                <h3 class="track-title">Farewells</h3>
+                <p class="track-artist">Melatonin</p>
+              </div>
+              <div class="control-buttons">
+                <button class="play-pause-btn" onclick="togglePlayer(this)" aria-label="Play/Pause">
+                  <span class="play-icon">▶</span>
+                  <span class="pause-icon" style="display:none;">⏸</span>
+                </button>
+                <div class="progress-container">
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                  </div>
+                  <div class="time-display">
+                    <span class="current-time">0:00</span>
+                    <span class="total-time">0:00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="album-text">
+            <p>Музыка, которая погружает в атмосферу светлой грусти и ностальгии. Доступно на всех площадках.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- Promo Videos Panel -->
+  <section class="panel">
+    <div class="panel__inner panel__inner--quad">
+      <div class="quad reveal">
+        <h1>Promo</h1>
+        <p class="text-uppercase letter-spacing-wide accent-color mb-40">
+          В качестве промо для альбома мы выпустили серию роликов в социальных сетях со звуком с концертов
+        </p>
+      </div>
 
-</div>
+      <div class="quad reveal">
+        <div class="media-wrapper ratio-16-9">
+          <button class="fullscreen-btn" onclick="toggleFullscreen(this.parentElement)" aria-label="Fullscreen">⛶</button>
+          <iframe src="https://vkvideo.ru/video_ext.php?oid=-234429917&id=456239017&hash=92c33ef843db6cf4&hd=3&js_api=1" class="media-content" frameborder="0" allowfullscreen title="Promo Video 1"></iframe>
+        </div>
+      </div>
 
-<!-- Lightbox -->
-<div id="lightbox" class="lightbox" onclick="closeLightbox()">
-  <span class="lightbox-close">&times;</span>
-  <img id="lightbox-img" src="" alt="Fullscreen">
-</div>
+      <div class="quad reveal">
+        <div class="media-wrapper ratio-16-9">
+          <button class="fullscreen-btn" onclick="toggleFullscreen(this.parentElement)" aria-label="Fullscreen">⛶</button>
+          <iframe src="https://vkvideo.ru/video_ext.php?oid=-234429917&id=456239019&hash=f589f9311f4cefd7&hd=3&js_api=1" class="media-content" frameborder="0" allowfullscreen title="Promo Video 2"></iframe>
+        </div>
+      </div>
 
-<script>
-  function openLightbox(element) {
-      const img = element.querySelector('img');
-      if (!img) return;
-      const lightbox = document.getElementById('lightbox');
-      const lightboxImg = document.getElementById('lightbox-img');
+      <div class="quad reveal">
+        <div class="grid-2-fill">
+          <div class="media-wrapper ratio-1-1" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View concert photo">
+            <img src="https://sun9-79.vkuserphoto.ru/s/v1/ig2/423T1eBPVQKuv0sa3xH9jTitZjlvjEBfCTzpKLiF20VGMYhQi8PI8AIkDhOLFkP0ngIDWqnVmgtYLwx79YyNATLH.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960&from=bu&cs=1280x0" alt="Concert Photo 1" class="media-content cover">
+            <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
+          </div>
+          <div class="media-wrapper ratio-1-1" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View concert photo">
+            <img src="https://sun9-25.vkuserphoto.ru/s/v1/ig2/q900seO1qA54_fAcm5MY8g9PakLQelJhlcEOQPpwK-7fBRQHQ2DhlU9XkGFaT7UJwuJcPR5NxFjXbZmPQLBKmWCu.jpg?quality=95&as=32x40,48x60,72x90,108x135,160x201,240x301,360x452,480x602,540x677,640x803,720x903,877x1100&from=bu&cs=877x0" alt="Concert Photo 2" class="media-content cover">
+            <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      lightboxImg.src = img.src;
-      lightbox.classList.add('active');
-      document.body.style.overflow = 'hidden';
-  }
+  <!-- Live Performance Panel -->
+  <section class="panel">
+    <div class="panel__inner panel__inner--quad">
+      <div class="quad reveal">
+        <h1 class="large-heading">Live Performance</h1>
+        <p class="text-uppercase letter-spacing-wide accent-color mb-40">
+          Запись с презентации альбома, живой звук и атмосфера
+        </p>
+      </div>
 
-  function closeLightbox() {
-      const lightbox = document.getElementById('lightbox');
-      lightbox.classList.remove('active');
-      document.body.style.overflow = '';
-  }
+      <div class="quad reveal">
+        <div class="media-wrapper ratio-16-9">
+          <button class="fullscreen-btn" onclick="toggleFullscreen(this.parentElement)" aria-label="Fullscreen">⛶</button>
+          <iframe src="https://vkvideo.ru/video_ext.php?oid=-234429917&id=456239026&hash=0542bce15c999171&hd=3&js_api=1" class="media-content" frameborder="0" allowfullscreen title="Live Performance 1"></iframe>
+        </div>
+      </div>
 
-  function toggleFullscreen(element) {
-      if (!document.fullscreenElement) {
-          if (element.requestFullscreen) element.requestFullscreen();
-          else if (element.webkitRequestFullscreen) element.webkitRequestFullscreen();
-          else if (element.msRequestFullscreen) element.msRequestFullscreen();
-      } else {
-          if (document.exitFullscreen) document.exitFullscreen();
-          else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-          else if (document.msExitFullscreen) document.msExitFullscreen();
-      }
-  }
-</script>
+      <div class="quad reveal">
+        <div class="media-wrapper ratio-16-9">
+          <button class="fullscreen-btn" onclick="toggleFullscreen(this.parentElement)" aria-label="Fullscreen">⛶</button>
+          <iframe src="https://vkvideo.ru/video_ext.php?oid=-234429917&id=456239025&hash=6f0047861ee239d7&hd=3&js_api=1" class="media-content" frameborder="0" allowfullscreen title="Live Performance 2"></iframe>
+        </div>
+      </div>
 
+      <div class="quad reveal">
+        <div class="media-wrapper ratio-16-9">
+          <button class="fullscreen-btn" onclick="toggleFullscreen(this.parentElement)" aria-label="Fullscreen">⛶</button>
+          <iframe src="https://vkvideo.ru/video_ext.php?oid=-234429917&id=456239024&hash=caa5b7b9fb708e76&hd=3&js_api=1" class="media-content" frameborder="0" allowfullscreen title="Live Performance 3"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Carousel Panel -->
+  <section class="panel">
+    <div class="carousel-container">
+      <button class="carousel-btn carousel-btn-prev" onclick="prevCarousel()" aria-label="Previous slide">❮</button>
+      <div class="carousel-wrapper">
+        <!-- Gallery Slide -->
+        <div class="carousel-item active">
+          <div class="quad reveal">
+            <h1>Gallery</h1>
+            <p class="text-uppercase letter-spacing-wide accent-color mb-40">
+              Фотографии с наших выступлений и репетиций
+            </p>
+          </div>
+          <div class="quad reveal">
+            <div class="media-wrapper ratio-16-10" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View performance photo">
+              <img src="https://sun9-79.vkuserphoto.ru/s/v1/ig2/423T1eBPVQKuv0sa3xH9jTitZjlvjEBfCTzpKLiF20VGMYhQi8PI8AIkDhOLFkP0ngIDWqnVmgtYLwx79YyNATLH.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960&from=bu&cs=1280x0" alt="Performance Photo 1" class="media-content cover">
+              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
+            </div>
+          </div>
+          <div class="quad reveal">
+            <div class="media-wrapper ratio-16-10" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View performance photo">
+              <img src="https://sun9-25.vkuserphoto.ru/s/v1/ig2/q900seO1qA54_fAcm5MY8g9PakLQelJhlcEOQPpwK-7fBRQHQ2DhlU9XkGFaT7UJwuJcPR5NxFjXbZmPQLBKmWCu.jpg?quality=95&as=32x40,48x60,72x90,108x135,160x201,240x301,360x452,480x602,540x677,640x803,720x903,877x1100&from=bu&cs=877x0" alt="Performance Photo 2" class="media-content cover">
+              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
+            </div>
+          </div>
+          <div class="quad reveal">
+            <div class="media-wrapper ratio-16-10" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View concert photo">
+              <img src="https://sun9-79.vkuserphoto.ru/s/v1/ig2/423T1eBPVQKuv0sa3xH9jTitZjlvjEBfCTzpKLiF20VGMYhQi8PI8AIkDhOLFkP0ngIDWqnVmgtYLwx79YyNATLH.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960&from=bu&cs=1280x0" alt="Concert Photo 1" class="media-content cover">
+              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Behind the Scenes Slide -->
+        <div class="carousel-item">
+          <div class="quad reveal">
+            <h1>Behind the Scenes</h1>
+            <p class="text-uppercase letter-spacing-wide accent-color mb-40">
+              Кадры из жизни коллектива за кулисами
+            </p>
+          </div>
+          <div class="quad reveal">
+            <div class="media-wrapper ratio-16-10" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View behind the scenes photo">
+              <img src="https://sun9-84.vkuserphoto.ru/s/v1/ig2/HydlIMpge91xdLHkWGkMR_BBhXzDZ4EX8GEUggolMnfXU_iw7oamAjkEnwGufQQ1_NkyIS2jEJ6p6aCRhpDjLf5C.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x161,240x241,360x362,480x482,540x543,640x643,720x723,1080x1085,1274x1280&from=bu&cs=1274x0" alt="Behind the Scenes 1" class="media-content cover">
+              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
+            </div>
+          </div>
+          <div class="quad reveal">
+            <div class="media-wrapper ratio-16-10" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View behind the scenes photo">
+              <img src="https://sun9-79.vkuserphoto.ru/s/v1/ig2/423T1eBPVQKuv0sa3xH9jTitZjlvjEBfCTzpKLiF20VGMYhQi8PI8AIkDhOLFkP0ngIDWqnVmgtYLwx79YyNATLH.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960&from=bu&cs=1280x0" alt="Behind the Scenes 2" class="media-content cover">
+              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
+            </div>
+          </div>
+          <div class="quad reveal">
+            <div class="media-wrapper ratio-16-10" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View band photo">
+              <img src="https://sun9-25.vkuserphoto.ru/s/v1/ig2/q900seO1qA54_fAcm5MY8g9PakLQelJhlcEOQPpwK-7fBRQHQ2DhlU9XkGFaT7UJwuJcPR5NxFjXbZmPQLBKmWCu.jpg?quality=95&as=32x40,48x60,72x90,108x135,160x201,240x301,360x452,480x602,540x677,640x803,720x903,877x1100&from=bu&cs=877x0" alt="Band Photo 1" class="media-content cover">
+              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Studio Sessions Slide -->
+        <div class="carousel-item">
+          <div class="quad reveal">
+            <h1>Studio Sessions</h1>
+            <p class="text-uppercase letter-spacing-wide accent-color mb-40">
+              Процесс записи альбома Farewells
+            </p>
+          </div>
+          <div class="quad reveal">
+            <div class="media-wrapper ratio-16-9" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View studio session photo">
+              <img src="https://sun9-25.vkuserphoto.ru/s/v1/ig2/q900seO1qA54_fAcm5MY8g9PakLQelJhlcEOQPpwK-7fBRQHQ2DhlU9XkGFaT7UJwuJcPR5NxFjXbZmPQLBKmWCu.jpg?quality=95&as=32x40,48x60,72x90,108x135,160x201,240x301,360x452,480x602,540x677,640x803,720x903,877x1100&from=bu&cs=877x0" alt="Studio Session 1" class="media-content cover">
+              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
+            </div>
+          </div>
+          <div class="quad reveal">
+            <div class="media-wrapper ratio-16-9" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View studio session photo">
+              <img src="https://sun9-84.vkuserphoto.ru/s/v1/ig2/HydlIMpge91xdLHkWGkMR_BBhXzDZ4EX8GEUggolMnfXU_iw7oamAjkEnwGufQQ1_NkyIS2jEJ6p6aCRhpDjLf5C.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x161,240x241,360x362,480x482,540x543,640x643,720x723,1080x1085,1274x1280&from=bu&cs=1274x0" alt="Studio Session 2" class="media-content cover">
+              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
+            </div>
+          </div>
+          <div class="quad reveal">
+            <div class="media-wrapper ratio-16-9" onclick="openLightbox(this)" role="button" tabindex="0" aria-label="View recording photo">
+              <img src="https://sun9-79.vkuserphoto.ru/s/v1/ig2/423T1eBPVQKuv0sa3xH9jTitZjlvjEBfCTzpKLiF20VGMYhQi8PI8AIkDhOLFkP0ngIDWqnVmgtYLwx79YyNATLH.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960&from=bu&cs=1280x0" alt="Recording Photo 1" class="media-content cover">
+              <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)" aria-label="Fullscreen">⛶</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-btn carousel-btn-next" onclick="nextCarousel()" aria-label="Next slide">❯</button>
+    </div>
+  </section>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <span class="lightbox-close" onclick="closeLightbox()" role="button" tabindex="0" aria-label="Close">&times;</span>
+    <img id="lightbox-img" src="" alt="Fullscreen image">
+  </div>
+
+  <!-- JavaScript -->
+  <script src="src/js/main.js" type="module"></script>
 </body>
 </html>

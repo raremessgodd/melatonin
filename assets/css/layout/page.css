@@ -1,0 +1,293 @@
+/* Page titles */
+.page-title {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: var(--bg-color);
+  color: #fff;
+  padding: 16px 24px;
+  pointer-events: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.page-title--top {
+  top: 0;
+}
+
+/* Main content panels */
+.panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 8vh 8vw;
+  box-sizing: border-box;
+  touch-action: pan-y;
+}
+
+.panel__inner {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.panel__inner--quad {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* Background layers */
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  aria-hidden: true;
+}
+
+.bg__layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.bg__layer:first-child {
+  opacity: 1;
+}
+
+/* Background canvas strip */
+.img-strip__grid {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-auto-flow: row;
+  z-index: -1;
+}
+
+.img-strip {
+  --tile-w: 400px;
+  --tile-h: 140px;
+  
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+}
+
+/* Image only as source */
+#srcImg {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  left: -9999px;
+  top: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#stripCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .panel__inner {
+    grid-template-columns: 1fr;
+  }
+  
+  .panel__inner--quad {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  
+  .panel {
+    padding: 5vh 5vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    flex-direction: column;
+    text-align: center;
+    padding: 10px 12px;
+  }
+  
+  .page-title h1 {
+    font-size: 1.8rem;
+    margin-bottom: 6px;
+  }
+  
+  .page-title p {
+    font-size: 0.8rem;
+    margin-bottom: 0;
+  }
+  
+  h1 {
+    font-size: 2.2rem;
+  }
+  
+  h2 {
+    font-size: 1.3rem;
+  }
+  
+  .panel {
+    padding: 3vh 3vw;
+  }
+  
+  .panel__inner {
+    gap: 24px;
+  }
+  
+  .panel__inner--quad {
+    gap: 12px;
+  }
+}
+
+/* Medium screen optimization for better fit on devices like 430px width */
+@media (max-width: 576px) {
+  .panel__inner--quad {
+    gap: 10px;
+  }
+  
+  .panel__inner--quad .quad {
+    padding: 8px;
+  }
+  
+  .panel__inner--quad .quad h1:not(.large-heading) {
+    font-size: 1.6rem;
+  }
+  
+  .panel__inner--quad .quad .mb-40 {
+    margin-bottom: 12px;
+  }
+  
+  /* Specific optimization for live performance panel */
+  .panel__inner--quad .quad .media-wrapper {
+    max-width: 95%;
+    margin: 0 auto;
+  }
+}
+
+/* Extra mobile optimization for quad panels */
+@media (max-width: 480px) {
+  .panel__inner--quad {
+    gap: 10px;
+  }
+  
+  .panel__inner--quad .quad {
+    padding: 6px;
+  }
+  
+  .panel__inner--quad .quad h1 {
+    font-size: 1.5rem;
+  }
+  
+  .panel__inner--quad .quad h2 {
+    font-size: 1.1rem;
+  }
+  
+  .panel__inner--quad .quad p {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+  }
+}
+
+/* Ultra mobile optimization */
+@media (max-width: 360px) {
+  .page-title {
+    padding: 8px 10px;
+  }
+  
+  .page-title h1 {
+    font-size: 1.5rem;
+  }
+  
+  .page-title p {
+    font-size: 0.7rem;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  h2 {
+    font-size: 1.1rem;
+  }
+  
+  .panel {
+    padding: 2vh 2vw;
+  }
+  
+  .panel__inner {
+    gap: 16px;
+  }
+  
+  .panel__inner--quad {
+    gap: 8px;
+  }
+  
+  .panel__inner--quad .quad {
+    padding: 4px;
+  }
+  
+  .panel__inner--quad .quad h1 {
+    font-size: 1.3rem;
+  }
+  
+  .panel__inner--quad .quad p {
+    font-size: 0.75rem;
+  }
+  
+  /* Specific optimization for live performance panel */
+  .panel__inner--quad .quad .media-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Extra small screen optimization */
+@media (max-width: 320px) {
+  .panel__inner--quad {
+    gap: 6px;
+  }
+  
+  .panel__inner--quad .quad {
+    padding: 2px;
+  }
+  
+  .panel__inner--quad .quad h1 {
+    font-size: 1.2rem;
+  }
+  
+  .panel__inner--quad .quad p {
+    font-size: 0.7rem;
+  }
+}
+
+/* Specific optimizations for promo and live sections */
+@media (max-width: 768px) {
+  .panel__inner--quad .quad:first-child {
+    text-align: center;
+  }
+  
+  .panel__inner--quad .quad:first-child h1,
+  .panel__inner--quad .quad:first-child .large-heading {
+    margin-bottom: 10px;
+  }
+}

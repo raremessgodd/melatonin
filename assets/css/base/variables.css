@@ -1,0 +1,50 @@
+:root {
+  /* Colors */
+  --bg-color: #000000;
+  --text-color: #e0e0e0;
+  --text-muted: #a0a0a0;
+  --card-bg: #111111;
+  --card-border: #333333;
+  --accent-color: #ffffff;
+  
+  /* Spacing */
+  --spacing-unit: 32px;
+  --radius: 10px;
+  
+  /* Typography */
+  --font-primary: 'Space Grotesk', sans-serif;
+  --font-secondary: 'Syne', sans-serif;
+  
+  /* Custom properties from custom.css */
+  --accent-text-style: uppercase;
+  --accent-letter-spacing: 2px;
+  --section-margin-bottom: 40px;
+  --iframe-margin: 20px 0;
+  --image-margin-top: 60px;
+}
+
+/* Mobile-specific variables */
+@media (max-width: 768px) {
+  :root {
+    --spacing-unit: 24px;
+    --radius: 8px;
+    --section-margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --spacing-unit: 16px;
+    --radius: 6px;
+    --section-margin-bottom: 20px;
+    --accent-letter-spacing: 1px;
+  }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --spacing-unit: 12px;
+    --radius: 4px;
+    --section-margin-bottom: 15px;
+  }
+}
