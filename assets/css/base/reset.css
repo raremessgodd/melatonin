@@ -1,0 +1,129 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-primary);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Prevent scrolling on mobile devices - panels should be fullscreen slides */
+@media (max-width: 480px) {
+  body {
+    overflow: hidden;
+    height: 100vh;
+    position: fixed;
+    width: 100%;
+  }
+  
+  html {
+    overflow: hidden;
+    height: 100vh;
+  }
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+a:visited {
+  color: var(--accent-color);
+}
+
+a:hover {
+  color: var(--accent-color);
+}
+
+a:active {
+  color: var(--accent-color);
+}
+
+/* Typography */
+h1 {
+  font-family: var(--font-secondary);
+  font-size: 4rem;
+  font-weight: 800;
+  margin: 0 0 10px 0;
+  color: var(--accent-color);
+  text-transform: uppercase;
+}
+
+h2 {
+  font-family: var(--font-secondary);
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 0 10px 0;
+  color: var(--accent-color);
+  text-transform: uppercase;
+}
+
+h3 {
+  font-family: var(--font-secondary);
+  color: var(--accent-color);
+  margin-top: 0;
+}
+
+p {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 3rem;
+  }
+  
+  h2 {
+    font-size: 1.8rem;
+  }
+  
+  h3 {
+    font-size: 1.4rem;
+  }
+  
+  p {
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+  }
+  
+  p {
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+  }
+}
+
+/* Text alignment utilities */
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}

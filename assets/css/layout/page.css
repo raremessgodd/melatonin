@@ -1,0 +1,450 @@
+/* Page titles */
+.page-title {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: var(--bg-color);
+  color: #fff;
+  padding: 16px 24px;
+  pointer-events: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-title--top {
+  top: 0;
+}
+
+/* Main content panels */
+.panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 8vh 8vw;
+  box-sizing: border-box;
+  touch-action: pan-y;
+}
+
+.panel__inner {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.panel__inner--quad {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* Background layers */
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  aria-hidden: true;
+}
+
+.bg__layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.bg__layer:first-child {
+  opacity: 1;
+}
+
+/* Background canvas strip */
+.img-strip__grid {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-auto-flow: row;
+  z-index: -1;
+}
+
+.img-strip {
+  --tile-w: 400px;
+  --tile-h: 140px;
+  
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+}
+
+/* Image only as source */
+#srcImg {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  left: -9999px;
+  top: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#stripCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .panel__inner {
+    grid-template-columns: 1fr;
+  }
+  
+  .panel__inner--quad {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  
+  .panel {
+    padding: 5vh 5vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    padding: 10px 12px;
+    flex-wrap: wrap;
+  }
+  
+  .page-title h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0;
+    margin-right: 12px;
+  }
+  
+  .page-title p {
+    font-size: 0.8rem;
+    margin-bottom: 0;
+    text-align: right;
+    flex: 1;
+    min-width: 0;
+  }
+  
+  h1 {
+    font-size: 2.2rem;
+  }
+  
+  h2 {
+    font-size: 1.3rem;
+  }
+  
+  .panel {
+    padding: 3vh 3vw;
+  }
+  
+  .panel__inner {
+    gap: 24px;
+  }
+  
+  .panel__inner--quad {
+    gap: 12px;
+  }
+}
+
+/* Medium screen optimization for better fit on devices like 430px width */
+@media (max-width: 576px) {
+  .panel__inner--quad {
+    gap: 10px;
+  }
+  
+  .panel__inner--quad .quad {
+    padding: 8px;
+  }
+  
+  .panel__inner--quad .quad h1:not(.large-heading) {
+    font-size: 1.6rem;
+  }
+  
+  .panel__inner--quad .quad .mb-40 {
+    margin-bottom: 12px;
+  }
+  
+  /* Specific optimization for live performance panel */
+  .panel__inner--quad .quad .media-wrapper {
+    max-width: 95%;
+    margin: 0 auto;
+  }
+}
+
+/* Extra mobile optimization for quad panels */
+@media (max-width: 480px) {
+  /* Fix header - links go to second line on small screens */
+  .page-title {
+    height: auto;
+    min-height: auto;
+    max-height: none;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8px 12px;
+    flex-wrap: nowrap;
+  }
+  
+  .page-title {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8px 12px;
+    min-height: auto;
+  }
+  
+  .page-title h1 {
+    font-size: 1.2rem;
+    margin: 0;
+    margin-bottom: 4px;
+    flex-shrink: 0;
+  }
+  
+  .page-title p {
+    font-size: 0.6rem;
+    margin: 0;
+    text-align: left;
+    width: 100%;
+    overflow: visible;
+  }
+  
+  .page-title p a {
+    white-space: nowrap;
+    display: inline;
+  }
+  
+  /* Body should account for fixed header */
+  body {
+    padding-top: 0;
+    overflow: hidden;
+  }
+  
+  /* All panels should fit between header and bottom - NO SCROLLING */
+  /* Note: PanelTransitionManager sets inline styles, but we ensure no scrolling */
+  .panel {
+    padding-left: 5vw;
+    padding-right: 5vw;
+    overflow: hidden !important;
+    box-sizing: border-box;
+  }
+  
+  /* Ensure panels respect the height set by JavaScript */
+  .panel[style*="position: absolute"] {
+    overflow: hidden !important;
+  }
+  
+  /* Ensure panel inner content fits within viewport - NO SCROLLING */
+  .panel__inner {
+    gap: 12px;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+  
+  .panel__inner--quad {
+    gap: 6px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto repeat(3, 1fr);
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  
+  .panel__inner--quad .quad {
+    padding: 4px;
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .panel__inner--quad .quad:first-child {
+    flex: 0 0 auto;
+    min-height: auto;
+  }
+  
+  .panel__inner--quad .quad h1 {
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  
+  .panel__inner--quad .quad h2 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  
+  .panel__inner--quad .quad p {
+    font-size: 0.7rem;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  
+  /* Ensure text columns fit - NO SCROLLING */
+  .panel__col {
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+/* Ultra mobile optimization */
+@media (max-width: 380px) {
+  .page-title {
+    padding: 6px 8px;
+    min-height: auto;
+    flex-direction: column;
+  }
+  
+  .page-title h1 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+  
+  .page-title p {
+    font-size: 0.55rem;
+    overflow: visible;
+    text-align: left;
+    width: 100%;
+  }
+  
+  .page-title p a {
+    white-space: nowrap;
+  }
+  
+  .panel {
+    padding-top: calc(50px + 1vh);
+    padding-bottom: 1vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    height: 100vh;
+  }
+  
+  .panel__inner {
+    height: calc(100vh - 50px - 2vh);
+    max-height: calc(100vh - 50px - 2vh);
+    gap: 8px;
+  }
+  
+  .panel__inner--quad {
+    gap: 4px;
+  }
+  
+  .panel__inner--quad .quad {
+    padding: 3px;
+  }
+  
+  .panel__inner--quad .quad h1 {
+    font-size: 1.1rem;
+    margin-bottom: 3px;
+  }
+  
+  .panel__inner--quad .quad p {
+    font-size: 0.65rem;
+    margin-bottom: 3px;
+  }
+  
+  h1 {
+    font-size: 1.9rem;
+  }
+  
+  h2 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Extra small screen optimization */
+@media (max-width: 320px) {
+  .page-title {
+    min-height: auto;
+    padding: 5px 6px;
+    flex-direction: column;
+  }
+  
+  .page-title h1 {
+    font-size: 0.9rem;
+    margin-bottom: 3px;
+  }
+  
+  .page-title p {
+    font-size: 0.5rem;
+    overflow: visible;
+    text-align: left;
+    width: 100%;
+  }
+  
+  .page-title p a {
+    white-space: nowrap;
+  }
+  
+  .panel {
+    padding-top: calc(45px + 1vh);
+    padding-bottom: 1vh;
+    padding-left: 4vw;
+    padding-right: 4vw;
+  }
+  
+  .panel__inner {
+    height: calc(100vh - 45px - 2vh);
+    max-height: calc(100vh - 45px - 2vh);
+  }
+  
+  .panel__inner--quad {
+    gap: 3px;
+  }
+  
+  .panel__inner--quad .quad {
+    padding: 2px;
+  }
+  
+  .panel__inner--quad .quad h1 {
+    font-size: 1rem;
+    margin-bottom: 2px;
+  }
+  
+  .panel__inner--quad .quad p {
+    font-size: 0.6rem;
+    margin-bottom: 2px;
+  }
+}
+
+/* Specific optimizations for promo and live sections */
+@media (max-width: 768px) {
+  .panel__inner--quad .quad:first-child {
+    text-align: center;
+  }
+  
+  .panel__inner--quad .quad:first-child h1,
+  .panel__inner--quad .quad:first-child .large-heading {
+    margin-bottom: 10px;
+  }
+}
