@@ -17,6 +17,7 @@ body {
 html {
   overflow: auto;
   height: auto;
+  scroll-behavior: smooth;
 }
 
 a {
@@ -136,5 +137,6 @@ p {
 }
 
 .text-left {
+  cursor: pointer;
   text-align: left;
 }

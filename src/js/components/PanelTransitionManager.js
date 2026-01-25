@@ -9,9 +9,9 @@ export class PanelTransitionManager {
     
     // Background images array - one for each panel
     this.backgroundImages = [
-      'assets/img/mi(1).jpeg',        // First panel (Introduction)
-      'assets/img/mi(1)_bl.jpg',      // Second panel (Album)
+      'assets/img/mi(1).jpg',        // First panel (Introduction)
       'assets/img/mi(1)_gr.jpg',      // Third panel (Promo)
+      'assets/img/mi(1)_bl.jpg',      // Second panel (Album)
       'assets/img/mi(1)_yl.jpg'       // Fourth panel (Live Performance)
     ];
     

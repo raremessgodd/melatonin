@@ -228,6 +228,10 @@
   .panel__inner--quad .quad:first-child {
     text-align: center;
   }
+
+  .panel__inner .panel__col:first-child {
+    text-align: center;
+  }
   
   .panel__inner--quad .quad:first-child h1,
   .panel__inner--quad .quad:first-child .large-heading {
