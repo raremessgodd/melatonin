@@ -1,24 +1,31 @@
 import { DOMUtils } from '../utils/DOMUtils.js';
+import { BackgroundCanvasManager } from './BackgroundCanvasManager.js';
 
 export class PanelTransitionManager {
   constructor() {
     this.panels = [...document.querySelectorAll('.panel')];
-    this.bgA = document.getElementById('bgA');
-    this.bgB = document.getElementById('bgB');
     this.header = document.querySelector('.page-title--top');
     this.footer = document.querySelector('.page-title--bottom');
     
-    this.panelData = [];
-    this.currentSection = 0;
+    // Background images array - one for each panel
+    this.backgroundImages = [
+      'assets/img/mi(1).jpeg',        // First panel (Introduction)
+      'assets/img/mi(1)_bl.jpg',      // Second panel (Album)
+      'assets/img/mi(1)_gr.jpg',      // Third panel (Promo)
+      'assets/img/mi(1)_yl.jpg'       // Fourth panel (Live Performance)
+    ];
+    
+    this.currentBgIndex = 0;
     this.isTransitioning = false;
-    this.transitionDirection = 0; // 1 for forward, -1 for backward
-    this.transitionProgress = 0; // 0 to 1
-    this.scrollDelta = 0;
-    this.lastScrollTime = 0;
-    this.isScrollLocked = false;
-    this.touchStartY = 0;
-    this.lastTouchTime = 0;
-    this.isTouchLocked = false;
+    this.observer = null;
+    
+    // Canvas elements for cross-fade
+    this.strip = document.getElementById('strip');
+    this.canvasA = null;
+    this.canvasB = null;
+    this.canvasManagerA = null;
+    this.canvasManagerB = null;
+    this.activeCanvas = 'A';
     
     this.init();
   }
@@ -26,242 +33,186 @@ export class PanelTransitionManager {
   init() {
     if (this.panels.length === 0) return;
     
-    // 1) Store panel data
-    this.panelData = this.panels.map(p => ({
-      element: p,
-      bg: p.dataset.bg
-    }));
+    // Create two canvas layers for cross-fade
+    this.createCanvasLayers();
     
-    // 2) Preload backgrounds
-    const urls = [...new Set(this.panelData.map(p => p.bg).filter(Boolean))];
-    urls.forEach(u => { 
-      const im = new Image(); 
-      im.decoding = 'async'; 
-      im.src = u; 
-    });
+    // Initialize canvas managers
+    this.initCanvasManagers();
     
-    // 3) Initialize panel positions and visibility
-    this.initPanels();
+    // Set all panels to normal scroll layout
+    this.setupNormalLayout();
     
-    // 4) Add event listeners with throttling for better performance
-    const throttledHandleScroll = DOMUtils.throttle((event) => this.handleScroll(event), 100);
-    const throttledHandleTouchMove = DOMUtils.throttle((event) => this.handleTouchMove(event), 100);
-    
-    window.addEventListener('wheel', throttledHandleScroll, { passive: false });
-    window.addEventListener('touchstart', (event) => this.handleTouchStart(event), { passive: true });
-    window.addEventListener('touchmove', throttledHandleTouchMove, { passive: false });
-    window.addEventListener('keydown', (event) => this.handleKeyDown(event));
+    // Setup scroll-based background changes
+    this.setupScrollBackgrounds();
   }
   
-  setBg(el, url) {
-    if (el) {
-      el.style.backgroundImage = `url("${url}")`;
+  createCanvasLayers() {
+    if (!this.strip) return;
+    
+    // Remove existing canvas if any
+    const existingCanvas = document.getElementById('stripCanvas');
+    if (existingCanvas) {
+      existingCanvas.remove();
     }
+    
+    // Create canvas A (visible)
+    this.canvasA = document.createElement('canvas');
+    this.canvasA.id = 'stripCanvasA';
+    this.canvasA.style.position = 'absolute';
+    this.canvasA.style.top = '0';
+    this.canvasA.style.left = '0';
+    this.canvasA.style.width = '100%';
+    this.canvasA.style.height = '100%';
+    this.canvasA.style.opacity = '1';
+    this.canvasA.style.transition = 'opacity 0.8s ease';
+    this.strip.appendChild(this.canvasA);
+    
+    // Create canvas B (hidden, for transition)
+    this.canvasB = document.createElement('canvas');
+    this.canvasB.id = 'stripCanvasB';
+    this.canvasB.style.position = 'absolute';
+    this.canvasB.style.top = '0';
+    this.canvasB.style.left = '0';
+    this.canvasB.style.width = '100%';
+    this.canvasB.style.height = '100%';
+    this.canvasB.style.opacity = '0';
+    this.canvasB.style.transition = 'opacity 0.8s ease';
+    this.canvasB.style.pointerEvents = 'none';
+    this.strip.appendChild(this.canvasB);
   }
   
-  // Initialize panel positions and visibility
-  initPanels() {
-    // Get header and footer heights
-    const headerHeight = this.header ? this.header.offsetHeight : 0;
-    const footerHeight = this.footer ? this.footer.offsetHeight : 0;
+  initCanvasManagers() {
+    // Initialize canvas A with first image
+    this.canvasManagerA = new BackgroundCanvasManager(
+      this.canvasA,
+      this.backgroundImages[0],
+      this.strip
+    );
+    this.canvasManagerA.startRendering();
     
-    // Calculate available height for content
-    const availableHeight = `calc(100vh - ${headerHeight}px - ${footerHeight}px)`;
-    
+    // Initialize canvas B (will be used for transitions)
+    this.canvasManagerB = new BackgroundCanvasManager(
+      this.canvasB,
+      this.backgroundImages[0],
+      this.strip
+    );
+    // Don't start rendering B yet, it will be activated during transitions
+  }
+  
+  setupNormalLayout() {
+    // Reset all panels to normal flow for scrolling
     this.panels.forEach((panel, index) => {
-      // Position all panels absolutely to stack them
-      panel.style.position = 'absolute';
-      panel.style.top = '0';
-      panel.style.left = '0';
+      panel.style.position = 'relative';
+      panel.style.top = 'auto';
+      panel.style.left = 'auto';
       panel.style.width = '100%';
-      panel.style.height = '100vh';
-      panel.style.boxSizing = 'border-box';
-      
-      // Constrain panels to viewport area between header and footer
-      panel.style.paddingTop = `${headerHeight}px`;
-      panel.style.paddingBottom = `${footerHeight}px`;
-      
-      // Ensure content area has proper constraints
-      panel.style.display = 'flex';
-      panel.style.alignItems = 'center';
-      
-      // Initially hide all panels except the first
-      if (index === 0) {
-        panel.style.opacity = '1';
-        panel.style.pointerEvents = 'auto';
-        panel.classList.add('is-visible');
-      } else {
-        panel.style.opacity = '0';
-        panel.style.pointerEvents = 'none';
-        panel.classList.remove('is-visible');
-      }
+      panel.style.height = 'auto';
+      panel.style.minHeight = '100vh';
+      panel.style.paddingTop = '';
+      panel.style.paddingBottom = '';
+      panel.style.opacity = '1';
+      panel.style.pointerEvents = 'auto';
+      panel.style.display = '';
+      panel.style.boxSizing = '';
+      panel.classList.add('is-visible');
     });
   }
   
-  // Update cross-fade transition
-  updateTransition() {
-    const nextSection = this.currentSection + this.transitionDirection;
+  setupScrollBackgrounds() {
+    // Use Intersection Observer to detect when panels enter viewport
+    const options = {
+      root: null,
+      rootMargin: '-20% 0px -20% 0px', // Trigger when panel is 20% from top/bottom
+      threshold: 0.3
+    };
     
-    if (nextSection < 0 || nextSection >= this.panels.length) {
-      // Reset transition if out of bounds
-      this.transitionDirection = 0;
-      this.transitionProgress = 0;
-      this.isTransitioning = false;
-      return;
-    }
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !this.isTransitioning) {
+          const panelIndex = this.panels.indexOf(entry.target);
+          if (panelIndex !== -1 && panelIndex < this.backgroundImages.length) {
+            this.changeBackground(panelIndex);
+          }
+        }
+      });
+    }, options);
     
-    const currentPanel = this.panelData[this.currentSection].element;
-    const nextPanel = this.panelData[nextSection].element;
-    
-    // Update opacities for cross-fade effect
-    currentPanel.style.opacity = `${1 - this.transitionProgress}`;
-    nextPanel.style.opacity = `${this.transitionProgress}`;
-    
-    // Update background transition
-    const currentBg = this.panelData[this.currentSection].bg;
-    const nextBg = this.panelData[nextSection].bg;
-    
-    if (currentBg !== nextBg) {
-      if (this.transitionProgress === 0) {
-        // Starting transition - set both backgrounds
-        if (currentBg) this.setBg(this.bgA, currentBg);
-        if (nextBg) this.setBg(this.bgB, nextBg);
-        if (this.bgB) this.bgB.style.opacity = '0';
-      } else if (this.transitionProgress === 1) {
-        // Finished transition - switch to next background
-        if (nextBg) this.setBg(this.bgA, nextBg);
-        if (this.bgB) this.bgB.style.opacity = '0';
-      } else {
-        // During transition - cross-fade backgrounds
-        if (this.bgB) this.bgB.style.opacity = `${this.transitionProgress}`;
-      }
-    }
-    
-    // Update visibility classes
-    if (this.transitionProgress > 0.5) {
-      currentPanel.classList.remove('is-visible');
-      nextPanel.classList.add('is-visible');
-      currentPanel.style.pointerEvents = 'none';
-      nextPanel.style.pointerEvents = 'auto';
-    } else {
-      currentPanel.classList.add('is-visible');
-      nextPanel.classList.remove('is-visible');
-      currentPanel.style.pointerEvents = 'auto';
-      nextPanel.style.pointerEvents = 'none';
-    }
-    
-    // Complete transition
-    if (this.transitionProgress >= 1) {
-      this.currentSection = nextSection;
-      this.transitionDirection = 0;
-      this.transitionProgress = 0;
-      this.isTransitioning = false;
-    }
+    // Observe all panels
+    this.panels.forEach(panel => {
+      this.observer.observe(panel);
+    });
   }
   
-  // Navigation functions with cross-fade
-  startTransition(direction) {
+  changeBackground(newIndex) {
+    if (newIndex === this.currentBgIndex || !this.backgroundImages[newIndex]) return;
     if (this.isTransitioning) return;
     
-    const nextSection = this.currentSection + direction;
-    if (nextSection < 0 || nextSection >= this.panelData.length) return;
-    
-    this.transitionDirection = direction;
-    this.transitionProgress = 0;
     this.isTransitioning = true;
+    const newBgUrl = this.backgroundImages[newIndex];
     
-    // Make sure both panels are visible for transition
-    const currentPanel = this.panelData[this.currentSection].element;
-    const nextPanel = this.panelData[nextSection].element;
+    // Determine which canvas is currently visible
+    const visibleCanvas = this.activeCanvas === 'A' ? this.canvasA : this.canvasB;
+    const hiddenCanvas = this.activeCanvas === 'A' ? this.canvasB : this.canvasA;
+    const visibleManager = this.activeCanvas === 'A' ? this.canvasManagerA : this.canvasManagerB;
+    const hiddenManager = this.activeCanvas === 'A' ? this.canvasManagerB : this.canvasManagerA;
     
-    currentPanel.style.pointerEvents = 'none';
-    nextPanel.style.pointerEvents = 'none';
+    // Change image on hidden canvas
+    hiddenManager.changeImage(newBgUrl);
     
-    this.animateTransition();
+    // Wait a bit for the image to start loading, then start rendering
+    setTimeout(() => {
+      hiddenManager.startRendering();
+      
+      // Start cross-fade transition
+      this.fadeCanvas(hiddenCanvas, visibleCanvas, hiddenManager, visibleManager, newIndex);
+    }, 50);
   }
   
-  animateTransition() {
-    if (!this.isTransitioning || this.transitionDirection === 0) return;
+  fadeCanvas(newCanvas, oldCanvas, newManager, oldManager, newIndex) {
+    const duration = 200; // milliseconds - longer for smoother fade
+    const startTime = performance.now();
+    const startOpacity = 0;
+    const endOpacity = 1;
     
-    // Smooth transition progress
-    this.transitionProgress = Math.min(1, this.transitionProgress + 0.05);
+    // Ensure new canvas is on top
+    newCanvas.style.zIndex = '2';
+    oldCanvas.style.zIndex = '1';
     
-    this.updateTransition();
+    // Smooth easing function (ease-in-out cubic)
+    const easeInOutCubic = (t) => {
+      return t < 0.5
+        ? 4 * t * t * t
+        : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    };
     
-    if (this.transitionProgress < 1) {
-      requestAnimationFrame(() => this.animateTransition());
-    } else {
-      this.isTransitioning = false;
-    }
-  }
-  
-  // Scroll event handling for cross-fade
-  handleScroll(event) {
-    const now = Date.now();
-    if (now - this.lastScrollTime < 300 || this.isScrollLocked) return; // Stronger debounce
-    
-    this.scrollDelta += event.deltaY;
-    
-    // Much higher threshold for tighter control
-    const threshold = 10;
-    
-    if (this.scrollDelta > threshold && !this.isTransitioning) {
-      this.isScrollLocked = true;
-      this.startTransition(1); // Next section
-      this.scrollDelta = 0;
-      this.lastScrollTime = now;
-      setTimeout(() => { this.isScrollLocked = false; }, 600); // Lock out rapid scrolls
-    } else if (this.scrollDelta < -threshold && !this.isTransitioning) {
-      this.isScrollLocked = true;
-      this.startTransition(-1); // Previous section
-      this.scrollDelta = 0;
-      this.lastScrollTime = now;
-      setTimeout(() => { this.isScrollLocked = false; }, 600); // Lock out rapid scrolls
-    }
-  }
-  
-  // Touch swipe handling for cross-fade
-  handleTouchStart(event) {
-    this.touchStartY = event.touches[0].clientY;
-  }
-  
-  handleTouchMove(event) {
-    const now = Date.now();
-    if (now - this.lastTouchTime < 500 || this.isTouchLocked) return; // Stronger debounce
-    
-    const touchY = event.touches[0].clientY;
-    const deltaY = this.touchStartY - touchY;
-    
-    // Much higher threshold for tighter control
-    const threshold = 110;
-    
-    if (Math.abs(deltaY) > threshold && !this.isTransitioning) {
-      this.isTouchLocked = true;
-      if (deltaY > 0) {
-        this.startTransition(1); // Next section
+    const animate = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Use smooth cubic easing
+      const easeProgress = easeInOutCubic(progress);
+      
+      const opacity = startOpacity + (endOpacity - startOpacity) * easeProgress;
+      newCanvas.style.opacity = opacity;
+      oldCanvas.style.opacity = 1 - opacity;
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
       } else {
-        this.startTransition(-1); // Previous section
+        // Transition complete
+        newCanvas.style.opacity = '1';
+        oldCanvas.style.opacity = '0';
+        
+        // Stop rendering old canvas
+        oldManager.stopRendering();
+        
+        // Swap active canvas
+        this.activeCanvas = this.activeCanvas === 'A' ? 'B' : 'A';
+        this.currentBgIndex = newIndex;
+        this.isTransitioning = false;
       }
-      this.touchStartY = touchY;
-      this.lastTouchTime = now;
-      setTimeout(() => { this.isTouchLocked = false; }, 600); // Lock out rapid touches
-    }
-  }
-  
-  // Keyboard navigation
-  handleKeyDown(event) {
-    switch (event.key) {
-      case 'ArrowDown':
-      case 'PageDown':
-      case ' ':
-        event.preventDefault();
-        if (!this.isTransitioning) this.startTransition(1);
-        break;
-      case 'ArrowUp':
-      case 'PageUp':
-        event.preventDefault();
-        if (!this.isTransitioning) this.startTransition(-1);
-        break;
-    }
+    };
+    
+    requestAnimationFrame(animate);
   }
 }

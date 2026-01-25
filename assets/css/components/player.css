@@ -11,6 +11,7 @@
 .player-artwork {
   flex: 0 0 auto;
   margin-bottom: 20px;
+  position: relative;
 }
 
 .player-artwork .artwork-image {
@@ -24,10 +25,11 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 .track-info {
-  flex: 1;
+  flex: 0 0 auto;
   margin-bottom: 15px;
 }
 
@@ -38,12 +40,16 @@
   margin: 0 0 5px 0;
   color: var(--accent-color);
   text-transform: uppercase;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .track-info .track-artist {
   font-size: 1rem;
   color: var(--text-muted);
   margin: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .control-buttons {
@@ -66,13 +72,17 @@
   justify-content: center;
   font-size: 18px;
   flex-shrink: 0;
-  /* Increase touch target size */
   min-width: 44px;
   min-height: 44px;
+  transition: opacity 0.2s ease;
 }
 
 .play-pause-btn:hover {
   opacity: 0.8;
+}
+
+.play-pause-btn:active {
+  opacity: 0.6;
 }
 
 .progress-container {
@@ -106,12 +116,61 @@
   justify-content: space-between;
   font-size: 0.8rem;
   color: var(--text-muted);
+  white-space: nowrap;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Tablets and medium-width devices (768px - 1600px) */
+@media (min-width: 768px) and (max-width: 1600px) {
   .custom-player {
-    padding: 12px;
+    padding: 24px;
+  }
+  
+  .player-artwork {
+    margin-bottom: 24px;
+  }
+  
+  .player-artwork .artwork-image {
+    max-width: 100%;
+  }
+  
+  .track-info {
+    margin-bottom: 20px;
+  }
+  
+  .track-info .track-title {
+    font-size: 1.8rem;
+  }
+  
+  .track-info .track-artist {
+    font-size: 1.1rem;
+  }
+  
+  .control-buttons {
+    gap: 20px;
+  }
+  
+  .play-pause-btn {
+    width: 56px;
+    height: 56px;
+    font-size: 20px;
+    min-width: 56px;
+    min-height: 56px;
+  }
+  
+  .progress-bar {
+    height: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .time-display {
+    font-size: 0.9rem;
+  }
+}
+
+/* Small devices (481px - 767px) */
+@media (max-width: 767px) {
+  .custom-player {
+    padding: 15px;
     max-width: 100%;
   }
   
@@ -120,7 +179,7 @@
   }
   
   .player-artwork .artwork-image {
-    max-width: 200px;
+    max-width: 220px;
     margin: 0 auto;
   }
   
@@ -129,11 +188,63 @@
   }
   
   .track-info .track-title {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
   
   .track-info .track-artist {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+  }
+  
+  .control-buttons {
+    gap: 10px;
+  }
+  
+  .play-pause-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .progress-bar {
+    height: 5px;
+    margin-bottom: 6px;
+  }
+  
+  .time-display {
+    font-size: 0.7rem;
+  }
+}
+
+/* Very small devices (381px - 480px) */
+@media (max-width: 480px) {
+  .custom-player {
+    padding: 12px;
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .player-artwork {
+    margin-bottom: 12px;
+  }
+  
+  .player-artwork .artwork-image {
+    max-width: 160px;
+    margin: 0 auto;
+  }
+  
+  .track-info {
+    margin-bottom: 10px;
+  }
+  
+  .track-info .track-title {
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+  
+  .track-info .track-artist {
+    font-size: 0.8rem;
   }
   
   .control-buttons {
@@ -144,13 +255,13 @@
     width: 40px;
     height: 40px;
     font-size: 14px;
-    min-width: 44px;
-    min-height: 44px;
+    min-width: 40px;
+    min-height: 40px;
   }
   
   .progress-bar {
-    height: 6px;
-    margin-bottom: 6px;
+    height: 5px;
+    margin-bottom: 5px;
   }
   
   .time-display {
@@ -158,12 +269,12 @@
   }
 }
 
-@media (max-width: 480px) {
+/* Ultra small devices (380px and less) */
+@media (max-width: 380px) {
   .custom-player {
-    padding: 11px;
+    padding: 10px;
     max-width: 100%;
     width: 100%;
-    border: 1px solid var(--card-border);
   }
   
   .player-artwork {
@@ -182,6 +293,7 @@
   .track-info .track-title {
     font-size: 0.9rem;
     line-height: 1.2;
+    margin-bottom: 4px;
   }
   
   .track-info .track-artist {
@@ -190,69 +302,34 @@
   
   .control-buttons {
     gap: 6px;
+    flex-wrap: nowrap;
   }
   
   .play-pause-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 12px;
-    min-width: 36px;
-    min-height: 36px;
+    width: 38px;
+    height: 38px;
+    font-size: 13px;
+    min-width: 38px;
+    min-height: 38px;
+  }
+  
+  .progress-container {
+    min-width: 0;
+    overflow: hidden;
   }
   
   .progress-bar {
-    height: 4px;
+    height: 5px;
     margin-bottom: 4px;
   }
   
   .time-display {
-    font-size: 0.55rem;
-  }
-}
-
-@media (max-width: 380px) {
-  .custom-player {
-    padding: 8px;
-    max-width: 100%;
-    width: 100%;
+    font-size: 0.6rem;
+    gap: 4px;
   }
   
-  .player-artwork {
-    margin-bottom: 8px;
-  }
-  
-  .player-artwork .artwork-image {
-    max-width: 120px;
-    margin: 0 auto;
-  }
-  
-  .track-info {
-    margin-bottom: 6px;
-  }
-  
-  .track-info .track-title {
-    font-size: 0.8rem;
-    line-height: 1.2;
-  }
-  
-  .track-info .track-artist {
-    font-size: 0.7rem;
-  }
-  
-  .play-pause-btn {
-    width: 32px;
-    height: 32px;
-    font-size: 11px;
-    min-width: 32px;
-    min-height: 32px;
-  }
-  
-  .progress-bar {
-    height: 4px;
-    margin-bottom: 4px;
-  }
-  
-  .time-display {
-    font-size: 0.5rem;
+  .time-display span {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

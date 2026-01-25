@@ -9,23 +9,14 @@ body {
   color: var(--text-color);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  height: 100vh;
-  overflow: hidden;
+  height: auto;
+  min-height: 100vh;
+  overflow: auto;
 }
 
-/* Prevent scrolling on mobile devices - panels should be fullscreen slides */
-@media (max-width: 480px) {
-  body {
-    overflow: hidden;
-    height: 100vh;
-    position: fixed;
-    width: 100%;
-  }
-  
-  html {
-    overflow: hidden;
-    height: 100vh;
-  }
+html {
+  overflow: auto;
+  height: auto;
 }
 
 a {
@@ -45,21 +36,21 @@ a:active {
   color: var(--accent-color);
 }
 
-/* Typography */
+/* Typography - Smaller sizes */
 h1 {
   font-family: var(--font-secondary);
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-weight: 800;
-  margin: 0 0 10px 0;
+  margin: 0 0 8px 0;
   color: var(--accent-color);
   text-transform: uppercase;
 }
 
 h2 {
   font-family: var(--font-secondary);
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 800;
-  margin: 0 0 10px 0;
+  margin: 0 0 8px 0;
   color: var(--accent-color);
   text-transform: uppercase;
 }
@@ -68,41 +59,23 @@ h3 {
   font-family: var(--font-secondary);
   color: var(--accent-color);
   margin-top: 0;
+  font-size: 1.3rem;
 }
 
 p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--text-muted);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 /* Responsive Typography */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   h1 {
-    font-size: 3rem;
+    font-size: 2.8rem;
   }
   
   h2 {
-    font-size: 1.8rem;
-  }
-  
-  h3 {
-    font-size: 1.4rem;
-  }
-  
-  p {
-    font-size: 1rem;
-    margin-bottom: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  h1 {
-    font-size: 2.5rem;
-  }
-  
-  h2 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
   
   h3 {
@@ -110,8 +83,46 @@ p {
   }
   
   p {
+    font-size: 0.95rem;
+    margin-bottom: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.2rem;
+  }
+  
+  h2 {
+    font-size: 1.4rem;
+  }
+  
+  h3 {
+    font-size: 1.1rem;
+  }
+  
+  p {
     font-size: 0.9rem;
     margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  h2 {
+    font-size: 1.2rem;
+  }
+  
+  h3 {
+    font-size: 1rem;
+  }
+  
+  p {
+    font-size: 0.85rem;
+    margin-bottom: 10px;
   }
 }
 

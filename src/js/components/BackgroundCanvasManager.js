@@ -1,30 +1,44 @@
 import { DOMUtils } from '../utils/DOMUtils.js';
 
 export class BackgroundCanvasManager {
-  constructor() {
-    this.strip = document.getElementById('strip');
-    this.canvas = document.getElementById('stripCanvas');
+  constructor(canvas, imageSrc, strip) {
+    this.strip = strip || document.getElementById('strip');
+    this.canvas = canvas;
     this.ctx = this.canvas ? this.canvas.getContext('2d', { alpha: false }) : null;
-    this.img = document.getElementById('srcImg');
+    this.img = null;
+    this.imageSrc = imageSrc;
     
     this.tileW = 400;
     this.tileH = 140;
+    this.isRendering = false;
+    this.animationFrame = null;
     
     this.init();
   }
   
   init() {
-    if (!this.strip || !this.canvas || !this.ctx || !this.img) return;
+    if (!this.strip || !this.canvas || !this.ctx || !this.imageSrc) return;
     
-    this.resize();
-    window.addEventListener('resize', () => this.resize());
+    // Create image element
+    this.img = new Image();
+    this.img.crossOrigin = 'anonymous';
     
-    // Start rendering after image loads
-    if (this.img.complete) {
+    this.img.onload = () => {
+      this.resize();
       this.render();
-    } else {
-      this.img.addEventListener('load', () => this.render());
-    }
+    };
+    
+    this.img.onerror = () => {
+      console.error('Failed to load image:', this.imageSrc);
+    };
+    
+    this.img.src = this.imageSrc;
+    
+    window.addEventListener('resize', () => {
+      if (this.img && this.img.complete) {
+        this.resize();
+      }
+    });
   }
   
   resize() {
@@ -44,16 +58,35 @@ export class BackgroundCanvasManager {
   }
   
   render() {
-    if (!this.strip || !this.canvas || !this.ctx || !this.img) return;
+    if (!this.strip || !this.canvas || !this.ctx || !this.img || !this.img.complete) {
+      if (this.isRendering) {
+        this.animationFrame = requestAnimationFrame(() => this.render());
+      }
+      return;
+    }
     
     const rect = this.strip.getBoundingClientRect();
     const W = rect.width;
     const H = rect.height;
     
+    if (W === 0 || H === 0) {
+      if (this.isRendering) {
+        this.animationFrame = requestAnimationFrame(() => this.render());
+      }
+      return;
+    }
+    
     this.ctx.clearRect(0, 0, W, H);
     
     const iw = this.img.naturalWidth || 1;
     const ih = this.img.naturalHeight || 1;
+    
+    if (iw === 0 || ih === 0) {
+      if (this.isRendering) {
+        this.animationFrame = requestAnimationFrame(() => this.render());
+      }
+      return;
+    }
     
     // object-fit: cover for one tile
     const tileAR = this.tileW / this.tileH;
@@ -84,8 +117,8 @@ export class BackgroundCanvasManager {
     const extraY = rows * this.tileH - H;
     
     // Movement if needed
-    const offsetX = 0; // Example: -((performance.now()/1000)*30 % tileW)
-    const offsetY = 0; // Example: -((performance.now()/1000)*10 % tileH)
+    const offsetX = 0;
+    const offsetY = 0;
     
     const startX = -extraX / 2 + offsetX;
     const startY = -extraY / 2 + offsetY;
@@ -98,6 +131,45 @@ export class BackgroundCanvasManager {
       }
     }
     
-    requestAnimationFrame(() => this.render());
+    // Only continue rendering if this is the active canvas and we need to check for resize
+    if (this.isRendering) {
+      this.animationFrame = requestAnimationFrame(() => this.render());
+    }
+  }
+  
+  startRendering() {
+    if (!this.isRendering) {
+      this.isRendering = true;
+      if (this.img && this.img.complete) {
+        this.render();
+      }
+    }
+  }
+  
+  stopRendering() {
+    this.isRendering = false;
+    if (this.animationFrame) {
+      cancelAnimationFrame(this.animationFrame);
+      this.animationFrame = null;
+    }
+  }
+  
+  changeImage(newImageSrc) {
+    if (newImageSrc === this.imageSrc) return;
+    
+    this.imageSrc = newImageSrc;
+    this.img = new Image();
+    this.img.crossOrigin = 'anonymous';
+    
+    this.img.onload = () => {
+      this.resize();
+      this.render();
+    };
+    
+    this.img.onerror = () => {
+      console.error('Failed to load image:', newImageSrc);
+    };
+    
+    this.img.src = newImageSrc;
   }
 }
