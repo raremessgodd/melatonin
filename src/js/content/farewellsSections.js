@@ -39,7 +39,7 @@ export const farewellsSections = [
           {
             type: 'media',
             mediaType: 'image',
-            src: 'assets/img/posters/motri_afisha.JPG',
+            src: 'assets/img/posters/motri_afisha.jpg',
             alt: 'Concert Photo 1',
             ariaLabel: 'View concert photo',
             ratio: '1-1',
