@@ -1,5 +1,9 @@
 * {
   box-sizing: border-box;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 body {
@@ -54,6 +58,10 @@ h1 {
   margin: 0 0 8px 0;
   color: var(--accent-color);
   text-transform: uppercase;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
 }
 
 h2 {
@@ -63,6 +71,10 @@ h2 {
   margin: 0 0 8px 0;
   color: var(--accent-color);
   text-transform: uppercase;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
 }
 
 h3 {
@@ -70,12 +82,20 @@ h3 {
   color: var(--accent-color);
   margin-top: 0;
   font-size: 1.3rem;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
 }
 
 p {
   font-size: 1rem;
   color: var(--text-muted);
   margin-bottom: 16px;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
 }
 
 /* Responsive Typography */
@@ -149,3 +169,50 @@ p {
   cursor: pointer;
   text-align: left;
 }
+
+/* Allow text selection for text elements */
+h1, h2, h3, h4, h5, h6,
+p, span, li, a,
+blockquote, pre, code,
+label, input[type="text"], textarea {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Text selection styling with color reversal */
+::selection {
+  background-color: #e0e0e0 !important;
+  color: #000000 !important;
+}
+
+::-moz-selection {
+  background-color: #e0e0e0 !important;
+  color: #000000 !important;
+}
+
+body ::selection {
+  background-color: #e0e0e0 !important;
+  color: #000000 !important;
+}
+
+body ::-moz-selection {
+  background-color: #e0e0e0 !important;
+  color: #000000 !important;
+}
+
+h1::selection, h2::selection, h3::selection,
+h4::selection, h5::selection, h6::selection,
+p::selection, span::selection, li::selection, a::selection {
+  background-color: #e0e0e0 !important;
+  color: #000000 !important;
+}
+
+h1::-moz-selection, h2::-moz-selection, h3::-moz-selection,
+h4::-moz-selection, h5::-moz-selection, h6::-moz-selection,
+p::-moz-selection, span::-moz-selection, li::-moz-selection, a::-moz-selection {
+  background-color: #e0e0e0 !important;
+  color: #000000 !important;
+}
+
