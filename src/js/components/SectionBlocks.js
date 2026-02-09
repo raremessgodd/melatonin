@@ -120,15 +120,6 @@ export class SectionBlocks {
     const controls = document.createElement('div');
     controls.className = 'video-player__controls';
 
-    const toggle = document.createElement('button');
-    toggle.type = 'button';
-    toggle.className = 'video-player__toggle';
-    toggle.setAttribute('aria-label', 'Воспроизведение/Пауза');
-    toggle.dataset.videoToggle = '';
-
-    toggle.appendChild(createPlayIcon());
-    toggle.dataset.currentIcon = 'play';
-
     const seek = document.createElement('input');
     seek.type = 'range';
     seek.min = '0';
@@ -156,7 +147,6 @@ export class SectionBlocks {
     fullscreen.dataset.videoFullscreen = '';
     fullscreen.appendChild(createFullscreenIcon());
 
-    controls.appendChild(toggle);
     controls.appendChild(seek);
     controls.appendChild(volume);
     controls.appendChild(fullscreen);

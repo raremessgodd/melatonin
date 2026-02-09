@@ -1,10 +1,12 @@
 import { createPlayIcon, createPauseIcon } from '../utils/SvgIcons.js';
 import { isMobileDevice } from '../utils/MediaUtils.js';
 
+const DEFAULT_VOLUME = 0.65; // 70% громкости по умолчанию
+
 export class VideoPlayerManager {
   constructor() {
     this.players = [];
-    this.hlsInstances = new Map(); // Храним HLS-инстансы для каждого видео
+    this.hlsInstances = new Map();
     this.init();
   }
 
@@ -17,33 +19,30 @@ export class VideoPlayerManager {
      wrappers.forEach((wrapper) => {
        const video = wrapper.querySelector('[data-video]');
        const seek = wrapper.querySelector('[data-video-seek]');
-       const volume = wrapper.querySelector('[data-video-volume]');
-       const toggle = wrapper.querySelector('[data-video-toggle]');
        const fullscreen = wrapper.querySelector('[data-video-fullscreen]');
        const centerToggle = wrapper.querySelector('.video-player__center-toggle');
-       if (!video || !seek || !volume || !toggle || !fullscreen) return;
+       if (!video || !seek || !fullscreen) return;
 
        wrapper.classList.toggle('is-touch', isTouchDevice);
+       video.volume = DEFAULT_VOLUME;
+       video.muted = false; // Убедиться, что видео не muted
 
        const player = {
          wrapper,
          video,
          seek,
-         volume,
-         toggle,
          fullscreen,
          centerToggle,
          isScrubbing: false,
          initialized: false,
          tempIcon: null,
          bufferBar: null,
-         volumeFill: null
+         controlsHideTimeout: null
         };
         this.players.push(player);
 
         this.createTempIcon(player);
         this.createBufferIndicator(player);
-        this.createVolumeIndicator(player);
 
         // Убираем автоматическую инициализацию - видео загружается только по клику на play
         // video.addEventListener('lazy-video-load', () => {
@@ -59,16 +58,12 @@ export class VideoPlayerManager {
          centerToggle.addEventListener('click', (e) => {
            e.preventDefault();
            e.stopPropagation();
-           // Если видео на паузе, запускаем
            if (video.paused) {
              if (!player.initialized) {
-               this.showLoading(player);
                this.initSource(player);
                setTimeout(() => {
-                 video.play().catch(() => {
-                   this.hideLoading(player);
-                 });
-               }, 100);
+                 video.play().catch(() => {});
+               }, 50);
              } else {
                video.play().catch(() => {});
              }
@@ -80,21 +75,23 @@ export class VideoPlayerManager {
 
        // Клик на wrapper запускает видео если не кликнули на кнопку
        wrapper.addEventListener('click', (e) => {
-         // Игнорируем клики на контролы и центральную кнопку
          if (e.target.closest('.video-player__controls') || e.target.closest('.video-player__center-toggle')) {
            return;
          }
 
-         // Если видео на паузе, запускаем
+         // На мобилке: если контролы скрыты, показываем их вместо паузы
+         if (isTouchDevice && wrapper.classList.contains('controls-hidden')) {
+           clearTimeout(player.controlsHideTimeout);
+           wrapper.classList.remove('controls-hidden');
+           return;
+         }
+
          if (video.paused) {
            if (!player.initialized) {
-             this.showLoading(player);
              this.initSource(player);
              setTimeout(() => {
-              video.play().catch(() => {
-                this.hideLoading(player);
-              });
-            }, 100);
+              video.play().catch(() => {});
+            }, 50);
           } else {
             video.play().catch(() => {});
           }
@@ -107,46 +104,35 @@ export class VideoPlayerManager {
          event.stopPropagation();
        };
 
-       const controlElements = [seek, volume];
-       controlElements.forEach((control) => {
-         ['pointerdown', 'mousedown', 'touchstart', 'click'].forEach((eventName) => {
-           control.addEventListener(eventName, swallowControlEvent);
-         });
-       });
+      const seekWrapper = seek.closest('.video-player__seek-wrapper');
+      if (seekWrapper) {
+        ['pointerdown', 'mousedown', 'touchstart', 'click'].forEach((eventName) => {
+          seekWrapper.addEventListener(eventName, swallowControlEvent);
+        });
+      }
+      seek.addEventListener('pointerdown', swallowControlEvent);
+      seek.addEventListener('mousedown', swallowControlEvent);
+      seek.addEventListener('touchstart', swallowControlEvent);
+      seek.addEventListener('click', swallowControlEvent);
 
-       const seekWrapper = seek.closest('.video-player__seek-wrapper');
-       const volumeWrapper = volume.closest('.video-player__volume-wrapper');
-       [seekWrapper, volumeWrapper].forEach((controlWrapper) => {
-         if (!controlWrapper) return;
-         ['pointerdown', 'mousedown', 'touchstart', 'click'].forEach((eventName) => {
-           controlWrapper.addEventListener(eventName, swallowControlEvent);
-         });
-       });
+      // Добавляем визуальную обратную связь при взаимодействии
+      const addActiveClass = () => {
+        if (seekWrapper) seekWrapper.classList.add('is-seeking');
+      };
 
-       volume.addEventListener('input', () => {
-         const value = Number(volume.value);
-         video.volume = value;
-         video.muted = value === 0;
-         if (value > 0 && video.muted) {
-           video.muted = false;
-         }
-         this.scheduleVolumeFill(player, value);
-       });
+      const removeActiveClass = () => {
+        if (seekWrapper) seekWrapper.classList.remove('is-seeking');
+      };
 
-      toggle.addEventListener('click', () => {
-        // Если видео ещё не инициализировано, загружаем его
-        if (!player.initialized) {
-          this.initSource(player);
-          // Небольшая задержка для загрузки, потом play
-          setTimeout(() => {
-            video.play().catch(() => {});
-          }, 100);
-        } else if (video.paused) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
-      });
+      seek.addEventListener('pointerdown', addActiveClass);
+      seek.addEventListener('touchstart', addActiveClass);
+      seek.addEventListener('mousedown', addActiveClass);
+
+      seek.addEventListener('pointerup', removeActiveClass);
+      seek.addEventListener('touchend', removeActiveClass);
+      seek.addEventListener('mouseup', removeActiveClass);
+      seek.addEventListener('pointercancel', removeActiveClass);
+      seek.addEventListener('touchcancel', removeActiveClass);
 
       seek.addEventListener('input', () => {
         player.isScrubbing = true;
@@ -158,9 +144,11 @@ export class VideoPlayerManager {
         this.updateTimeFromSeek(player);
       });
 
+      // Fullscreen обрабатывается в App.js - не добавляем обработчик здесь
+      // Кнопка fullscreen открывает/закрывает ЛАЙТБОКС, а не браузерный fullscreen
+
       video.addEventListener('loadedmetadata', () => {
         this.syncSeek(player);
-        this.updateToggleState(player);
       });
 
       video.addEventListener('timeupdate', () => {
@@ -173,20 +161,30 @@ export class VideoPlayerManager {
          if (!player.isScrubbing) {
            this.syncSeek(player);
          }
-         this.updateToggleState(player);
 
-         // Добавляем класс has-played при первом воспроизведении
          wrapper.classList.add('has-played');
          wrapper.classList.add('is-playing');
-
-         // Показываем временную иконку play
          this.showTempIcon(player, true);
+
+         // На мобильных устройствах скрывать контролы после 3 секунд воспроизведения
+         // НО НЕ в лайтбоксе
+         if (isTouchDevice && !wrapper.classList.contains('is-lightbox')) {
+           clearTimeout(player.controlsHideTimeout);
+           player.controlsHideTimeout = setTimeout(() => {
+             wrapper.classList.add('controls-hidden');
+           }, 3000);
+         }
        });
 
         video.addEventListener('pause', () => {
-          this.updateToggleState(player);
           this.showTempIcon(player, false);
           wrapper.classList.remove('is-playing');
+
+          // На мобильных показывать контролы при паузе
+          if (isTouchDevice) {
+            clearTimeout(player.controlsHideTimeout);
+            wrapper.classList.remove('controls-hidden');
+          }
         });
 
       // Обновляем прогресс буферизации
@@ -201,9 +199,6 @@ export class VideoPlayerManager {
         }
       });
 
-      if (!video.muted) {
-        volume.value = String(video.volume || 1);
-      }
 
       wrapper.classList.toggle('is-playing', !video.paused);
      });
@@ -250,12 +245,13 @@ export class VideoPlayerManager {
         const hls = new Hls({
           enableWorker: true,
           lowLatencyMode: false,
-          backBufferLength: 90,
+          backBufferLength: 60,
           debug: false,
-          maxBufferLength: 30,
-          maxMaxBufferLength: 60,
-          maxLoadingDelay: 4,
-          maxBufferHole: 0.5
+          maxBufferLength: 20,
+          maxMaxBufferLength: 40,
+          maxLoadingDelay: 3,
+          maxBufferHole: 0.3,
+          startLevel: -1
         });
 
         let errorRecoveryAttempts = 0;
@@ -312,20 +308,6 @@ export class VideoPlayerManager {
     }
 
     player.initialized = true;
-  }
-
-  updateToggleState(player) {
-    if (!player.toggle) return;
-    const isPaused = player.video.paused;
-
-    const oldIcon = player.toggle.querySelector('.video-player__icon');
-    if (oldIcon) {
-      oldIcon.remove();
-    }
-
-    const newIcon = isPaused ? createPlayIcon() : createPauseIcon();
-    player.toggle.appendChild(newIcon);
-    player.toggle.dataset.currentIcon = isPaused ? 'play' : 'pause';
   }
 
   setupPosterCapture(video) {
@@ -403,39 +385,6 @@ export class VideoPlayerManager {
   }
 
   // Создание индикатора уровня громкости
-  createVolumeIndicator(player) {
-    // Оборачиваем volume в контейнер если его ещё нет
-    if (!player.volume.parentElement.classList.contains('video-player__volume-wrapper')) {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'video-player__volume-wrapper';
-
-      player.volume.parentNode.insertBefore(wrapper, player.volume);
-      wrapper.appendChild(player.volume);
-
-      const volumeFill = document.createElement('div');
-      volumeFill.className = 'video-player__volume-fill';
-      wrapper.appendChild(volumeFill);
-      player.volumeFill = volumeFill;
-
-      // Инициализируем начальное значение
-      this.updateVolumeFill(player);
-    }
-  }
-
-  // Показать индикатор загрузки
-  showLoading(player) {
-    if (player.loadingIndicator && player.initialized) {
-      player.loadingIndicator.classList.add('is-visible');
-    }
-  }
-
-  // Скрыть индикатор загрузки
-  hideLoading(player) {
-    if (player.loadingIndicator) {
-      player.loadingIndicator.classList.remove('is-visible');
-    }
-  }
-
   // Показать временную иконку play/pause
   showTempIcon(player, isPlaying) {
     if (!player.tempIcon) return;
@@ -464,28 +413,5 @@ export class VideoPlayerManager {
     } catch (e) {
       // Игнорируем ошибки при обновлении буфера
     }
-  }
-  
-  // Запланировать обновление индикатора громкости
-  scheduleVolumeFill(player, value) {
-    if (Number.isNaN(value)) return;
-    player.pendingVolumeValue = value;
-    if (player.volumeRaf) return;
-    player.volumeRaf = requestAnimationFrame(() => {
-      player.volumeRaf = null;
-      this.updateVolumeFill(player, player.pendingVolumeValue);
-    });
-  }
-
-  // Обновление визуального индикатора уровня громкости
-  updateVolumeFill(player, valueOverride = null) {
-    const { volume, volumeFill } = player;
-    if (!volumeFill) return;
-
-    const rawValue = valueOverride === null ? Number(volume.value) : valueOverride;
-    const value = Math.min(1, Math.max(0, rawValue));
-    const percent = value * 100;
-
-    volumeFill.style.width = `${percent}%`;
   }
 }

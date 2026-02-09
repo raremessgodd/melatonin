@@ -73,6 +73,13 @@ export class LightboxManager {
     // Сначала показываем текущее изображение (низкого качества)
     this.lightboxImg.src = imgSrc;
     this.lightbox.classList.add('active');
+
+    // Сохраняем текущую позицию скролла
+    this.scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+    // Блокируем скролл и фиксируем позицию
+    document.body.classList.add('lightbox-open');
+    document.body.style.top = `-${this.scrollPosition}px`;
     document.body.style.overflow = 'hidden';
 
     // Затем загружаем версию высокого качества с приоритетом
@@ -109,6 +116,13 @@ export class LightboxManager {
     wrapper.classList.add('is-lightbox');
 
     this.lightbox.classList.add('active');
+
+    // Сохраняем текущую позицию скролла
+    this.scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+    // Блокируем скролл и фиксируем позицию
+    document.body.classList.add('lightbox-open');
+    document.body.style.top = `-${this.scrollPosition}px`;
     document.body.style.overflow = 'hidden';
   }
   
@@ -117,7 +131,21 @@ export class LightboxManager {
 
     this.lightbox.classList.remove('active');
     this.lightbox.classList.remove('is-video');
+
+    // Восстанавливаем скролл
+    document.body.classList.remove('lightbox-open');
     document.body.style.overflow = '';
+    document.body.style.top = '';
+
+    // Возвращаем страницу на сохраненную позицию МГНОВЕННО
+    if (this.scrollPosition !== undefined) {
+      window.scrollTo({
+        top: this.scrollPosition,
+        left: 0,
+        behavior: 'instant'
+      });
+      this.scrollPosition = undefined;
+    }
 
     if (this.videoState) {
       const { wrapper, placeholder } = this.videoState;

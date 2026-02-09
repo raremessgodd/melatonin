@@ -218,6 +218,13 @@
   transform: translateY(0);
 }
 
+/* Hide controls on touch devices after timeout */
+.video-player.is-touch.is-playing.controls-hidden .video-player__controls {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+}
+
 .video-player.is-lightbox .video-player__center-toggle,
 .video-player.is-lightbox .video-player__temp-icon,
 .video-player.is-lightbox .video-player__fullscreen,
@@ -268,6 +275,8 @@
   outline: none;
   position: relative;
   z-index: 2;
+  /* Увеличенная зона касания */
+  cursor: pointer;
 }
 
 .video-player__seek-wrapper {
@@ -276,6 +285,9 @@
   min-width: 140px;
   display: flex;
   align-items: center;
+  /* Увеличенная зона касания для мобильных */
+  padding: 12px 0;
+  margin: -12px 0;
 }
 
 .video-player__seek {
@@ -311,51 +323,11 @@
   z-index: 0;
 }
 
-.video-player__volume {
-  width: 100%;
-  position: relative;
-}
-
-/* Wrapper для volume с индикатором */
-.video-player__volume-wrapper {
-  position: relative;
-  width: 120px;
-  display: flex;
-  align-items: center;
-}
-
-/* Индикатор уровня громкости (заполнение слева от ползунка) */
+/* Скрываем все стили для громкости */
+.video-player__volume,
+.video-player__volume-wrapper,
 .video-player__volume-fill {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  height: 4px;
-  transform: translateY(-50%);
-  background: var(--accent-color);
-  border-radius: 999px;
-  pointer-events: none;
-  z-index: 1;
-  /* Убрали transition для мгновенного обновления */
-}
-
-/* Фон под volume */
-.video-player__volume-wrapper::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 4px;
-  transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.35);
-  border-radius: 999px;
-  z-index: 0;
-}
-
-/* Прозрачный фон для самого input */
-.video-player__volume {
-  background: transparent;
-  z-index: 2;
+  display: none !important;
 }
 
 .video-player__seek::-webkit-slider-thumb,
@@ -387,14 +359,26 @@
     gap: 10px;
   }
 
-  .video-player__volume-wrapper {
-    width: 90px;
-  }
-
-  .video-player__toggle,
   .video-player__fullscreen {
     width: 30px;
     height: 30px;
+  }
+
+  /* Увеличиваем зону касания для seek бара */
+  .video-player__seek-wrapper {
+    padding: 12px 0;
+    margin: -12px 0;
+  }
+
+  /* Увеличиваем размер thumb на мобильных */
+  .video-player__seek::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+  }
+
+  .video-player__seek::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
   }
 
   /* Адаптивная центральная кнопка play для мобильных */

@@ -60,6 +60,7 @@ export class AudioManager {
     if (!this.audio || !this.progressBarContainer || !this.audio.duration) return;
     this.isDragging = true;
     this.progressBarContainer.setPointerCapture(event.pointerId);
+    this.progressBarContainer.classList.add('is-dragging');
     this.seekToEvent(event);
     event.preventDefault();
   }
@@ -73,6 +74,7 @@ export class AudioManager {
   handlePointerUp(event) {
     if (!this.isDragging) return;
     this.isDragging = false;
+    this.progressBarContainer.classList.remove('is-dragging');
     try {
       this.progressBarContainer.releasePointerCapture(event.pointerId);
     } catch (error) {
