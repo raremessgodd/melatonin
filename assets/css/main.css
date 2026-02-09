@@ -11,6 +11,9 @@
 @import 'components/media.css';
 @import 'components/player.css';
 @import 'components/lightbox.css';
+@import 'components/blocks.css';
+@import 'components/menu.css';
+@import 'components/terminal.css';
 
 /* Utility classes */
 @import 'utilities/helpers.css';

@@ -47,6 +47,390 @@
   object-fit: contain;
 }
 
+/* Стили для видео элемента */
+.video-player video {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+  display: block;
+}
+
+.video-player {
+  position: relative;
+}
+
+/* Placeholder для незагруженного видео */
+.video-player video[preload="none"]:not([src]) {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+}
+
+/* Индикатор загрузки видео (буферизация) - минималистичный стиль */
+.video-player__loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25); /* Полупрозрачный как кнопки */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 3;
+  backdrop-filter: blur(12px); /* Сильное размытие */
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2); /* Светлая обводка */
+}
+
+.video-player__loading.is-visible {
+  opacity: 1;
+}
+
+.video-player__loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.3); /* Светлая база */
+  border-top-color: #fff; /* Белый верх */
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Скрываем текст загрузки */
+.video-player__loading-text {
+  display: none;
+}
+
+/* Большая кнопка play по центру видео (видна при паузе) */
+.video-player__center-toggle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(56px, 12vw, 90px);
+  height: clamp(56px, 12vw, 90px);
+  border-radius: var(--player-control-radius);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--player-control-bg);
+  color: var(--player-control-color);
+  display: grid;
+  place-items: center;
+  line-height: 1;
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 2;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Скрываем кнопку только во время воспроизведения */
+.video-player.is-playing .video-player__center-toggle {
+  display: none !important;
+}
+
+.video-player:hover .video-player__center-toggle {
+  transform: translate(-50%, -50%) scale(1.08);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7);
+}
+
+.video-player:active .video-player__center-toggle {
+  transform: translate(-50%, -50%) scale(0.98);
+}
+
+.video-player__center-toggle:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.video-player__center-toggle .video-player__icon {
+  width: 28px;
+  height: 28px;
+}
+
+/* Временная иконка play/pause при клике */
+.video-player__temp-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(56px, 12vw, 90px);
+  height: clamp(56px, 12vw, 90px);
+  border-radius: var(--player-control-radius);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--player-control-bg);
+  color: var(--player-control-color);
+  display: grid;
+  place-items: center;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  animation: tempIconFade 0.6s ease-out;
+}
+
+.video-player__temp-icon .video-player__icon {
+  width: 28px;
+  height: 28px;
+}
+
+.video-player__controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(6, 6, 6, 0.7) 100%);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.video-player:hover .video-player__controls,
+.video-player.is-lightbox .video-player__controls {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.video-player.is-lightbox .video-player__center-toggle,
+.video-player.is-lightbox .video-player__temp-icon,
+.video-player.is-lightbox .video-player__fullscreen,
+.video-player.is-lightbox .video-player__toggle {
+  border: none;
+  box-shadow: none;
+}
+
+.video-player__toggle,
+.video-player__fullscreen {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--player-control-radius);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--player-control-bg);
+  color: var(--player-control-color);
+  font-size: 14px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.video-player__icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  display: block;
+}
+
+/* Скрываем кнопку toggle (используем центральную кнопку вместо неё) */
+.video-player__toggle {
+  display: none !important;
+}
+
+.video-player__toggle:focus-visible,
+.video-player__fullscreen:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.video-player__seek,
+.video-player__volume {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.35);
+  outline: none;
+  position: relative;
+  z-index: 2;
+}
+
+.video-player__seek-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+}
+
+.video-player__seek {
+  width: 100%;
+  background: transparent; /* Прозрачный, показываем буфер под ним */
+}
+
+/* Индикатор буферизации на seek bar */
+.video-player__seek-buffer {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  pointer-events: none;
+  transition: width 0.3s ease;
+  z-index: 1;
+}
+
+/* Фон под seek и буфером */
+.video-player__seek-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  z-index: 0;
+}
+
+.video-player__volume {
+  width: 100%;
+  position: relative;
+}
+
+/* Wrapper для volume с индикатором */
+.video-player__volume-wrapper {
+  position: relative;
+  width: 120px;
+  display: flex;
+  align-items: center;
+}
+
+/* Индикатор уровня громкости (заполнение слева от ползунка) */
+.video-player__volume-fill {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  transform: translateY(-50%);
+  background: var(--accent-color);
+  border-radius: 999px;
+  pointer-events: none;
+  z-index: 1;
+  /* Убрали transition для мгновенного обновления */
+}
+
+/* Фон под volume */
+.video-player__volume-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  z-index: 0;
+}
+
+/* Прозрачный фон для самого input */
+.video-player__volume {
+  background: transparent;
+  z-index: 2;
+}
+
+.video-player__seek::-webkit-slider-thumb,
+.video-player__volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+}
+
+.video-player__seek::-moz-range-thumb,
+.video-player__volume::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  border: none;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .video-player__controls {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .video-player__volume-wrapper {
+    width: 90px;
+  }
+
+  .video-player__toggle,
+  .video-player__fullscreen {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* Адаптивная центральная кнопка play для мобильных */
+  .video-player__center-toggle {
+    width: 70px;
+    height: 70px;
+  }
+  
+  /* Адаптивная временная иконка для мобильных */
+  .video-player__temp-icon {
+    width: 70px;
+    height: 70px;
+  }
+
+  /* Адаптивный индикатор загрузки для мобильных */
+  .video-player__loading {
+    width: 70px;
+    height: 70px;
+  }
+
+  .video-player__loading-spinner {
+    width: 32px;
+    height: 32px;
+    border-width: 2.5px;
+  }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 380px) {
+  .video-player__center-toggle {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .video-player__temp-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .video-player__loading {
+    width: 60px;
+    height: 60px;
+  }
+
+  .video-player__loading-spinner {
+    width: 28px;
+    height: 28px;
+    border-width: 2px;
+  }
+}
 /* Grid layouts - Smaller gaps */
 .grid-2 {
   display: grid;

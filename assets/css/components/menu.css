@@ -1,0 +1,234 @@
+/* Mobile Menu Styles */
+
+/* ==============================================
+   HEADER LAYOUT - Simple & Clean
+   ============================================== */
+
+.page-title {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 16px;
+}
+
+/* ==============================================
+   HEADER TITLE - Left Side
+   ============================================== */
+
+.page-title__heading {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  font-family: var(--font-secondary);
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--accent-color);
+}
+
+.page-title__link {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.page-title__link:hover {
+  opacity: 0.8;
+}
+
+/* ==============================================
+   MENU TRIGGER - Right Side
+   ============================================== */
+
+.menu-trigger {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin: 0 !important;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.menu-trigger span {
+  width: 24px;
+  height: 2px;
+  background: var(--text-color);
+  display: block;
+  transition: none;
+}
+
+/* No animation when menu opens */
+.menu-trigger[aria-expanded="true"] span {
+  transform: none;
+  opacity: 1;
+}
+
+/* ==============================================
+   MOBILE MENU OVERLAY
+   ============================================== */
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 35;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  pointer-events: none;
+  cursor: pointer;
+}
+
+.mobile-menu.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ==============================================
+   MOBILE MENU CONTENT PANEL
+   ============================================== */
+
+.mobile-menu__content {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 260px;
+  max-width: 260px;
+  background: var(--bg-color);
+  z-index: 36;
+  padding: 80px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  border-left: 1px solid var(--card-border);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  cursor: default;
+}
+
+.mobile-menu.active .mobile-menu__content {
+  transform: translateX(0);
+}
+
+/* ==============================================
+   MOBILE MENU LINKS
+   ============================================== */
+
+.mobile-menu__link {
+  color: var(--text-color);
+  text-decoration: none;
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 12px 0;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.mobile-menu__link:hover {
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
+}
+
+.mobile-menu__link.active {
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
+}
+
+.mobile-menu__divider {
+  height: 1px;
+  background: var(--card-border);
+  margin: 8px 0;
+}
+
+/* ==============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================== */
+
+@media (max-width: 768px) {
+  .page-title {
+    padding: 14px 16px !important;
+    gap: 12px;
+  }
+
+  .page-title__heading {
+    font-size: clamp(20px, 5vw, 26px);
+  }
+
+  .menu-trigger {
+    padding: 8px 6px;
+  }
+
+  .mobile-menu__content {
+    width: 240px;
+    max-width: 240px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    padding: 12px 14px !important;
+    gap: 10px;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .page-title__heading {
+    font-size: clamp(18px, 5vw, 22px);
+  }
+
+  .menu-trigger {
+    padding: 6px 4px;
+  }
+
+  .menu-trigger span {
+    width: 22px;
+  }
+
+  .mobile-menu__content {
+    width: 220px;
+    max-width: 220px;
+  }
+}
+
+@media (max-width: 360px) {
+  .page-title {
+    padding: 10px 12px !important;
+    gap: 8px;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .page-title__heading {
+    font-size: clamp(16px, 4.5vw, 20px);
+  }
+
+  .menu-trigger {
+    padding: 4px;
+  }
+
+  .menu-trigger span {
+    width: 20px;
+  }
+}

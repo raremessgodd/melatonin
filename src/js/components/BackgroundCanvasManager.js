@@ -1,6 +1,33 @@
 import { DOMUtils } from '../utils/DOMUtils.js';
 
 export class BackgroundCanvasManager {
+  static imageCache = new Map();
+
+  static loadImage(src) {
+    if (BackgroundCanvasManager.imageCache.has(src)) {
+      return BackgroundCanvasManager.imageCache.get(src);
+    }
+
+    const promise = new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+
+      img.onload = () => {
+        if (img.decode) {
+          img.decode().catch(() => {}).finally(() => resolve(img));
+        } else {
+          resolve(img);
+        }
+      };
+
+      img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
+      img.src = src;
+    });
+
+    BackgroundCanvasManager.imageCache.set(src, promise);
+    return promise;
+  }
+
   constructor(canvas, imageSrc, strip) {
     this.strip = strip || document.getElementById('strip');
     this.canvas = canvas;
@@ -10,8 +37,8 @@ export class BackgroundCanvasManager {
     
     this.tileW = 400;
     this.tileH = 140;
-    this.isRendering = false;
     this.animationFrame = null;
+    this.pendingRender = false;
     
     this.init();
   }
@@ -19,26 +46,25 @@ export class BackgroundCanvasManager {
   init() {
     if (!this.strip || !this.canvas || !this.ctx || !this.imageSrc) return;
     
-    // Create image element
-    this.img = new Image();
-    this.img.crossOrigin = 'anonymous';
-    
-    this.img.onload = () => {
-      this.resize();
-      this.render();
-    };
-    
-    this.img.onerror = () => {
-      console.error('Failed to load image:', this.imageSrc);
-    };
-    
-    this.img.src = this.imageSrc;
+    this.setImage(this.imageSrc);
     
     window.addEventListener('resize', () => {
       if (this.img && this.img.complete) {
         this.resize();
       }
     });
+  }
+
+  setImage(src) {
+    BackgroundCanvasManager.loadImage(src)
+      .then((img) => {
+        this.img = img;
+        this.resize();
+        this.scheduleRender();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
   
   resize() {
@@ -48,45 +74,35 @@ export class BackgroundCanvasManager {
     this.tileH = DOMUtils.cssVarPx(this.strip, '--tile-h', 140);
     
     const rect = this.strip.getBoundingClientRect();
-    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const saveData = connection && connection.saveData;
+    const effectiveType = connection && connection.effectiveType ? connection.effectiveType : '';
+    const isSlow = effectiveType === '2g' || effectiveType === 'slow-2g';
+    const dpr = saveData || isSlow ? 1 : Math.max(1, window.devicePixelRatio || 1);
     
     this.canvas.width = Math.round(rect.width * dpr);
     this.canvas.height = Math.round(rect.height * dpr);
     
     // Draw in CSS pixels
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.scheduleRender();
   }
   
   render() {
-    if (!this.strip || !this.canvas || !this.ctx || !this.img || !this.img.complete) {
-      if (this.isRendering) {
-        this.animationFrame = requestAnimationFrame(() => this.render());
-      }
-      return;
-    }
+    if (!this.strip || !this.canvas || !this.ctx || !this.img || !this.img.complete) return;
     
     const rect = this.strip.getBoundingClientRect();
     const W = rect.width;
     const H = rect.height;
     
-    if (W === 0 || H === 0) {
-      if (this.isRendering) {
-        this.animationFrame = requestAnimationFrame(() => this.render());
-      }
-      return;
-    }
+    if (W === 0 || H === 0) return;
     
     this.ctx.clearRect(0, 0, W, H);
     
     const iw = this.img.naturalWidth || 1;
     const ih = this.img.naturalHeight || 1;
     
-    if (iw === 0 || ih === 0) {
-      if (this.isRendering) {
-        this.animationFrame = requestAnimationFrame(() => this.render());
-      }
-      return;
-    }
+    if (iw === 0 || ih === 0) return;
     
     // object-fit: cover for one tile
     const tileAR = this.tileW / this.tileH;
@@ -131,45 +147,45 @@ export class BackgroundCanvasManager {
       }
     }
     
-    // Only continue rendering if this is the active canvas and we need to check for resize
-    if (this.isRendering) {
-      this.animationFrame = requestAnimationFrame(() => this.render());
-    }
+  }
+  
+  scheduleRender() {
+    if (this.pendingRender) return;
+    this.pendingRender = true;
+    this.animationFrame = requestAnimationFrame(() => {
+      this.pendingRender = false;
+      this.render();
+    });
   }
   
   startRendering() {
-    if (!this.isRendering) {
-      this.isRendering = true;
-      if (this.img && this.img.complete) {
-        this.render();
-      }
-    }
+    this.scheduleRender();
   }
   
   stopRendering() {
-    this.isRendering = false;
     if (this.animationFrame) {
       cancelAnimationFrame(this.animationFrame);
       this.animationFrame = null;
     }
+    this.pendingRender = false;
   }
   
   changeImage(newImageSrc) {
-    if (newImageSrc === this.imageSrc) return;
+    if (newImageSrc === this.imageSrc) {
+      return Promise.resolve(true);
+    }
     
     this.imageSrc = newImageSrc;
-    this.img = new Image();
-    this.img.crossOrigin = 'anonymous';
-    
-    this.img.onload = () => {
-      this.resize();
-      this.render();
-    };
-    
-    this.img.onerror = () => {
-      console.error('Failed to load image:', newImageSrc);
-    };
-    
-    this.img.src = newImageSrc;
+    return BackgroundCanvasManager.loadImage(newImageSrc)
+      .then((img) => {
+        this.img = img;
+        this.resize();
+        this.scheduleRender();
+        return true;
+      })
+      .catch((error) => {
+        console.error(error);
+        return false;
+      });
   }
 }

@@ -6,12 +6,17 @@
   background: var(--bg-color);
   border-radius: var(--radius);
   padding: 20px;
+  max-width: 420px; /* Ограничиваем ширину контейнера */
+  margin: 0 auto;
+  align-items: center;
 }
 
 .player-artwork {
   flex: 0 0 auto;
   margin-bottom: 20px;
   position: relative;
+  width: 100%;
+  max-width: 380px; /* Обложка чуть уже контейнера */
 }
 
 .player-artwork .artwork-image {
@@ -22,7 +27,8 @@
 }
 
 .player-controls {
-  flex: 1;
+  width: 100%;
+  max-width: 380px; /* Плеер той же ширины что и обложка */
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -60,12 +66,12 @@
 }
 
 .play-pause-btn {
-  background: var(--accent-color);
-  color: var(--bg-color);
-  border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--player-control-radius, 10px);
+  width: 44px;
+  height: 44px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -119,18 +125,45 @@
   white-space: nowrap;
 }
 
+/* Large desktops (above 1600px) */
+@media (min-width: 1601px) {
+  .custom-player {
+    max-width: 520px;
+    padding: 28px;
+  }
+
+  .player-artwork {
+    max-width: 480px;
+    margin-bottom: 28px;
+  }
+
+  .player-controls {
+    max-width: 480px;
+  }
+
+  .track-info .track-title {
+    font-size: 2rem;
+  }
+
+  .track-info .track-artist {
+    font-size: 1.2rem;
+  }
+}
+
 /* Tablets and medium-width devices (768px - 1600px) */
 @media (min-width: 768px) and (max-width: 1600px) {
   .custom-player {
     padding: 24px;
+    max-width: 460px; /* Увеличиваем для средних экранов */
   }
   
   .player-artwork {
     margin-bottom: 24px;
+    max-width: 420px; /* Обложка чуть уже */
   }
   
-  .player-artwork .artwork-image {
-    max-width: 100%;
+  .player-controls {
+    max-width: 420px; /* Контролы той же ширины что и обложка */
   }
   
   .track-info {
@@ -150,11 +183,11 @@
   }
   
   .play-pause-btn {
-    width: 56px;
-    height: 56px;
+    width: 44px;
+    height: 44px;
     font-size: 20px;
-    min-width: 56px;
-    min-height: 56px;
+    min-width: 44px;
+    min-height: 44px;
   }
   
   .progress-bar {
@@ -171,16 +204,16 @@
 @media (max-width: 767px) {
   .custom-player {
     padding: 15px;
-    max-width: 100%;
+    max-width: 320px; /* Компактнее для мобилок */
   }
   
   .player-artwork {
     margin-bottom: 15px;
+    max-width: 280px; /* Обложка чуть уже */
   }
   
-  .player-artwork .artwork-image {
-    max-width: 220px;
-    margin: 0 auto;
+  .player-controls {
+    max-width: 280px; /* Контролы той же ширины что и обложка */
   }
   
   .track-info {
@@ -221,17 +254,16 @@
 @media (max-width: 480px) {
   .custom-player {
     padding: 12px;
-    max-width: 100%;
-    width: 100%;
+    max-width: 280px;
   }
   
   .player-artwork {
     margin-bottom: 12px;
+    max-width: 240px;
   }
   
-  .player-artwork .artwork-image {
-    max-width: 160px;
-    margin: 0 auto;
+  .player-controls {
+    max-width: 240px;
   }
   
   .track-info {
@@ -273,17 +305,16 @@
 @media (max-width: 380px) {
   .custom-player {
     padding: 10px;
-    max-width: 100%;
-    width: 100%;
+    max-width: 240px;
   }
   
   .player-artwork {
     margin-bottom: 10px;
+    max-width: 200px;
   }
   
-  .player-artwork .artwork-image {
-    max-width: 140px;
-    margin: 0 auto;
+  .player-controls {
+    max-width: 200px;
   }
   
   .track-info {

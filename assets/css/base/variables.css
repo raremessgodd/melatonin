@@ -6,11 +6,16 @@
   --card-bg: #111111;
   --card-border: #333333;
   --accent-color: #ffffff;
-  
+
   /* Spacing */
   --spacing-unit: 32px;
   --radius: 10px;
-  
+
+  /* Player controls */
+  --player-control-radius: 10px;
+  --player-control-bg: #000000;
+  --player-control-color: #ffffff;
+
   /* Typography */
   --font-primary: 'Space Grotesk', sans-serif;
   --font-secondary: 'Syne', sans-serif;
@@ -28,6 +33,7 @@
   :root {
     --spacing-unit: 24px;
     --radius: 8px;
+    --player-control-radius: 8px;
     --section-margin-bottom: 30px;
   }
 }
@@ -36,6 +42,7 @@
   :root {
     --spacing-unit: 16px;
     --radius: 6px;
+    --player-control-radius: 6px;
     --section-margin-bottom: 20px;
     --accent-letter-spacing: 1px;
   }
@@ -45,6 +52,7 @@
   :root {
     --spacing-unit: 12px;
     --radius: 4px;
+    --player-control-radius: 4px;
     --section-margin-bottom: 15px;
   }
 }

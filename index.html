@@ -7,26 +7,56 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Melatonin">
     <meta name="theme-color" content="#000000">
+    <!-- Оптимизация загрузки медиа контента -->
+    <meta name="supports-loading" content="lazy">
     <title>melatonin*</title>
 
-    <link rel="icon" href="/assets/img/sticker.ico" type="image/x-icon">
+    <link rel="icon" href="/assets/img/icons/sticker.ico" type="image/x-icon">
+    <link rel="preload" as="image" href="assets/img/icons/ico.jpg" fetchpriority="high">
+
+    <!-- Video poster preloads -->
+    <link rel="preload" as="image" href="assets/img/covers/live_motri_1_cover.jpeg" media="(max-width: 768px)">
+    <link rel="preload" as="image" href="assets/img/covers/live_motri_1_cover_big.jpeg" media="(min-width: 769px)">
+    <link rel="preload" as="image" href="assets/img/covers/promo_1_cover.jpeg" media="(max-width: 768px)">
+    <link rel="preload" as="image" href="assets/img/covers/promo_1_cover_big.jpeg" media="(min-width: 769px)">
 
     <!-- CSS Styles -->
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=Syne:wght@700;800&display=swap">
+
+    <!-- HLS.js for adaptive streaming -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
-<body>
-<!-- Header -->
+<body class="is-booting">
+<div class="boot-loader" aria-live="polite" aria-label="Загрузка">
+    <div class="boot-loader__spinner" aria-hidden="true">
+        <img src="assets/img/icons/ico.jpg" alt="" loading="eager" decoding="async" fetchpriority="high">
+    </div>
+</div>
+<!-- Header with Menu Trigger -->
 <header class="page-title page-title--top">
-    <h1 id="scroll-to-top" class="text-left large-heading">MELATONIN*</h1>
-    <p class="text-right text-uppercase letter-spacing-wide accent-color">
-        <a href="https://t.me/melatoninm" target="_blank" rel="noopener">TELEGRAM</a> |
-        <a href="https://www.instagram.com/mellattonnin" target="_blank"
-           rel="noopener">INSTAGRAM</a> |
-        <a href="https://vk.ru/club234429917" target="_blank" rel="noopener">VKONTAKTE</a>
-    </p>
+    <h1 id="scroll-to-top" class="page-title__heading">
+        <a href="index.html" class="page-title__link">MELATONIN*</a>
+    </h1>
+    <button class="menu-trigger" id="menuTrigger" aria-label="Open menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
 </header>
+
+<!-- Mobile Navigation Menu -->
+<nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu__content">
+        <a href="farewells.html" class="mobile-menu__link">FAREWELLS</a>
+        <a href="about.html" class="mobile-menu__link">ABOUT</a>
+        <div class="mobile-menu__divider"></div>
+        <a href="https://t.me/melatoninm" target="_blank" rel="noopener" class="mobile-menu__link">TELEGRAM</a>
+        <a href="https://www.instagram.com/mellattonnin" target="_blank" rel="noopener" class="mobile-menu__link">INSTAGRAM</a>
+        <a href="https://vk.ru/club234429917" target="_blank" rel="noopener" class="mobile-menu__link">VKONTAKTE</a>
+    </div>
+</nav>
 
 <!-- Background Layers -->
 <div class="bg" aria-hidden="true">
@@ -37,177 +67,22 @@
 <!-- Tiled Background Canvas -->
 <div class="img-strip__grid" id="wall">
     <div class="img-strip" id="strip">
-        <img id="srcImg" src="assets/img/mi(1).jpg" alt="Background source image">
+        <img id="srcImg" data-src="assets/img/backgrounds/mi(1).jpg" alt="Background source image">
         <canvas id="stripCanvas"></canvas>
     </div>
 </div>
 
-<!-- Introduction Panel -->
-<section class="panel">
-    <div class="panel__inner">
-        <div class="panel__col reveal">
-            <h2>Альтернативная группа с элементами инди и шугейза. В основе звучания — женский вокал
-                и экспериментальный инструментал с мягкой, спокойной атмосферой</h2>
-        </div>
-    </div>
-</section>
-
-<!-- Album Information Panel -->
-<section class="panel">
-    <div class="panel__inner">
-        <div class="panel__col reveal">
-            <h1>Farewells</h1>
-            <p class="text-uppercase letter-spacing-wide accent-color mb-40">
-                Farewells — альбом о прощании со сном. Мы старались передать желание вернуться в
-                теплое прошлое, в воспоминание, которое не получается забыть до конца. Многие
-                сталкивались с моментом, когда невыразимо хотелось вернуться назад. Но прошлое
-                осталось только начертанием в голове, почти забытым. Его больше не получится
-                пережить, послушать, пересмотреть. Только вспоминать.
-            </p>
-        </div>
-        <div class="panel__col reveal">
-            <div class="custom-player">
-                <audio id="album-audio" preload="metadata">
-                    <source src="assets/music/till_the_end.mp3" type="audio/mpeg">
-                </audio>
-                <div class="player-artwork" onclick="openLightbox(this)" role="button"
-                     tabindex="0" aria-label="Album cover photo">
-                    <img src="assets/img/album_cover.jpg"
-                         alt="Album Artwork" class="artwork-image">
-                    <button class="fullscreen-btn"
-                            onclick="toggleFullscreen(this.parentElement)"
-                            aria-label="Fullscreen">⛶
-                    </button>
-                </div>
-                <div class="player-controls">
-                    <div class="track-info">
-                        <h3 class="track-title text-center">Till The End</h3>
-                        <p class="track-artist text-center">Melatonin</p>
-                    </div>
-                    <div class="control-buttons">
-                        <button class="play-pause-btn" onclick="togglePlayer(this)"
-                                aria-label="Play/Pause">
-                            <span class="play-icon">▶</span>
-                            <span class="pause-icon" style="display:none;">⏸</span>
-                        </button>
-                        <div class="progress-container">
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 0%"></div>
-                            </div>
-                            <div class="time-display">
-                                <span class="current-time">0:00</span>
-                                <span class="total-time">0:00</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Promo Videos Panel -->
-<section class="panel">
-    <div class="panel__inner panel__inner--quad">
-        <div class="quad reveal">
-            <h1>Promo</h1>
-            <p class="text-uppercase letter-spacing-wide accent-color mb-40">
-                В качестве промо для альбома мы выпустили серию роликов в социальных сетях со звуком
-                с концертов
-            </p>
-        </div>
-
-        <div class="quad reveal">
-            <div class="grid-2-fill">
-                <div class="media-wrapper ratio-1-1" onclick="openLightbox(this)" role="button"
-                     tabindex="0" aria-label="View concert photo">
-                    <img src="assets/img/motri_afisha.JPG"
-                         alt="Concert Photo 1" class="media-content cover">
-                    <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)"
-                            aria-label="Fullscreen">⛶
-                    </button>
-                </div>
-                <div class="media-wrapper ratio-1-1" onclick="openLightbox(this)" role="button"
-                     tabindex="0" aria-label="View concert photo">
-                    <img src="assets/img/perspektiva_afisha.png"
-                         alt="Concert Photo 2" class="media-content cover">
-                    <button class="fullscreen-btn" onclick="openLightbox(this.parentElement)"
-                            aria-label="Fullscreen">⛶
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="quad reveal">
-            <div class="media-wrapper ratio-16-9">
-                <video src="assets/video/promo_1.MP4"
-                       autoplay muted controls playsinline loop
-                       preload="metadata"
-                       controlslist="nodownload noplaybackrate noremoteplayback disablepictureinpicture"
-                       class="media-content"></video>
-            </div>
-        </div>
-
-        <div class="quad reveal">
-            <div class="media-wrapper ratio-16-9">
-                <video src="assets/video/promo_2.mp4"
-                       autoplay muted controls playsinline loop
-                       preload="metadata"
-                       controlslist="nodownload noplaybackrate noremoteplayback disablepictureinpicture"
-                       class="media-content"></video>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Live Performance Panel -->
-<section class="panel">
-    <div class="panel__inner panel__inner--quad">
-        <div class="quad reveal">
-            <h1 class="large-heading">Live Performance</h1>
-            <p class="text-uppercase letter-spacing-wide accent-color mb-40">
-                Записи с выступлений, живой звук и атмосфера
-            </p>
-        </div>
-
-        <div class="quad reveal">
-            <div class="media-wrapper ratio-16-9">
-                <video src="assets/video/live_motri_1.mp4"
-                       autoplay muted controls playsinline loop
-                       preload="metadata"
-                       controlslist="nodownload noplaybackrate noremoteplayback disablepictureinpicture"
-                       class="media-content"></video>
-            </div>
-        </div>
-
-        <div class="quad reveal">
-            <div class="media-wrapper ratio-16-9">
-                <video src="assets/video/live_perspektiva_1.MP4"
-                       autoplay muted controls playsinline loop
-                       preload="metadata"
-                       controlslist="nodownload noplaybackrate noremoteplayback disablepictureinpicture"
-                       class="media-content"></video>
-            </div>
-        </div>
-
-        <div class="quad reveal">
-            <div class="media-wrapper ratio-16-9">
-                <video src="assets/video/live_perspektiva_2.MP4"
-                       autoplay muted controls playsinline loop
-                       preload="metadata"
-                       controlslist="nodownload noplaybackrate noremoteplayback disablepictureinpicture"
-                       class="media-content"></video>
-            </div>
-        </div>
-    </div>
-</section>
+<main id="content"></main>
 
 <!-- Lightbox Modal -->
-<div id="lightbox" class="lightbox" onclick="closeLightbox()" role="dialog" aria-modal="true"
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true"
      aria-label="Image viewer">
-    <span class="lightbox-close" onclick="closeLightbox()" role="button" tabindex="0"
+    <span class="lightbox-close" role="button" tabindex="0"
           aria-label="Close">&times;</span>
+    <button class="lightbox-nav lightbox-nav--prev" data-lightbox-prev aria-label="Previous image">←</button>
+    <button class="lightbox-nav lightbox-nav--next" data-lightbox-next aria-label="Next image">→</button>
     <img id="lightbox-img" src="" alt="Fullscreen image">
+    <div id="lightbox-media" class="lightbox-media" aria-hidden="true"></div>
 </div>
 
 <!-- JavaScript -->

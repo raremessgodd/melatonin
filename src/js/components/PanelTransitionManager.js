@@ -1,19 +1,10 @@
-import { DOMUtils } from '../utils/DOMUtils.js';
 import { BackgroundCanvasManager } from './BackgroundCanvasManager.js';
 
 export class PanelTransitionManager {
   constructor() {
     this.panels = [...document.querySelectorAll('.panel')];
-    this.header = document.querySelector('.page-title--top');
-    this.footer = document.querySelector('.page-title--bottom');
     
-    // Background images array - one for each panel
-    this.backgroundImages = [
-      'assets/img/mi(1).jpg',        // First panel (Introduction)
-      'assets/img/mi(1)_gr.jpg',      // Third panel (Promo)
-      'assets/img/mi(1)_bl.jpg',      // Second panel (Album)
-      'assets/img/mi(1)_yl.jpg'       // Fourth panel (Live Performance)
-    ];
+    this.backgroundImages = [];
     
     this.currentBgIndex = 0;
     this.isTransitioning = false;
@@ -26,12 +17,23 @@ export class PanelTransitionManager {
     this.canvasManagerA = null;
     this.canvasManagerB = null;
     this.activeCanvas = 'A';
+    this.pendingBgIndex = 0;
+    this.transitionToken = 0;
+    this.preloadPromise = null;
     
+    this.observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -20% 0px',
+      threshold: 0.3
+    };
+
     this.init();
   }
   
   init() {
     if (this.panels.length === 0) return;
+
+    this.backgroundImages = this.panels.map((panel) => panel.dataset.bg || null);
     
     // Create two canvas layers for cross-fade
     this.createCanvasLayers();
@@ -120,22 +122,16 @@ export class PanelTransitionManager {
   
   setupScrollBackgrounds() {
     // Use Intersection Observer to detect when panels enter viewport
-    const options = {
-      root: null,
-      rootMargin: '-20% 0px -20% 0px', // Trigger when panel is 20% from top/bottom
-      threshold: 0.3
-    };
-    
     this.observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting && !this.isTransitioning) {
+        if (entry.isIntersecting) {
           const panelIndex = this.panels.indexOf(entry.target);
           if (panelIndex !== -1 && panelIndex < this.backgroundImages.length) {
-            this.changeBackground(panelIndex);
+            this.requestBackground(panelIndex);
           }
         }
       });
-    }, options);
+    }, this.observerOptions);
     
     // Observe all panels
     this.panels.forEach(panel => {
@@ -148,6 +144,7 @@ export class PanelTransitionManager {
     if (this.isTransitioning) return;
     
     this.isTransitioning = true;
+    const transitionId = ++this.transitionToken;
     const newBgUrl = this.backgroundImages[newIndex];
     
     // Determine which canvas is currently visible
@@ -157,18 +154,22 @@ export class PanelTransitionManager {
     const hiddenManager = this.activeCanvas === 'A' ? this.canvasManagerB : this.canvasManagerA;
     
     // Change image on hidden canvas
-    hiddenManager.changeImage(newBgUrl);
-    
-    // Wait a bit for the image to start loading, then start rendering
-    setTimeout(() => {
-      hiddenManager.startRendering();
-      
-      // Start cross-fade transition
-      this.fadeCanvas(hiddenCanvas, visibleCanvas, hiddenManager, visibleManager, newIndex);
-    }, 50);
+    hiddenManager.changeImage(newBgUrl).then((loaded) => {
+      if (!loaded || transitionId !== this.transitionToken) {
+        this.isTransitioning = false;
+        this.pendingBgIndex = this.currentBgIndex;
+        return;
+      }
+
+      this.fadeCanvas(hiddenCanvas, visibleCanvas, hiddenManager, visibleManager, newIndex, () => {
+        if (this.pendingBgIndex !== this.currentBgIndex) {
+          this.changeBackground(this.pendingBgIndex);
+        }
+      });
+    });
   }
   
-  fadeCanvas(newCanvas, oldCanvas, newManager, oldManager, newIndex) {
+  fadeCanvas(newCanvas, oldCanvas, newManager, oldManager, newIndex, onComplete) {
     const duration = 200; // milliseconds - longer for smoother fade
     const startTime = performance.now();
     const startOpacity = 0;
@@ -203,16 +204,97 @@ export class PanelTransitionManager {
         newCanvas.style.opacity = '1';
         oldCanvas.style.opacity = '0';
         
-        // Stop rendering old canvas
+        // Stop any pending render on the old canvas
         oldManager.stopRendering();
         
         // Swap active canvas
         this.activeCanvas = this.activeCanvas === 'A' ? 'B' : 'A';
         this.currentBgIndex = newIndex;
         this.isTransitioning = false;
+        if (onComplete) {
+          onComplete();
+        }
       }
     };
     
     requestAnimationFrame(animate);
+  }
+
+  requestBackground(index) {
+    if (index === this.currentBgIndex) return;
+    this.pendingBgIndex = index;
+    if (this.isTransitioning) return;
+    this.changeBackground(index);
+  }
+
+  preloadImages() {
+    return this.preloadBackgrounds({ strategy: 'adjacent' });
+  }
+
+  preloadBackgrounds(options = {}) {
+    if (this.preloadPromise) return this.preloadPromise;
+
+    const strategy = options.strategy || 'all';
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const saveData = connection && connection.saveData;
+    const effectiveType = connection && connection.effectiveType ? connection.effectiveType : '';
+    const isSlow = effectiveType === '2g' || effectiveType === 'slow-2g';
+    const maxConcurrency = options.concurrency || (isSlow || saveData ? 1 : 3);
+
+    const sources = this.buildBackgroundQueue(strategy);
+    if (!sources.length) {
+      this.preloadPromise = Promise.resolve();
+      return this.preloadPromise;
+    }
+
+    this.preloadPromise = this.runPreloadQueue(sources, maxConcurrency);
+    return this.preloadPromise;
+  }
+
+  buildBackgroundQueue(strategy) {
+    const all = this.backgroundImages.filter(Boolean);
+    if (strategy === 'adjacent') {
+      const nextIndexes = [this.currentBgIndex + 1, this.currentBgIndex - 1]
+        .filter((index) => index >= 0 && index < this.backgroundImages.length);
+      return nextIndexes.map((index) => this.backgroundImages[index]).filter(Boolean);
+    }
+
+    const current = this.backgroundImages[this.currentBgIndex];
+    const ordered = current ? [current, ...all.filter((src) => src !== current)] : all.slice();
+    const seen = new Set();
+    return ordered.filter((src) => {
+      if (seen.has(src)) return false;
+      seen.add(src);
+      return true;
+    });
+  }
+
+  runPreloadQueue(sources, concurrency) {
+    return new Promise((resolve) => {
+      let index = 0;
+      let active = 0;
+      let completed = 0;
+      const total = sources.length;
+
+      const launchNext = () => {
+        while (active < concurrency && index < total) {
+          const src = sources[index++];
+          active += 1;
+          BackgroundCanvasManager.loadImage(src)
+            .catch(() => {})
+            .finally(() => {
+              active -= 1;
+              completed += 1;
+              if (completed >= total) {
+                resolve();
+                return;
+              }
+              launchNext();
+            });
+        }
+      };
+
+      launchNext();
+    });
   }
 }

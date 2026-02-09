@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Melatonin">
+    <meta name="theme-color" content="#000000">
+    <meta name="supports-loading" content="lazy">
+    <title>Farewells - melatonin*</title>
+
+    <link rel="icon" href="/assets/img/icons/sticker.ico" type="image/x-icon">
+
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=Syne:wght@700;800&display=swap">
+
+    <!-- HLS.js for adaptive streaming -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body class="is-booting subpage">
+<div class="boot-loader" aria-live="polite" aria-label="Загрузка">
+    <div class="boot-loader__spinner" aria-hidden="true">
+        <img src="assets/img/icons/ico.jpg" alt="" loading="eager" decoding="async" fetchpriority="high">
+    </div>
+</div>
+
+<!-- Header with Menu Trigger -->
+<header class="page-title page-title--top">
+    <h1 class="page-title__heading">
+        <a href="index.html" class="page-title__link">MELATONIN*</a>
+    </h1>
+    <button class="menu-trigger" id="menuTrigger" aria-label="Open menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+</header>
+
+<!-- Mobile Navigation Menu -->
+<nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu__content">
+        <a href="farewells.html" class="mobile-menu__link active">FAREWELLS</a>
+        <a href="about.html" class="mobile-menu__link">ABOUT</a>
+        <div class="mobile-menu__divider"></div>
+        <a href="https://t.me/melatoninm" target="_blank" rel="noopener" class="mobile-menu__link">TELEGRAM</a>
+        <a href="https://www.instagram.com/mellattonnin" target="_blank" rel="noopener" class="mobile-menu__link">INSTAGRAM</a>
+        <a href="https://vk.ru/club234429917" target="_blank" rel="noopener" class="mobile-menu__link">VKONTAKTE</a>
+    </div>
+</nav>
+
+<!-- Background Layers -->
+<div class="bg" aria-hidden="true">
+    <div class="bg__layer" id="bgA"></div>
+    <div class="bg__layer" id="bgB"></div>
+</div>
+
+<!-- Tiled Background Canvas -->
+<div class="img-strip__grid" id="wall">
+    <div class="img-strip" id="strip">
+        <img id="srcImg" data-src="assets/img/backgrounds/mi(1)_gr.jpg" alt="Background source image">
+        <canvas id="stripCanvas"></canvas>
+    </div>
+</div>
+
+<main id="content"></main>
+
+<!-- Lightbox Modal -->
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true"
+     aria-label="Image viewer">
+    <span class="lightbox-close" role="button" tabindex="0"
+          aria-label="Close">&times;</span>
+    <button class="lightbox-nav lightbox-nav--prev" data-lightbox-prev aria-label="Previous image">←</button>
+    <button class="lightbox-nav lightbox-nav--next" data-lightbox-next aria-label="Next image">→</button>
+    <img id="lightbox-img" src="" alt="Fullscreen image">
+    <div id="lightbox-media" class="lightbox-media" aria-hidden="true"></div>
+</div>
+
+<!-- JavaScript -->
+<script src="src/js/main.js" type="module" data-page="farewells"></script>
+</body>
+</html>
+

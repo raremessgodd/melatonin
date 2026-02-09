@@ -1,0 +1,258 @@
+#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-STREAM-INF:BANDWIDTH=1600000,RESOLUTION=960x540
+540p.m3u8
+#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BANDW#gments -hls_segment_filename "/Users/temvmp/prjct/melatonin/assets/video/hls/live_perspektiva_1/540p_%03d.ts" "/Users/temvmp/prjct/melatonin/assets/video/hls/live_perspektiva_1/540p.m3u8"
+ffmpeg -y -i /Users/temvmp/prjct/melatonin/assets/video/live_perspektiva_1.MP4 -vf "scale=-2:1080,fps=30" -c:v libx264 -preset medium -crf 20 -c:a aac -b:a 160k -hls_time 6 -hls_playlist_type vod -hls_flags independent_segments -hls_segment_filename "/Users/temv#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-STREAM-INF:BANDWIDTH=1600000,RESOLUTION=960x540
+540p.m3u8
+/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BArj#EXT-Xatonffmpeg -y -i /Users/temvmp/prjct/melatonin/assets/video/live_perspektiva_1.MP4 -vf "scale=-2:1080,fps=30" -c:v libx264 -preset medium -crf 20 -c:a aac -b:a 160k -hls_time 6 -hls_playlist_type vod -hls_flags independent_segments -hls_segment_filename "/Users/temv#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-STREAM-INF:BANDWIDTH=1600000,RESOLUTION=960x540
+540p.m3u8
+/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BArj#EXT-Xatonffmpeg -y -i /Users/temvmp/prjct/melatonin/assets/video/live_perspektiva_1.MP4 -vf "scale=-2:1080,fps=30" -c:v libx264 -preset medium eo#EXT-X-VERSION:3
+#EXT-X-STREAM-INF:BANDWIDTH=1600000,RESOLUTION=960x540
+540p.m3u8
+/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BArj#EXT-Xatonffmpeg -y -i /Users/temvmp/prjct/melatonin/assets/video/live_perspektiva_1.MP4 -vf "scale=-2:1t_#EXT-X-STREAM-Ila540p.m3u8
+/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-X/t/m#EXT-Xjc#EXT-X-STREAM-INF:BANDW#EXT-X-STREA1/#EXT-X-VERSION:3
+#EXT-X-STREAM-INF:BANDWIDTH=1600000,RESOLUTION=960x540
+540p.m3u8
+/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BArj#EXT-Xatonffmpeg -y -i /Users/temvmp/prjct/melatonin/assets/video/live_perspektiva_1.MP4 -vf "scale=-2:1080,fps=30" -c:v libx264 -preset medium eo#EXT-X-VERSIOOF#EXT-X-STREAM-Imk540p.m3u8
+/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-X/p/m#EXT-Xfm#EXT-X-STREAM-INF:BANDW#EXT-X-STREAon#EXT-X-STREAM-INF:BANDWIDTH=1600000,RESOLUTION=960x540
+540p.m3u8
+/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BArj#EXT-Xatonffmpeg -y -i /Users/temvmp/prjct/melatonin/assetste540p.m3u8
+/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-X3d/m#EXT-Xse#EXT-X-STREAM-INF:BANDW#EXT-X-STREAde/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-X/t/m#EXT-Xjc#EXT-X-STREAM-INF:BANDW#EXT-X-STREA1/#EXT-X-VERSION:3
+#EXT-X-STREAM-INF:BANDWIDTH=1600000,RESOLUTION=960x540
+540p.m3u8
+/mhl#EXT-X/t/m#EXT-Xjc#EXT-X-STREAM-INFs_#EXT-X-STREAM-INF:BANDWIDTH=1600000,RESOLUTION=960x540
+540p.mmp/prjct/me540p.m3u8
+/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-Xrs/m#EXT-Xpr#EXT-X-STREAM-INF:BANDW#EXT-X-STREAo_/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-X/p/m#EXT-Xfm#EXT-X-STREAM-INF:BANDW#EXT-X-STREAon#EXT-X-STREAM-INF:BANDWIDTH=1600000,RESOLUTION=960x540
+540p.m3u8
+/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-=1#EXT-X/p/m#EXT-Xfm#EXT-X-STREAM-INFi_540p.m3u8
+/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BArj#EXT-Xatonffmpegme/m#EXT-Xas#EXT-X-STREAM-INF:BANDW#EXT-X-STREAal/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-X3d/m#EXT-Xse#EXT-X-STREAM-INF:BANDW#EXT-X-STREAde/m#EXT-Xin#EXT-X-STREAag#EXT-X3d/m#EXT-Xse#EXT-X-STREAM-INF_f#EXT-X/t/m#EXT-Xjc#EXT-X-STREAM-INF:BANDW#EXT-X-STREA1/#EXT-X-VERSION:3
+#EXT-X-STREAM-INF:/t#EXT-X-STREAM-INF:BANDWIDTH=1600000,RESOLUTION=960x540
+540p.m3uffmpeg -y540p.m3u8
+/mhl#EXT-X/t/m#EXT-Xjc#EXT-X-STREAM-INFs_#Eot/mhl#EXT -540p.mmp/prjct/me540p.m3u8
+/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-Xrs/m#EXT-Xpr#EXT-X-STREAhl/m#EXT-Xin#EXT-X-STREAM-Ifl#EXT-Xrs/m#EXT-Xpr#EXT-X-STREAM-INFnt#EXT-X/p/m#EXT-Xfm#EXT-X-STREAM-INF:BANDW#EXT-X-STREAon#EXT-X-STREAM-INF:BANDWIDTH=1600000er540p.m3u8
+/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-=1#EXT-X/p/m#EXT-Xfm#EXTs//m#EXThls/#EXT-X-STREAM-INF:BANDW#EXT-X-STR#EXT/m#EXT-Xin#EXT-X-STREAM-Ils540p.m3u8
+#EXT-X-STREAM-INF:BANDW#EXT-X-STREAM-INF:BArj#E8
+#EXT-X-STREAM-INF:BANDWIDTH=4500000,R#EXT-X3d/m#EXT-Xse#EXT-X-STREAM-INFls -la /Users/temvmp/prjct/melatonin/assets/video/hls/
+find /Users/temvmp/prjct/melatonin/assets/video/hls -type f -name "*.m3u8" | head -20
+ls -lh /Users/temvmp/prjct/melatonin/assets/img/ | grep -E "(poster|cover|thumb|preview)" | head -20
+ls -lh /Users/temvmp/prjct/melatonin/*.md | grep -E "(HLS|VIDEO|POSTER|IMPLEMENTATION|FINAL|TESTING)" | awk '{print $9, "(" $5 ")"}'
+ls -lh /Users/temvmp/prjct/melatonin/*.md
+cd /Users/temvmp/prjct/melatonin && npm run build 2>&1 | head -100
+cd /Users/temvmp/prjct/melatonin && npm run build 2>&1 | tail -50
+cd /Users/temvmp/prjct/melatonin && ls -la package.json
+cd /Users/temvmp/prjct/melatonin && node --input-type=module -e "import('./src/js/App.js'); import('./src/js/components/SectionBlocks.js'); import('./src/js/components/VideoPlayerManager.js'); console.log('ok')"
+rm /Users/temvmp/prjct/melatonin/src/js/components/LineGalleryManager.js
+ls -la /Users/temvmp/prjct/melatonin/src/js/components/LineGalleryManager.js 2>&1
+find /Users/temvmp/prjct/melatonin/src/js/components -name "LineGalleryManager.js" -type f
+grep -r "LineGalleryManager\|line-gallery\|lineGallery" /Users/temvmp/prjct/melatonin/src /Users/temvmp/prjct/melatonin/assets --include="*.js" --include="*.css" 2>/dev/null || echo "Не найдено ссылок на карусель"
+grep -r "LineGalleryManager" /Users/temvmp/prjct/melatonin/src 2>&1 || true
+echo "=== Проверка удаления карусели ===" && echo "" && echo "1. Ссылки на LineGalleryManager:" && grep -r "LineGalleryManager" /Users/temvmp/prjct/melatonin/src /Users/temvmp/prjct/melatonin/assets 2>&1 | wc -l && echo "" && echo "2. Ссылки на line-gallery:" && grep -r "line-gallery" /Users/temvmp/prjct/melatonin/src /Users/temvmp/prjct/melatonin/assets 2>&1 | wc -l && echo "" && echo "3. Ссылки на lineGallery:" && grep -r "lineGallery" /Users/temvmp/prjct/melatonin/src /Users/temvmp/prjct/melatonin/assets 2>&1 | wc -l
+cd /Users/temvmp/prjct/melatonin && grep -r "LineGalleryManager" src assets 2>&1 ; echo "---"; grep -r "line-gallery" src assets 2>&1 ; echo "---"; grep -r "lineGallery" src assets 2>&1
+cd /Users/temvmp/prjct/melatonin && rm promo.html live.html
+cd /Users/temvmp/prjct/melatonin && rm src/js/content/promoSections.js src/js/content/liveSections.js
+cd /Users/temvmp/prjct/melatonin && mv album.html farewells.html
+cd /Users/temvmp/prjct/melatonin && mv src/js/content/albumSections.js src/js/content/farewellsSections.js
+cd /Users/temvmp/prjct/melatonin && ls src/js/content/
+cd /Users/temvmp/prjct/melatonin && ls *.html
+cd /Users/temvmp/prjct/melatonin && rm -f SITE_STRUCTURE.md INSTRUCTIONS.md
+cd /Users/temvmp/prjct/melatonin && rm assets/css/components/menu.css
+cd /Users/temvmp/prjct/melatonin && ls -la assets/css/components/
+cd /Users/temvmp/prjct/melatonin && rm -f assets/css/components/menu.css && cat > assets/css/components/menu.css << 'EOF'
+/* Mobile Menu Styles */
+/* ==============================================
+   HEADER LAYOUT - Simple & Clean
+   ============================================== */
+.page-title {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: nowrap !important;
+  gap: 16px;
+}
+/* ==============================================
+   HEADER TITLE - Left Side
+   ============================================== */
+.page-title__heading {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  font-family: var(--font-secondary);
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--accent-color);
+}
+.page-title__link {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+}
+.page-title__link:hover {
+  opacity: 0.8;
+}
+/* ====================================/* Mobile Menu Styles */
+/* ==============================================
+   HEADER LAYOUT - Simple & Clean
+   ========fl/* ====================ir   HEADER LAYOUT - Simple & Clean
+   ======  align   =============================ck.page-title {
+  display: flex !important;
+  align-ipa  display: f    align-items: center !impex  justify-content: space-between {   width: 24px;
+  height: 2px;
+  background:   gap: 16px;
+}
+/* ============bl}
+/* ======siti   HEADER TITLE - Left Side
+   =================me   =======================tr.page-title__heading {
+  margin: 0 !important;
+  pa==  margin: 0 !importan==  padding: 0 !importan    line-height: 1 !impor==  font-family: var(--font-s==  font-size: 2.5rem;
+  font-weight: po  font-weight: 800;p:  text-transform: bo  color: var(--accent-colorro}
+.page-title__link {
+  colo-ind  color: inherit;
+ 0  text-decoratiohi  transition: opacity 0ci  cursor: pointer;
+}
+.page-titlas}
+.page-title__lits:   opacity: 0.8;
+}
+/* ===
+}}
+/* =========acti/* =======================================  pointer-events: auto   HEADER LAYOUT - Simple & Clean
+   ========fl/==   ========fl/* ================
+    ======  align   =============================ck.page-title {
+  dispen  display: flex !important;
+  align-ipa  display: f    align-idt  align-ipa  display: f   px  height: 2px;
+  background:   gap: 16px;
+}
+/* ============bl}
+/* ======siti   HEADER TITLE - Left Sire  background:;
+}
+/* ============bl}
+/* =: au/* ======siti   H:    =================me   ==============rm  margin: 0 !important;
+  pa==  margin: 0 !importan==  padding: 0 !impot;  pa==  margin: 0 !imp .  font-weight: po  font-weight: 800;p:  text-transform: bo  color: var(--accent-colorro}
+.page-title__link {
+  colo-ind  color =.page-title__link {
+  colo-ind  color: inherit;
+ 0  text-decoratiohi  transition: opacixt  colo-ind  color:co 0  text-decoratiohi  trany:}
+.page-titlas}
+.page-title__lits:   opacity: 0.8;
+}
+/* ===
+}} tex.page-title_ u}
+/* ===
+}}
+/* =========act 1px;
+  padding: /2p   ========fl/==   ========fl/* ================
+    ======  align   =============================ck.page-tle-menu    ======  align   ===========================bo  dispen  display: flex !important;
+  align-ipa  display: f    ti  align-ipa  display: f    align-i
+   background:   gap: 16px;
+}
+/* ============bl}
+/* ======siti   HEADER TITLE : }
+/* ============bl}
+/* =card/* ======siti   Hn:}
+/* ============bl}
+/* =: au/* ======siti   H:    ======/* =: au/* ====E BR  pa==  margin: 0 !importan==  padding: 0 !impot;  pa==  margin: 0 !imp .  font-weight: po
+ .page-title__link {
+  colo-ind  color =.page-title__link {
+  colo-ind  color: inherit;
+ 0  text-decoratiohi  transition: opacixt  colo-ind  color:co 0  text-decad  colo-ind  color 
+   colo-ind  color: inherit;
+ 0  text-40 0  text-decoratiohi  tran  .page-titlas}
+.page-title__lits:   opacity: 0.8;
+}
+/* ===
+}} tex.page-title_ u}
+/* ===
+}}p: 10px;
+  }
+  .page-title__heading {
+    font-size: clamp(18px, 5vw, 22px);
+  }
+  .menu-/ri  padding: /2p   == 6    ======  align   =============================ck.page-tle-bi  align-ipa  display: f    ti  align-ipa  display: f    align-i
+   background:   gap: 16px;
+}
+/* ============bl}
+/* ======siti   HEADER TITLE : }
+/*ga   background:   gap: 16px;
+}
+/* ============bl}
+/* ======siti, }
+/* ============bl}
+/* ==trig/* ======siti   H: /* ============bl}
+/* =card/* =
+ /* =card/* ====== }/* ====cd /Users/temvmp/prjct/melatonin && sed -i '' '/^@media (max-width: 768px)/,/^  \.panel {$/{
+  /\.page-title/,/^  }$/d
+  /\.page-title h1/,/^  }$/d
+  /\.page-title p/,/^  }$/d
+}' assets/css/layout/page.css
+cd /Users/temvmp/prjct/melatonin && python3 << 'EOF'
+import re
+with open('assets/css/layout/page.css', 'r') as f:
+    content = f.read()
+# Удаляем все блоки с .page-title внутри медиа-запросов
+# Паттерн для поиска @media блоков
+media_pattern = r'(@media[^{]+\{)'
+def clean_media_block(match):
+    media_start = match.group(0)
+    # Находим содержимое после @media
+    start_pos = match.end()
+    # Ищем закрывающую скобку медиа-запроса
+    brace_count = 1
+    i = start_pos
+    while i < len(content) and brace_count > 0:
+        if content[i] == '{':
+            brace_count += 1
+        elif content[i] == '}':
+            brace_count -= 1
+        i += 1
+    media_content = content[start_pos:i-1]
+    # Удаляем все блоки .page-title из этого медиа-запроса
+    # Паттерн для .page-title блока
+    page_title_pattern = r'\s*\.page-title[^}]*\{[^}]*\}'
+    media_import re
+with open('assets/css/layout/page.css', 'enwith ope=r    content = f.read()
+# Удаляем все бnt# Удаляем вся# Паттерн для поиска @media блоков
+media_pattern = r'(@media[^{]+\{еmedia_pattern = r'(@media[^{]+\{)'
+def clо удалим def clean_me-title блоки внутри @media
+lines = content.split('\n')
+new_lines = []
+skip_    start_pos = match.end()
+    # Ищем закрывr i,     # Ищем закры?     brace_count = 1
+    i = start_pos
+    while i < len(content) and brace_      i = start_pos
+(l    while i < leti        if content[i] == '{':
+            b:
+               brace_count += 1.c        elif content[i] ==  l            brace_count -= 1
+ =         i += 1
+    media_co i    media_con <    # Удаляем все блоки .p      # Паттерн для .page-title блока
+    page_title_pattern = r'\s*\.page-tit      page_title_pattern = r'\s*\.page-title[^}]*\{      media_import re
+with open('assets/css/layout/page.cs
+ with open('assets/e
+# Удаляем все бnt# Удаляем вся# Паттерн дляramedia_pattern = r'(@media[^{]+\{еmedia_pattern = r'(@media[^{]+\{)'
+def clо удалим def clean_me-ti  def clо удалим def clean_me-title блоки внутри @me lines = content.split('\n')
+new_lines = []
+skip_    start_pos = match.etnew_lines ut/page.css', 'w')skip_    starwr    # n'.join(new_lines))
+print("    i = start_pos
+    while i < len(content) and brace_      i = start_pos
+(l ?в")

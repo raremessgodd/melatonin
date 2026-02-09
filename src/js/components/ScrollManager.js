@@ -1,6 +1,7 @@
 export class ScrollManager {
     constructor() {
         this.h1Element = document.getElementById('scroll-to-top');
+        this.scrollToTop = this.scrollToTop.bind(this);
 
         // Add event listeners
         if (this.h1Element) {
