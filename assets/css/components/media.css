@@ -198,7 +198,21 @@
 }
 
 .video-player:hover .video-player__controls,
+.video-player.is-playing:hover .video-player__controls,
 .video-player.is-lightbox .video-player__controls {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.video-player:hover:not(.is-playing):not(.is-lightbox) .video-player__controls {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+}
+
+/* Touch devices: show controls while playing (exclude lightbox handled above) */
+.video-player.is-touch.is-playing .video-player__controls {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);

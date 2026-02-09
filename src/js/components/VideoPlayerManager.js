@@ -1,4 +1,5 @@
 import { createPlayIcon, createPauseIcon } from '../utils/SvgIcons.js';
+import { isMobileDevice } from '../utils/MediaUtils.js';
 
 export class VideoPlayerManager {
   constructor() {
@@ -11,6 +12,8 @@ export class VideoPlayerManager {
      const wrappers = Array.from(document.querySelectorAll('[data-video-player]'));
      if (!wrappers.length) return;
 
+     const isTouchDevice = isMobileDevice();
+
      wrappers.forEach((wrapper) => {
        const video = wrapper.querySelector('[data-video]');
        const seek = wrapper.querySelector('[data-video-seek]');
@@ -19,6 +22,8 @@ export class VideoPlayerManager {
        const fullscreen = wrapper.querySelector('[data-video-fullscreen]');
        const centerToggle = wrapper.querySelector('.video-player__center-toggle');
        if (!video || !seek || !volume || !toggle || !fullscreen) return;
+
+       wrapper.classList.toggle('is-touch', isTouchDevice);
 
        const player = {
          wrapper,
@@ -98,15 +103,35 @@ export class VideoPlayerManager {
         }
       });
 
-      volume.addEventListener('input', () => {
-        const value = Number(volume.value);
-        video.volume = value;
-        video.muted = value === 0;
-        if (value > 0 && video.muted) {
-          video.muted = false;
-        }
-        this.scheduleVolumeFill(player, value);
-      });
+       const swallowControlEvent = (event) => {
+         event.stopPropagation();
+       };
+
+       const controlElements = [seek, volume];
+       controlElements.forEach((control) => {
+         ['pointerdown', 'mousedown', 'touchstart', 'click'].forEach((eventName) => {
+           control.addEventListener(eventName, swallowControlEvent);
+         });
+       });
+
+       const seekWrapper = seek.closest('.video-player__seek-wrapper');
+       const volumeWrapper = volume.closest('.video-player__volume-wrapper');
+       [seekWrapper, volumeWrapper].forEach((controlWrapper) => {
+         if (!controlWrapper) return;
+         ['pointerdown', 'mousedown', 'touchstart', 'click'].forEach((eventName) => {
+           controlWrapper.addEventListener(eventName, swallowControlEvent);
+         });
+       });
+
+       volume.addEventListener('input', () => {
+         const value = Number(volume.value);
+         video.volume = value;
+         video.muted = value === 0;
+         if (value > 0 && video.muted) {
+           video.muted = false;
+         }
+         this.scheduleVolumeFill(player, value);
+       });
 
       toggle.addEventListener('click', () => {
         // Если видео ещё не инициализировано, загружаем его

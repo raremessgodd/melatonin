@@ -54,3 +54,43 @@ export function createFullscreenIcon() {
   return svg;
 }
 
+export function createAudioPlayIcon() {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('class', 'audio-player__icon');
+  svg.setAttribute('width', '18');
+  svg.setAttribute('height', '18');
+  svg.setAttribute('fill', 'currentColor');
+
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', 'M8 5v14l11-7z');
+  svg.appendChild(path);
+
+  return svg;
+}
+
+export function createAudioPauseIcon() {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('class', 'audio-player__icon');
+  svg.setAttribute('width', '18');
+  svg.setAttribute('height', '18');
+  svg.setAttribute('fill', 'currentColor');
+
+  const rect1 = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rect1.setAttribute('x', '6');
+  rect1.setAttribute('y', '4');
+  rect1.setAttribute('width', '4');
+  rect1.setAttribute('height', '16');
+
+  const rect2 = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rect2.setAttribute('x', '14');
+  rect2.setAttribute('y', '4');
+  rect2.setAttribute('width', '4');
+  rect2.setAttribute('height', '16');
+
+  svg.appendChild(rect1);
+  svg.appendChild(rect2);
+
+  return svg;
+}

@@ -3,7 +3,12 @@ import {
   getMaxQualityPath,
   getHLSPath
 } from '../utils/MediaUtils.js';
-import { createPlayIcon, createFullscreenIcon } from '../utils/SvgIcons.js';
+import {
+  createPlayIcon,
+  createFullscreenIcon,
+  createAudioPlayIcon,
+  createAudioPauseIcon
+} from '../utils/SvgIcons.js';
 
 export class SectionBlocks {
   appendTextBlock(container, block) {
@@ -341,13 +346,13 @@ export class SectionBlocks {
 
     const playIcon = document.createElement('span');
     playIcon.className = 'play-icon';
-    playIcon.textContent = '▶';
+    playIcon.appendChild(createAudioPlayIcon());
     playPause.appendChild(playIcon);
 
     const pauseIcon = document.createElement('span');
     pauseIcon.className = 'pause-icon';
     pauseIcon.style.display = 'none';
-    pauseIcon.textContent = '⏸';
+    pauseIcon.appendChild(createAudioPauseIcon());
     playPause.appendChild(pauseIcon);
 
     controlButtons.appendChild(playPause);
