@@ -16,7 +16,7 @@ export const farewellsSections = [
         audioSrc: 'assets/music/till_the_end.mp3',
         artworkSrc: 'assets/img/album/album_cover.jpg',
         trackTitle: 'Till The End',
-        trackArtist: 'Melatonin'
+        trackArtist: 'мelatonin*'
       }
     ]
   },

@@ -25,6 +25,12 @@ body.is-loaded {
   opacity: 1;
 }
 
+body.menu-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
 html {
   overflow: auto;
   overflow-x: hidden; /* Запрещаем горизонтальную прокрутку */
