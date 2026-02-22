@@ -3,7 +3,8 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://melatonin.ru',
+  output: 'static',
+  site: 'https://mellattonninn.ru',
   base: '/',
   integrations: [sitemap()],
   vite: {
