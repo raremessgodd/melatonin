@@ -1,6 +1,7 @@
 /**
  * Утилиты для работы с медиафайлами
  */
+import { asset } from './BaseUrl.js';
 
 /**
  * Определяет оптимальное разрешение изображения на основе размера контейнера
@@ -96,7 +97,7 @@ export function isMobileDevice() {
 export function getHLSPath(basePath) {
   const fileName = basePath.split('/').pop();
   const baseName = fileName.includes('.') ? fileName.split('.').slice(0, -1).join('.') : fileName;
-  return `/assets/video/hls/${baseName}/master.m3u8`;
+  return asset(`/assets/video/hls/${baseName}/master.m3u8`);
 }
 
 /**

@@ -2,6 +2,7 @@
 // src/layouts/BaseLayout.astro
 import '../styles/main.css';
 import { ViewTransitions } from 'astro:transitions';
+import { asset, url as pageUrl } from '../utils/assetPaths';
 
 export interface Props {
   title?: string;
@@ -28,7 +29,7 @@ const {
   bodyClass = '',
 } = Astro.props;
 
-const siteUrl = 'https://melatonin.ru';
+const siteUrl = 'https://mellattonninn.ru';
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, siteUrl).href;
 ---
@@ -43,6 +44,7 @@ const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, siteU
   <meta name="theme-color" content="#000000" />
   <meta name="supports-loading" content="lazy" />
   <meta name="page-key" content={pageKey} />
+  <meta name="base-url" content={import.meta.env.BASE_URL} />
 
   <title>{title}</title>
   <meta name="description" content={description} />
@@ -63,8 +65,8 @@ const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, siteU
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={ogImageUrl} />
 
-  <link rel="icon" href="/assets/img/icons/sticker.ico" type="image/x-icon" />
-  <link rel="preload" as="image" href="/assets/img/icons/ico.jpg" fetchpriority="high" />
+  <link rel="icon" href={asset('/assets/img/icons/sticker.ico')} type="image/x-icon" />
+  <link rel="preload" as="image" href={asset('/assets/img/icons/ico.jpg')} fetchpriority="high" />
 
   <slot name="preloads" />
 
@@ -79,17 +81,17 @@ const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, siteU
 
   <div class="boot-loader" aria-live="polite" aria-label="Загрузка">
     <div class="boot-loader__spinner" aria-hidden="true">
-      <img src="/assets/img/icons/ico.jpg" alt="" loading="eager" decoding="async" fetchpriority="high" />
+      <img src={asset('/assets/img/icons/ico.jpg')} alt="" loading="eager" decoding="async" fetchpriority="high" />
     </div>
   </div>
 
   <header class="page-title page-title--top">
     <nav class="header-nav header-nav--pages" aria-label="Pages">
-      <a href="/farewells" class={`header-nav__link${activePage === 'farewells' ? ' active' : ''}`}>FAREWELLS</a>
-      <a href="/about" class={`header-nav__link${activePage === 'about' ? ' active' : ''}`}>ABOUT</a>
+      <a href={pageUrl('/farewells')} class={`header-nav__link${activePage === 'farewells' ? ' active' : ''}`}>FAREWELLS</a>
+      <a href={pageUrl('/about')} class={`header-nav__link${activePage === 'about' ? ' active' : ''}`}>ABOUT</a>
     </nav>
     <h1 id="scroll-to-top" class="page-title__heading">
-      <a href="/" class="page-title__link">MELATONIN*</a>
+      <a href={pageUrl('/')} class="page-title__link">MELATONIN*</a>
     </h1>
     <nav class="header-nav header-nav--social" aria-label="Social">
       <a href="https://t.me/melatoninm" target="_blank" rel="noopener" class="header-nav__link">TELEGRAM</a>
@@ -105,8 +107,8 @@ const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, siteU
 
   <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
     <div class="mobile-menu__content">
-      <a href="/farewells" class={`mobile-menu__link${activePage === 'farewells' ? ' active' : ''}`}>FAREWELLS</a>
-      <a href="/about" class={`mobile-menu__link${activePage === 'about' ? ' active' : ''}`}>ABOUT</a>
+      <a href={pageUrl('/farewells')} class={`mobile-menu__link${activePage === 'farewells' ? ' active' : ''}`}>FAREWELLS</a>
+      <a href={pageUrl('/about')} class={`mobile-menu__link${activePage === 'about' ? ' active' : ''}`}>ABOUT</a>
       <div class="mobile-menu__divider"></div>
       <a href="https://t.me/melatoninm" target="_blank" rel="noopener" class="mobile-menu__link">TELEGRAM</a>
       <a href="https://www.instagram.com/mellattonnin" target="_blank" rel="noopener" class="mobile-menu__link">INSTAGRAM</a>

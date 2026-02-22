@@ -11,16 +11,21 @@ export interface Props {
 
 const { block } = Astro.props;
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+function withBase(path: string): string {
+  return base + (path.startsWith('/') ? path : '/' + path);
+}
+
 // Путь к HLS master.m3u8 для видео
 function getHLSPath(src: string): string {
   const baseName = src.split('/').pop() ?? '';
-  return `/assets/video/hls/${baseName}/master.m3u8`;
+  return withBase(`/assets/video/hls/${baseName}/master.m3u8`);
 }
 
 // Обложка видео: определяется клиентом по viewport — используем big как дефолт
 function getVideoPosterPath(src: string): string {
   const baseName = src.split('/').pop() ?? '';
-  return `/assets/img/covers/${baseName}_cover_big.jpeg`;
+  return withBase(`/assets/img/covers/${baseName}_cover_big.jpeg`);
 }
 
 // Responsive src: логика та же что в getResponsiveImagePaths, но без window (SSG)
@@ -32,10 +37,10 @@ function getResponsiveSrc(src: string): string {
     'live_motri_1','live_perspektiva_1','live_perspektiva_2','promo_1','promo_2',
   ];
   const hasVersions = responsive.some((f) => src.includes(f));
-  if (!hasVersions) return src;
+  if (!hasVersions) return withBase(src);
   const parts = src.split('.');
   const ext = parts.pop();
-  return `${parts.join('.')}-640.${ext}`;
+  return withBase(`${parts.join('.')}-640.${ext}`);
 }
 
 const isVideo = block.mediaType === 'video';
