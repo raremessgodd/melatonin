@@ -5,21 +5,14 @@ import aboutCss from '../styles/components/about.css?url';
 import { FEATURE_ABOUT_PAGE } from '../config/featureFlags';
 import { getEntry, getCollection } from 'astro:content';
 
-const meta = await getEntry('pages', 'about');
-const { title, description, activePage, bgImage, ogImage, bodyClass } = meta.data;
-
 const rawSlides = await getCollection('about');
 const slides = rawSlides.sort((a, b) => a.data.order - b.data.order).map((s) => s.data);
 ---
 
 <BaseLayout
-  title={title}
-  description={description}
-  pageKey={FEATURE_ABOUT_PAGE ? 'about' : 'wip'}
-  activePage={activePage}
-  bgImage={bgImage}
-  ogImage={ogImage}
-  bodyClass={FEATURE_ABOUT_PAGE ? bodyClass : 'wip-page'}
+  title="About - melatonin*"
+  pageKey="about"
+  activePage="about"
 >
   {FEATURE_ABOUT_PAGE ? (
     <>

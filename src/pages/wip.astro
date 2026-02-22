@@ -2,19 +2,12 @@
 // src/pages/wip.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getEntry } from 'astro:content';
-
-const meta = await getEntry('pages', 'wip');
-const { title, description, activePage, bgImage, ogImage, bodyClass } = meta.data;
 ---
 
 <BaseLayout
-  title={title}
-  description={description}
+  title="WIP - melatonin*"
   pageKey="wip"
-  activePage={activePage}
-  bgImage={bgImage}
-  ogImage={ogImage}
-  bodyClass={bodyClass}
+  activePage="wip"
 >
   <div class="terminal-fullscreen" aria-label="Work in progress" role="status">
     <div class="terminal-content" id="terminalContent"></div>
