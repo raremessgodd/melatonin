@@ -2,8 +2,12 @@
 // src/pages/farewells.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
-import { farewellsSections } from '../data/farewellsSections.ts';
-import { asset } from '../utils/assetPaths';
+import { getCollection } from 'astro:content';
+
+const rawSections = await getCollection('farewells');
+const farewellsSections = rawSections
+  .sort((a, b) => a.data.order - b.data.order)
+  .map(({ id, data: { order: _order, ...rest } }) => ({ id, ...rest }));
 ---
 
 <BaseLayout
@@ -11,8 +15,8 @@ import { asset } from '../utils/assetPaths';
   description="Farewells — альбом melatonin* о прощании со сном. Слушайте трек Till The End и смотрите живые концертные видео."
   pageKey="farewells"
   activePage="farewells"
-  bgImage={asset('/assets/img/backgrounds/mi(1)_gr.jpg')}
-  ogImage={asset('/assets/img/album/album_cover.jpg')}
+  bgImage="/assets/img/backgrounds/mi(1)_gr.jpg"
+  ogImage="/assets/img/album/album_cover.jpg"
   bodyClass="subpage"
 >
   <main id="content">

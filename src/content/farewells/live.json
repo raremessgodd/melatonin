@@ -1,0 +1,34 @@
+{
+  "order": 3,
+  "layout": "quad",
+  "bg": "/assets/img/backgrounds/mi(1)_yl.jpg",
+  "blocks": [
+    {
+      "type": "text",
+      "titleTag": "h1",
+      "title": "Live Performance",
+      "titleClass": "large-heading",
+      "description": "Записи с выступлений, живой звук и атмосфера",
+      "descriptionClass": "text-uppercase letter-spacing-wide accent-color mb-40"
+    },
+    {
+      "type": "media",
+      "mediaType": "video",
+      "src": "/assets/video/live_motri_1",
+      "ratio": "16-9"
+    },
+    {
+      "type": "media",
+      "mediaType": "video",
+      "src": "/assets/video/live_perspektiva_1",
+      "ratio": "16-9"
+    },
+    {
+      "type": "media",
+      "mediaType": "video",
+      "src": "/assets/video/live_perspektiva_2",
+      "ratio": "16-9"
+    }
+  ]
+}
+

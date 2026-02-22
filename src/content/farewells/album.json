@@ -1,0 +1,22 @@
+{
+  "order": 1,
+  "layout": "split",
+  "bg": "/assets/img/backgrounds/mi(1)_gr.jpg",
+  "blocks": [
+    {
+      "type": "text",
+      "titleTag": "h1",
+      "title": "Farewells",
+      "description": "Farewells — альбом о прощании со сном. Мы старались передать желание вернуться в теплое прошлое, в воспоминание, которое не получается забыть до конца. Многие сталкивались с моментом, когда невыразимо хотелось вернуться назад. Но прошлое осталось только начертанием в голове, почти забытым. Его больше не получится пережить, послушать, пересмотреть. Только вспоминать.",
+      "descriptionClass": "text-uppercase letter-spacing-wide accent-color mb-40"
+    },
+    {
+      "type": "player",
+      "audioSrc": "/assets/music/till_the_end.mp3",
+      "artworkSrc": "/assets/img/album/album_cover.jpg",
+      "trackTitle": "Till The End",
+      "trackArtist": "мelatonin*"
+    }
+  ]
+}
+

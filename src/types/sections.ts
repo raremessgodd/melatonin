@@ -49,52 +49,13 @@ export interface VideoBlock {
   poster?: string;
 }
 
-export interface QuoteBlock {
-  type: 'quote';
-  text: string;
-  author?: string;
-}
-
-export interface ListBlock {
-  type: 'list';
-  items: string[];
-  ordered?: boolean;
-}
-
-export interface ButtonsBlock {
-  type: 'buttons';
-  buttons: Array<{ label: string; href: string; external?: boolean }>;
-}
-
-export interface EmbedBlock {
-  type: 'embed';
-  src: string;
-  title?: string;
-}
-
-export interface CollageBlock {
-  type: 'collage';
-  items: MediaItem[];
-}
-
-export interface LineGalleryBlock {
-  type: 'lineGallery';
-  items: MediaItem[];
-}
-
 /** Все возможные типы блоков */
 export type Block =
   | TextBlock
   | MediaItem
   | PlayerBlock
   | GridBlock
-  | VideoBlock
-  | QuoteBlock
-  | ListBlock
-  | ButtonsBlock
-  | EmbedBlock
-  | CollageBlock
-  | LineGalleryBlock;
+  | VideoBlock;
 
 // ─── Секция ──────────────────────────────────────────────────────────────────
 

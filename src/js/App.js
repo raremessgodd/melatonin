@@ -1,7 +1,6 @@
 import { LightboxManager } from './components/LightboxManager.js';
 import { PanelTransitionManager } from './components/PanelTransitionManager.js';
 import { AudioPlayerManager } from './components/AudioPlayerManager.js';
-import { FullscreenManager } from './components/FullscreenManager.js';
 import { ScrollManager } from './components/ScrollManager.js';
 import { LazyMediaManager } from './components/LazyMediaManager.js';
 import { VideoPlayerManager } from './components/VideoPlayerManager.js';
@@ -171,29 +170,6 @@ export class App {
     };
 
     const handlers = [
-      () => {
-        const fullscreenTrigger = target.closest('[data-fullscreen]');
-        if (!fullscreenTrigger) return false;
-        preventDefault();
-        const container = fullscreenTrigger.closest('.player-artwork') || fullscreenTrigger.parentElement;
-        if (container) {
-          FullscreenManager.toggleFullscreen(container);
-        }
-        return true;
-      },
-      () => {
-        const imageFullscreenTrigger = target.closest('[data-image-fullscreen]');
-        if (!imageFullscreenTrigger) return false;
-        event.preventDefault();
-        if (!fromKeyboard) {
-          event.stopPropagation();
-        }
-        const wrapper = imageFullscreenTrigger.closest('.media-wrapper');
-        if (wrapper) {
-          this.lightboxManager.openLightbox(wrapper);
-        }
-        return true;
-      },
       () => {
         const lightboxTrigger = target.closest('[data-lightbox]');
         if (!lightboxTrigger) return false;

@@ -11,25 +11,23 @@ export interface Props {
 
 const { block } = Astro.props;
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-function withBase(path: string): string {
-  return base + (path.startsWith('/') ? path : '/' + path);
-}
+const isVideo = block.mediaType === 'video';
+const ratio = block.ratio ?? (isVideo ? '16-9' : undefined);
+const wrapperClass = ['media-wrapper', ratio ? `ratio-${ratio}` : '', isVideo ? 'video-player' : ''].filter(Boolean).join(' ');
 
 // Путь к HLS master.m3u8 для видео
 function getHLSPath(src: string): string {
   const baseName = src.split('/').pop() ?? '';
-  return withBase(`/assets/video/hls/${baseName}/master.m3u8`);
+  return `/assets/video/hls/${baseName}/master.m3u8`;
 }
 
-// Обложка видео: определяется клиентом по viewport — используем big как дефолт
+// Обложка видео: серверный дефолт — big jpeg
 function getVideoPosterPath(src: string): string {
   const baseName = src.split('/').pop() ?? '';
-  return withBase(`/assets/img/covers/${baseName}_cover_big.jpeg`);
+  return `/assets/img/covers/${baseName}_cover_big.jpeg`;
 }
 
-// Responsive src: логика та же что в getResponsiveImagePaths, но без window (SSG)
-// На клиенте LazyMediaManager обновит src под реальный viewport через data-src
+// Responsive src для изображений (мобильный — 640px вариант)
 function getResponsiveSrc(src: string): string {
   const responsive = [
     'album_cover','mi(1)_bl','mi(1)_gr','mi(1)_pu','mi(1)_yl','mi(1)',
@@ -37,18 +35,14 @@ function getResponsiveSrc(src: string): string {
     'live_motri_1','live_perspektiva_1','live_perspektiva_2','promo_1','promo_2',
   ];
   const hasVersions = responsive.some((f) => src.includes(f));
-  if (!hasVersions) return withBase(src);
+  if (!hasVersions) return src;
   const parts = src.split('.');
   const ext = parts.pop();
-  return withBase(`${parts.join('.')}-640.${ext}`);
+  return `${parts.join('.')}-640.${ext}`;
 }
 
-const isVideo = block.mediaType === 'video';
-const ratio = block.ratio ?? (isVideo ? '16-9' : undefined);
-const wrapperClass = ['media-wrapper', ratio ? `ratio-${ratio}` : '', isVideo ? 'video-player' : ''].filter(Boolean).join(' ');
 const posterPath = isVideo ? getVideoPosterPath(block.src) : undefined;
 const hlsSrc = isVideo ? getHLSPath(block.src) : undefined;
-// Мобильный src — будет обновлён LazyMediaManager на клиенте
 const mobileSrc = !isVideo ? getResponsiveSrc(block.src) : undefined;
 ---
 
@@ -103,5 +97,4 @@ const mobileSrc = !isVideo ? getResponsiveSrc(block.src) : undefined;
     />
   )}
 </div>
-
 

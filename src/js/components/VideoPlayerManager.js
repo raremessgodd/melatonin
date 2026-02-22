@@ -59,7 +59,7 @@ export class VideoPlayerManager {
 
        // Клик на wrapper запускает видео если не кликнули на кнопку
        wrapper.addEventListener('click', (e) => {
-         if (e.target.closest('.video-player__controls') || e.target.closest('.video-player__center-toggle')) {
+         if (e.target.closest('.video-player__controls')) {
            return;
          }
 
@@ -125,8 +125,6 @@ export class VideoPlayerManager {
 
       video.addEventListener('play', () => {
         wrapper.classList.add('has-played', 'is-playing');
-        wrapper.classList.remove('is-paused');
-        this.showTempPlayIcon(player);
 
         if (isTouchDevice && !wrapper.classList.contains('is-lightbox')) {
           clearTimeout(player.controlsHideTimeout);
@@ -138,9 +136,6 @@ export class VideoPlayerManager {
 
       video.addEventListener('pause', () => {
         wrapper.classList.remove('is-playing');
-        wrapper.classList.add('is-paused');
-        this.hideTempIcon(player);
-
         if (isTouchDevice) {
           clearTimeout(player.controlsHideTimeout);
           wrapper.classList.remove('controls-hidden');
@@ -339,25 +334,6 @@ export class VideoPlayerManager {
       player.bufferBar = bufferBar;
     }
   }
-  // Показать мигающий треугольник при старте воспроизведения
-  showTempPlayIcon(player) {
-    if (!player.tempIcon) return;
-
-    player.tempIcon.style.animation = 'none';
-    player.tempIcon.offsetHeight; // force reflow
-
-    player.tempIcon.innerHTML = '';
-    player.tempIcon.appendChild(createPlayIcon());
-
-    player.tempIcon.style.animation = 'tempIconFade 0.6s ease-out';
-  }
-
-  // Скрыть temp-icon (сбросить анимацию)
-  hideTempIcon(player) {
-    if (!player.tempIcon) return;
-    player.tempIcon.style.animation = 'none';
-    player.tempIcon.innerHTML = '';
-  }
 
   // Обновление визуального индикатора буферизации на seek bar
   updateBufferBar(player) {
@@ -375,3 +351,4 @@ export class VideoPlayerManager {
     }
   }
 }
+

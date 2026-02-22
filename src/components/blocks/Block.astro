@@ -16,7 +16,7 @@ export interface Props {
 
 const { block, layout } = Astro.props;
 
-const isText = ['text', 'quote', 'list', 'buttons'].includes(block.type);
+const isText = block.type === 'text';
 const containerClass = ['panel__col', 'reveal', isText ? 'block--text' : 'block--media'].join(' ');
 const isQuad = layout === 'quad';
 const wrapperClass = isQuad ? 'quad reveal' : containerClass;

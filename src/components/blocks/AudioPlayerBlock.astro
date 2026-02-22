@@ -6,17 +6,13 @@ export interface Props {
 }
 
 const { block } = Astro.props;
-
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const audioSrc = base + (block.audioSrc.startsWith('/') ? block.audioSrc : '/' + block.audioSrc);
-const artworkSrc = base + (block.artworkSrc.startsWith('/') ? block.artworkSrc : '/' + block.artworkSrc);
 ---
 
 <div
   class="audio-player"
   data-audio-player
-  data-audio-src={audioSrc}
-  data-artwork-src={artworkSrc}
+  data-audio-src={block.audioSrc}
+  data-artwork-src={block.artworkSrc}
   data-track-title={block.trackTitle}
   data-track-artist={block.trackArtist}
 >
@@ -24,7 +20,7 @@ const artworkSrc = base + (block.artworkSrc.startsWith('/') ? block.artworkSrc :
   <div class="audio-player__artwork" data-lightbox role="button" tabindex="0" aria-label="Обложка альбома">
     <img
       class="audio-player__cover"
-      src={artworkSrc}
+      src={block.artworkSrc}
       alt="Album Artwork"
       loading="lazy"
       decoding="async"

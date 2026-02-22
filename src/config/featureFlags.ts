@@ -8,5 +8,5 @@
  * true  → показывается полноценная страница About (PhotoStack)
  * false → показывается WIP-заглушка с терминальной анимацией
  */
-export const FEATURE_ABOUT_PAGE = false;
+export const FEATURE_ABOUT_PAGE = true;
 

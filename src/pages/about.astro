@@ -3,104 +3,47 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import aboutCss from '../styles/components/about.css?url';
 import { FEATURE_ABOUT_PAGE } from '../config/featureFlags';
-import { asset } from '../utils/assetPaths';
+import { getEntry, getCollection } from 'astro:content';
+
+const meta = await getEntry('pages', 'about');
+const { title, description, activePage, bgImage, ogImage, bodyClass } = meta.data;
+
+const rawSlides = await getCollection('about');
+const slides = rawSlides.sort((a, b) => a.data.order - b.data.order).map((s) => s.data);
 ---
 
 <BaseLayout
-  title="About — melatonin*"
-  description="melatonin* — группа из Москвы, рождённая из ночных репетиций и случайных записей. Альтернативная музыка с элементами инди и шугейза."
+  title={title}
+  description={description}
   pageKey={FEATURE_ABOUT_PAGE ? 'about' : 'wip'}
-  activePage="about"
-  bgImage={asset('/assets/img/backgrounds/mi(1)_pu.jpg')}
-  ogImage={asset('/assets/img/covers/live_motri_1_cover_big.jpeg')}
-  bodyClass={FEATURE_ABOUT_PAGE ? 'subpage' : 'wip-page'}
+  activePage={activePage}
+  bgImage={bgImage}
+  ogImage={ogImage}
+  bodyClass={FEATURE_ABOUT_PAGE ? bodyClass : 'wip-page'}
 >
   {FEATURE_ABOUT_PAGE ? (
     <>
       <link slot="styles" rel="stylesheet" href={aboutCss} />
-      <!-- Photo Stack Section -->
       <section class="photo-stack-section" data-photo-stack>
         <div class="photo-stack__sticky">
-
-          <!-- Слайд 1 -->
-          <div class="photo-stack__slide">
-            <img
-              class="photo-stack__img"
-              src={asset('/assets/img/backgrounds/mi(1).jpg')}
-              alt="Melatonin — фото 1"
-              loading="eager"
-            />
-            <div class="photo-stack__overlay" aria-hidden="true"></div>
-            <div class="photo-stack__caption">
-              <p class="photo-stack__label">MELATONIN*</p>
-              <h2 class="photo-stack__title">Мы&nbsp;— звук</h2>
-              <p class="photo-stack__text">
-                Группа из Москвы, рождённая из ночных репетиций и случайных записей.
-                Нас объединяет одно — желание сделать что-то настоящее.
-              </p>
+          {slides.map((slide) => (
+            <div class="photo-stack__slide">
+              <img
+                class="photo-stack__img"
+                src={slide.image}
+                alt={slide.alt ?? ''}
+                loading={slide.loading ?? 'lazy'}
+              />
+              <div class="photo-stack__overlay" aria-hidden="true"></div>
+              <div class="photo-stack__caption">
+                <p class="photo-stack__label">{slide.label}</p>
+                <h2 class="photo-stack__title">{slide.title}</h2>
+                <p class="photo-stack__text">{slide.text}</p>
+              </div>
             </div>
-          </div>
-
-          <!-- Слайд 2 -->
-          <div class="photo-stack__slide">
-            <img
-              class="photo-stack__img"
-              src={asset('/assets/img/covers/live_perspektiva_1_cover_big.jpeg')}
-              alt="Melatonin — фото 2"
-              loading="lazy"
-            />
-            <div class="photo-stack__overlay" aria-hidden="true"></div>
-            <div class="photo-stack__caption">
-              <p class="photo-stack__label">ИСТОРИЯ</p>
-              <h2 class="photo-stack__title">Начало</h2>
-              <p class="photo-stack__text">
-                Первые треки были записаны в 2022 году в маленькой студии на окраине.
-                С тех пор мы не останавливались.
-              </p>
-            </div>
-          </div>
-
-          <!-- Слайд 3 -->
-          <div class="photo-stack__slide">
-            <img
-              class="photo-stack__img"
-              src={asset('/assets/img/covers/live_motri_1_cover_big.jpeg')}
-              alt="Melatonin — фото 3"
-              loading="lazy"
-            />
-            <div class="photo-stack__overlay" aria-hidden="true"></div>
-            <div class="photo-stack__caption">
-              <p class="photo-stack__label">ЖИВЫЕ КОНЦЕРТЫ</p>
-              <h2 class="photo-stack__title">На&nbsp;сцене</h2>
-              <p class="photo-stack__text">
-                Каждое выступление для нас — отдельная история.
-                Мы не повторяемся, мы проживаем.
-              </p>
-            </div>
-          </div>
-
-          <!-- Слайд 4 -->
-          <div class="photo-stack__slide">
-            <img
-              class="photo-stack__img"
-              src={asset('/assets/img/covers/live_perspektiva_2_cover_big.jpeg')}
-              alt="Melatonin — фото 4"
-              loading="lazy"
-            />
-            <div class="photo-stack__overlay" aria-hidden="true"></div>
-            <div class="photo-stack__caption">
-              <p class="photo-stack__label">СЕЙЧАС</p>
-              <h2 class="photo-stack__title">Впереди</h2>
-              <p class="photo-stack__text">
-                Новый материал, новые города. Следи за нами в Telegram и Instagram.
-              </p>
-            </div>
-          </div>
-
+          ))}
         </div>
       </section>
-
-      <!-- JS-рендер дополнительных секций (если есть) -->
       <main id="content"></main>
     </>
   ) : (

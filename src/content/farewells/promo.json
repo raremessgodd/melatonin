@@ -1,0 +1,53 @@
+{
+  "order": 2,
+  "layout": "quad",
+  "bg": "/assets/img/backgrounds/mi(1)_bl.jpg",
+  "blocks": [
+    {
+      "type": "text",
+      "titleTag": "h1",
+      "title": "Promo",
+      "description": "В качестве промо для альбома мы выпустили серию роликов в социальных сетях со звуком с концертов",
+      "descriptionClass": "text-uppercase letter-spacing-wide accent-color mb-40"
+    },
+    {
+      "type": "grid",
+      "gridClass": "grid-2-fill",
+      "items": [
+        {
+          "type": "media",
+          "mediaType": "image",
+          "src": "/assets/img/posters/motri_afisha.jpg",
+          "alt": "Concert Photo 1",
+          "ariaLabel": "View concert photo",
+          "ratio": "1-1",
+          "fit": "cover",
+          "lightbox": true
+        },
+        {
+          "type": "media",
+          "mediaType": "image",
+          "src": "/assets/img/posters/perspektiva_afisha.png",
+          "alt": "Concert Photo 2",
+          "ariaLabel": "View concert photo",
+          "ratio": "1-1",
+          "fit": "cover",
+          "lightbox": true
+        }
+      ]
+    },
+    {
+      "type": "media",
+      "mediaType": "video",
+      "src": "/assets/video/promo_1",
+      "ratio": "16-9"
+    },
+    {
+      "type": "media",
+      "mediaType": "video",
+      "src": "/assets/video/promo_2",
+      "ratio": "16-9"
+    }
+  ]
+}
+

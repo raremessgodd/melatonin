@@ -1,19 +1,22 @@
 ---
 // src/pages/wip.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
+
+const meta = await getEntry('pages', 'wip');
+const { title, description, activePage, bgImage, ogImage, bodyClass } = meta.data;
 ---
 
 <BaseLayout
-  title="About — melatonin*"
-  description="melatonin* — группа из Москвы, рождённая из ночных репетиций и случайных записей."
+  title={title}
+  description={description}
   pageKey="wip"
-  activePage="about"
-  bgImage="/assets/img/backgrounds/mi(1)_pu.jpg"
-  ogImage="/assets/img/album/album_cover.jpg"
-  bodyClass="wip-page"
+  activePage={activePage}
+  bgImage={bgImage}
+  ogImage={ogImage}
+  bodyClass={bodyClass}
 >
   <div class="terminal-fullscreen" aria-label="Work in progress" role="status">
     <div class="terminal-content" id="terminalContent"></div>
   </div>
 </BaseLayout>
-
