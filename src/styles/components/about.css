@@ -1,0 +1,172 @@
+/* ============================================
+   Photo Stack — About Page  (Static Slider)
+   JS управляет transform для въезда слайдов.
+   ============================================ */
+
+.photo-stack-section {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  pointer-events: none;
+  background: var(--bg-color);
+}
+
+.photo-stack__sticky {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--bg-color);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+
+  &.is-active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.photo-stack__slide {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  /* z-index задаётся через inline CSS-переменную --i из JS */
+  z-index: var(--i, 1);
+
+  &.is-entering { z-index: 10; }
+}
+
+/* nth-child z-index fallback если JS ещё не проставил --i */
+.photo-stack__slide:nth-child(1)  { --i: 1; }
+.photo-stack__slide:nth-child(2)  { --i: 2; }
+.photo-stack__slide:nth-child(3)  { --i: 3; }
+.photo-stack__slide:nth-child(4)  { --i: 4; }
+.photo-stack__slide:nth-child(5)  { --i: 5; }
+.photo-stack__slide:nth-child(6)  { --i: 6; }
+.photo-stack__slide:nth-child(7)  { --i: 7; }
+.photo-stack__slide:nth-child(8)  { --i: 8; }
+
+.photo-stack__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Gradient overlay */
+.photo-stack__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklch, black 10%, transparent) 0%,
+    color-mix(in oklch, black 50%, transparent) 60%,
+    color-mix(in oklch, black 75%, transparent) 100%
+  );
+  pointer-events: none;
+}
+
+/* Caption */
+.photo-stack__caption {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  padding-block: clamp(20px, 5vh, 80px) clamp(24px, 6vh, 96px);
+  padding-inline: clamp(20px, 5vw, 80px);
+  color: var(--accent-color);
+  opacity: 0;
+  translate: 0 16px;
+  transition: opacity 0.6s ease 0.05s, translate 0.6s ease 0.05s;
+  pointer-events: none;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.photo-stack__slide.is-text-visible .photo-stack__caption {
+  opacity: 1;
+  translate: 0 0;
+  pointer-events: auto;
+}
+
+/* Typography */
+.photo-stack__label {
+  font-family: var(--font-primary);
+  font-size: clamp(0.65rem, 1vw, 0.75rem);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: color-mix(in oklch, white 60%, transparent);
+  margin: 0 0 10px;
+}
+
+.photo-stack__title {
+  font-family: var(--font-secondary);
+  font-size: clamp(2rem, 6vw, 5rem);
+  font-weight: 800;
+  line-height: 1;
+  margin: 0 0 16px;
+  letter-spacing: -1px;
+  color: var(--accent-color);
+  text-transform: uppercase;
+}
+
+.photo-stack__text {
+  font-family: var(--font-primary);
+  font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+  line-height: 1.6;
+  color: color-mix(in oklch, white 85%, transparent);
+  max-width: 560px;
+  margin: 0;
+}
+
+/* Progress dots */
+.photo-stack__progress {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: clamp(2vw, 4vw, 5vw);
+  translate: 0 -50%;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(5px, 1vh, 8px);
+  z-index: var(--z-slide-nav);
+}
+
+.photo-stack__dot {
+  width: clamp(5px, 1vw, 6px);
+  height: clamp(5px, 1vw, 6px);
+  border-radius: 50%;
+  background: color-mix(in oklch, white 30%, transparent);
+  transition: background 0.4s ease, scale 0.4s ease;
+
+  &.is-active {
+    background: var(--accent-color);
+    scale: 1.4;
+  }
+}
+
+/* ── About page body-level overrides ── */
+body.has-photo-stack {
+  overflow: hidden;
+  height: 100%;
+
+  & .terminal-fullscreen     { display: none; }
+
+  & #content {
+    padding: 0;
+    margin: 0;
+    min-height: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  & :is(.img-strip__grid, .bg) {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+}
+

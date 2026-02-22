@@ -1,0 +1,111 @@
+---
+// src/pages/about.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import aboutCss from '../styles/components/about.css?url';
+import { FEATURE_ABOUT_PAGE } from '../config/featureFlags';
+---
+
+<BaseLayout
+  title="About — melatonin*"
+  description="melatonin* — группа из Москвы, рождённая из ночных репетиций и случайных записей. Альтернативная музыка с элементами инди и шугейза."
+  pageKey={FEATURE_ABOUT_PAGE ? 'about' : 'wip'}
+  activePage="about"
+  bgImage="/assets/img/backgrounds/mi(1)_pu.jpg"
+  ogImage="/assets/img/covers/live_motri_1_cover_big.jpeg"
+  bodyClass={FEATURE_ABOUT_PAGE ? 'subpage' : 'wip-page'}
+>
+  {FEATURE_ABOUT_PAGE ? (
+    <>
+      <link slot="styles" rel="stylesheet" href={aboutCss} />
+      <!-- Photo Stack Section -->
+      <section class="photo-stack-section" data-photo-stack>
+        <div class="photo-stack__sticky">
+
+          <!-- Слайд 1 -->
+          <div class="photo-stack__slide">
+            <img
+              class="photo-stack__img"
+              src="/assets/img/backgrounds/mi(1).jpg"
+              alt="Melatonin — фото 1"
+              loading="eager"
+            />
+            <div class="photo-stack__overlay" aria-hidden="true"></div>
+            <div class="photo-stack__caption">
+              <p class="photo-stack__label">MELATONIN*</p>
+              <h2 class="photo-stack__title">Мы&nbsp;— звук</h2>
+              <p class="photo-stack__text">
+                Группа из Москвы, рождённая из ночных репетиций и случайных записей.
+                Нас объединяет одно — желание сделать что-то настоящее.
+              </p>
+            </div>
+          </div>
+
+          <!-- Слайд 2 -->
+          <div class="photo-stack__slide">
+            <img
+              class="photo-stack__img"
+              src="/assets/img/covers/live_perspektiva_1_cover_big.jpeg"
+              alt="Melatonin — фото 2"
+              loading="lazy"
+            />
+            <div class="photo-stack__overlay" aria-hidden="true"></div>
+            <div class="photo-stack__caption">
+              <p class="photo-stack__label">ИСТОРИЯ</p>
+              <h2 class="photo-stack__title">Начало</h2>
+              <p class="photo-stack__text">
+                Первые треки были записаны в 2022 году в маленькой студии на окраине.
+                С тех пор мы не останавливались.
+              </p>
+            </div>
+          </div>
+
+          <!-- Слайд 3 -->
+          <div class="photo-stack__slide">
+            <img
+              class="photo-stack__img"
+              src="/assets/img/covers/live_motri_1_cover_big.jpeg"
+              alt="Melatonin — фото 3"
+              loading="lazy"
+            />
+            <div class="photo-stack__overlay" aria-hidden="true"></div>
+            <div class="photo-stack__caption">
+              <p class="photo-stack__label">ЖИВЫЕ КОНЦЕРТЫ</p>
+              <h2 class="photo-stack__title">На&nbsp;сцене</h2>
+              <p class="photo-stack__text">
+                Каждое выступление для нас — отдельная история.
+                Мы не повторяемся, мы проживаем.
+              </p>
+            </div>
+          </div>
+
+          <!-- Слайд 4 -->
+          <div class="photo-stack__slide">
+            <img
+              class="photo-stack__img"
+              src="/assets/img/covers/live_perspektiva_2_cover_big.jpeg"
+              alt="Melatonin — фото 4"
+              loading="lazy"
+            />
+            <div class="photo-stack__overlay" aria-hidden="true"></div>
+            <div class="photo-stack__caption">
+              <p class="photo-stack__label">СЕЙЧАС</p>
+              <h2 class="photo-stack__title">Впереди</h2>
+              <p class="photo-stack__text">
+                Новый материал, новые города. Следи за нами в Telegram и Instagram.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- JS-рендер дополнительных секций (если есть) -->
+      <main id="content"></main>
+    </>
+  ) : (
+    <div class="terminal-fullscreen" aria-label="Work in progress" role="status">
+      <div class="terminal-content" id="terminalContent"></div>
+    </div>
+  )}
+</BaseLayout>
+

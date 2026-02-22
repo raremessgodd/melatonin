@@ -1,19 +1,15 @@
 import { LightboxManager } from './components/LightboxManager.js';
 import { PanelTransitionManager } from './components/PanelTransitionManager.js';
-import { AudioManager } from './components/AudioManager.js';
+import { AudioPlayerManager } from './components/AudioPlayerManager.js';
 import { FullscreenManager } from './components/FullscreenManager.js';
 import { ScrollManager } from './components/ScrollManager.js';
-import { SectionRenderer } from './components/SectionRenderer.js';
-import { sections } from './content/sections.js';
-import { farewellsSections } from './content/farewellsSections.js';
-import { aboutSections } from './content/aboutSections.js';
 import { LazyMediaManager } from './components/LazyMediaManager.js';
 import { VideoPlayerManager } from './components/VideoPlayerManager.js';
 import { TerminalAnimationManager } from './components/TerminalAnimationManager.js';
+import { PhotoStackManager } from './components/PhotoStackManager.js';
 
 export class App {
   constructor() {
-    this.sectionRenderer = null;
     this.lightboxManager = null;
     this.panelTransitionManager = null;
     this.audioManager = null;
@@ -21,6 +17,7 @@ export class App {
     this.lazyMediaManager = null;
     this.videoPlayerManager = null;
     this.terminalAnimationManager = null;
+    this.photoStackManager = null;
     this.handleClick = this.handleClick.bind(this);
     this.handleKeydown = this.handleKeydown.bind(this);
     this.handleActivation = this.handleActivation.bind(this);
@@ -29,58 +26,54 @@ export class App {
   }
 
   getPageKey() {
+    // Astro-вариант: ключ страницы в <meta name="page-key">
+    const metaTag = document.querySelector('meta[name="page-key"]');
+    if (metaTag?.content) return metaTag.content;
+
+    // Оригинальный вариант (обратная совместимость): data-page на <script>
     const scriptTag = document.querySelector('script[data-page]');
     return scriptTag?.dataset.page || '';
   }
 
-  getSectionsForPage() {
-    const page = this.getPageKey();
-
-    switch (page) {
-      case 'farewells':
-        return farewellsSections;
-      case 'about':
-        return aboutSections;
-      default:
-        return sections;
-    }
-  }
-
   async init() {
+    // is-booting уже стоит на body из HTML (BaseLayout).
+    // При View Transitions новый body тоже приходит с is-booting из SSR.
+    // Просто убеждаемся что класс есть на случай если что-то его убрало раньше.
     document.body.classList.add('is-booting');
 
     try {
       await this.waitForLoaderImage();
 
-      this.sectionRenderer = new SectionRenderer(document.getElementById('content'));
-      const pageSections = this.getSectionsForPage();
-      this.sectionRenderer.render(pageSections);
+      const page = this.getPageKey();
 
-      // PanelTransitionManager now handles BackgroundCanvasManager internally
       this.panelTransitionManager = new PanelTransitionManager();
 
-      const backgroundPreload = this.panelTransitionManager.preloadBackgrounds({
-        strategy: 'all'
-      });
-      await backgroundPreload;
+      // Грузим фоны, но не блокируем дольше 3 секунд
+      await Promise.race([
+        this.panelTransitionManager.preloadBackgrounds({ strategy: 'all' }),
+        this.delay(3000),
+      ]);
       document.body.classList.add('is-bg-ready');
 
       await this.nextFrame(2);
       document.body.classList.add('is-text-ready');
 
-      // Initialize LazyMediaManager first
       await this.delay(150);
       this.lazyMediaManager = new LazyMediaManager({ deferVideos: true });
 
-      // Initialize all other components, passing lazyMediaManager to LightboxManager
       this.lightboxManager = new LightboxManager(this.lazyMediaManager);
-      this.audioManager = new AudioManager();
+      this.audioManager = new AudioPlayerManager();
       this.scrollManager = new ScrollManager();
       this.videoPlayerManager = new VideoPlayerManager();
 
-      // Initialize terminal animation only on about page
-      const page = this.getPageKey();
       if (page === 'about') {
+        this.photoStackManager = new PhotoStackManager();
+        if (!document.body.classList.contains('has-photo-stack')) {
+          this.terminalAnimationManager = new TerminalAnimationManager();
+        }
+      }
+
+      if (page === 'wip') {
         this.terminalAnimationManager = new TerminalAnimationManager();
       }
 
@@ -91,15 +84,38 @@ export class App {
       this.lazyMediaManager.enableVideos();
     } catch (error) {
       console.error('App init failed', error);
+      document.body.classList.add('is-bg-ready', 'is-text-ready', 'is-media-ready');
     } finally {
-      document.body.classList.add('is-bg-ready');
-      document.body.classList.add('is-text-ready');
-      document.body.classList.add('is-media-ready');
+      // is-bg-ready уже добавлен выше — CSS прячет .boot-loader по этому классу
       document.body.classList.remove('is-booting');
     }
   }
 
-  async waitForLoaderImage(timeoutMs = 1500) {
+  /** Очищает все менеджеры — вызывается при View Transitions перед уходом со страницы */
+  destroy() {
+    document.removeEventListener('click', this.handleClick);
+    document.removeEventListener('keydown', this.handleKeydown);
+
+    this.panelTransitionManager?.destroy();
+    this.videoPlayerManager?.destroy();
+    this.scrollManager?.destroy();
+    this.lazyMediaManager?.destroy?.();
+    this.lightboxManager?.destroy?.();
+    this.photoStackManager?.destroy?.();
+    this.terminalAnimationManager?.destroy?.();
+    this.audioManager?.destroy?.();
+
+    this.panelTransitionManager = null;
+    this.videoPlayerManager = null;
+    this.scrollManager = null;
+    this.lazyMediaManager = null;
+    this.lightboxManager = null;
+    this.photoStackManager = null;
+    this.terminalAnimationManager = null;
+    this.audioManager = null;
+  }
+
+  async waitForLoaderImage(timeoutMs = 300) {
     const loaderImg = document.querySelector('.boot-loader__spinner img');
     if (!loaderImg) return;
     if (loaderImg.complete && loaderImg.naturalWidth > 0) return;
@@ -176,13 +192,6 @@ export class App {
         if (wrapper) {
           this.lightboxManager.openLightbox(wrapper);
         }
-        return true;
-      },
-      () => {
-        const audioTrigger = target.closest('[data-audio-toggle]');
-        if (!audioTrigger) return false;
-        preventDefault();
-        this.audioManager.togglePlayer(audioTrigger);
         return true;
       },
       () => {

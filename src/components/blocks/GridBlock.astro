@@ -1,0 +1,17 @@
+---
+import type { GridBlock } from '../../types/sections.js';
+import MediaBlock from './MediaBlock.astro';
+
+export interface Props {
+  block: GridBlock;
+}
+
+const { block } = Astro.props;
+---
+
+<div class={block.gridClass ?? 'grid-2-fill'}>
+  {block.items.map((item) => (
+    <MediaBlock block={item} />
+  ))}
+</div>
+

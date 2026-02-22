@@ -1,0 +1,24 @@
+---
+// src/pages/index.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import { sections } from '../data/sections.ts';
+---
+
+<BaseLayout
+  title="melatonin*"
+  pageKey="index"
+  activePage="index"
+  bgImage="/assets/img/backgrounds/mi(1).jpg"
+>
+  <Fragment slot="preloads">
+    <link rel="preload" as="image" href="/assets/img/covers/live_motri_1_cover.jpeg" media="(max-width: 768px)" />
+    <link rel="preload" as="image" href="/assets/img/covers/live_motri_1_cover_big.jpeg" media="(min-width: 769px)" />
+    <link rel="preload" as="image" href="/assets/img/covers/promo_1_cover.jpeg" media="(max-width: 768px)" />
+    <link rel="preload" as="image" href="/assets/img/covers/promo_1_cover_big.jpeg" media="(min-width: 769px)" />
+  </Fragment>
+
+  <main id="content">
+    {sections.map((section) => <Section section={section} />)}
+  </main>
+</BaseLayout>

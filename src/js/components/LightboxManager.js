@@ -11,9 +11,9 @@ export class LightboxManager {
     this.galleryItems = [];
     this.galleryIndex = -1;
     this.videoState = null;
-    this.lazyMediaManager = lazyMediaManager; // Для приоритетной загрузки
+    this.lazyMediaManager = lazyMediaManager;
+    this.scrollPosition = undefined;
 
-    // Bind methods to preserve 'this' context
     this.openLightbox = this.openLightbox.bind(this);
     this.openVideoLightbox = this.openVideoLightbox.bind(this);
     this.closeLightbox = this.closeLightbox.bind(this);
@@ -21,8 +21,7 @@ export class LightboxManager {
     this.handleBackdropClick = this.handleBackdropClick.bind(this);
     this.showPrev = this.showPrev.bind(this);
     this.showNext = this.showNext.bind(this);
-    
-    // Add event listeners
+
     if (this.lightbox) {
       this.lightbox.addEventListener('click', this.handleBackdropClick);
     }
@@ -49,51 +48,61 @@ export class LightboxManager {
     }
     document.addEventListener('keydown', this.handleKeydown);
   }
-  
+
+  // ─── Scroll lock helpers ──────────────────────────────────────────────────
+
+  _lockScroll() {
+    this.scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+    document.body.classList.add('lightbox-open');
+    document.body.style.top = `-${this.scrollPosition}px`;
+    document.body.style.overflow = 'hidden';
+  }
+
+  _unlockScroll() {
+    document.body.classList.remove('lightbox-open');
+    document.body.style.overflow = '';
+    document.body.style.top = '';
+    if (this.scrollPosition !== undefined) {
+      window.scrollTo({ top: this.scrollPosition, left: 0, behavior: 'instant' });
+      this.scrollPosition = undefined;
+    }
+  }
+
+  // ─── High-quality image loader ────────────────────────────────────────────
+
+  _loadHighQuality(imgEl, src, lowQualitySrc) {
+    if (!this.lazyMediaManager || src === lowQualitySrc) return;
+    imgEl.style.opacity = '0.9';
+    this.lazyMediaManager.loadWithPriority(imgEl, src)
+      .then(() => { imgEl.style.opacity = '1'; })
+      .catch(() => { imgEl.style.opacity = '1'; });
+  }
+
+  // ─── Public API ───────────────────────────────────────────────────────────
+
   openLightbox(element) {
     if (!element) return;
     const img = element.querySelector('img');
     if (!img || !this.lightbox || !this.lightboxImg) return;
 
     const imgSrc = img.src || img.dataset.src || '';
-    if (!img.src && imgSrc) {
-      img.src = imgSrc;
-    }
+    if (!img.src && imgSrc) img.src = imgSrc;
+
     if (this.lightboxMedia) {
       this.lightboxMedia.innerHTML = '';
       this.lightboxMedia.setAttribute('aria-hidden', 'true');
     }
     this.lightbox.classList.remove('is-video');
 
-    // Получаем путь к максимальному качеству
     const maxQualitySrc = getMaxQualityPath(imgSrc);
-
     this.setupGallery(element, maxQualitySrc);
 
-    // Сначала показываем текущее изображение (низкого качества)
     this.lightboxImg.src = imgSrc;
     this.lightbox.classList.add('active');
-
-    // Сохраняем текущую позицию скролла
-    this.scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-
-    // Блокируем скролл и фиксируем позицию
-    document.body.classList.add('lightbox-open');
-    document.body.style.top = `-${this.scrollPosition}px`;
-    document.body.style.overflow = 'hidden';
-
-    // Затем загружаем версию высокого качества с приоритетом
-    if (this.lazyMediaManager && maxQualitySrc !== imgSrc) {
-      this.lightboxImg.style.opacity = '0.9';
-      this.lazyMediaManager.loadWithPriority(this.lightboxImg, maxQualitySrc)
-        .then(() => {
-          this.lightboxImg.style.opacity = '1';
-        })
-        .catch((error) => {
-          console.warn('Failed to load high quality image:', error);
-          this.lightboxImg.style.opacity = '1';
-        });
-    }
+    this.lightbox.setAttribute('aria-hidden', 'false');
+    this.lightboxImg.setAttribute('aria-hidden', 'false');
+    this._lockScroll();
+    this._loadHighQuality(this.lightboxImg, maxQualitySrc, imgSrc);
   }
 
   openVideoLightbox(wrapper) {
@@ -104,52 +113,28 @@ export class LightboxManager {
     placeholder.dataset.videoPlaceholder = '';
     wrapper.parentNode?.insertBefore(placeholder, wrapper);
 
-    this.videoState = {
-      wrapper,
-      placeholder
-    };
+    this.videoState = { wrapper, placeholder };
 
     this.lightboxImg.src = '';
     this.lightbox.classList.add('is-video');
+    this.lightbox.setAttribute('aria-hidden', 'false');
     this.lightboxMedia.setAttribute('aria-hidden', 'false');
     this.lightboxMedia.appendChild(wrapper);
     wrapper.classList.add('is-lightbox');
-
     this.lightbox.classList.add('active');
-
-    // Сохраняем текущую позицию скролла
-    this.scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-
-    // Блокируем скролл и фиксируем позицию
-    document.body.classList.add('lightbox-open');
-    document.body.style.top = `-${this.scrollPosition}px`;
-    document.body.style.overflow = 'hidden';
+    this._lockScroll();
   }
-  
+
   closeLightbox() {
     if (!this.lightbox) return;
 
-    this.lightbox.classList.remove('active');
-    this.lightbox.classList.remove('is-video');
-
-    // Восстанавливаем скролл
-    document.body.classList.remove('lightbox-open');
-    document.body.style.overflow = '';
-    document.body.style.top = '';
-
-    // Возвращаем страницу на сохраненную позицию МГНОВЕННО
-    if (this.scrollPosition !== undefined) {
-      window.scrollTo({
-        top: this.scrollPosition,
-        left: 0,
-        behavior: 'instant'
-      });
-      this.scrollPosition = undefined;
-    }
+    this.lightbox.classList.remove('active', 'is-video');
+    this.lightbox.setAttribute('aria-hidden', 'true');
+    this.lightboxImg.setAttribute('aria-hidden', 'true');
+    this._unlockScroll();
 
     if (this.videoState) {
       const { wrapper, placeholder } = this.videoState;
-
       wrapper.classList.remove('is-lightbox');
       if (placeholder.parentNode) {
         placeholder.parentNode.insertBefore(wrapper, placeholder);
@@ -165,24 +150,17 @@ export class LightboxManager {
 
   handleBackdropClick(event) {
     if (!this.lightbox) return;
-
     const isBackdrop = event.target === this.lightbox;
     const isEmptyMedia = this.lightboxMedia && event.target === this.lightboxMedia;
-    if (isBackdrop || isEmptyMedia) {
-      this.closeLightbox();
-    }
+    if (isBackdrop || isEmptyMedia) this.closeLightbox();
   }
 
   handleKeydown(event) {
     if (!this.lightbox || !this.lightbox.classList.contains('active')) return;
-    if (event.key === 'Escape') {
-      this.closeLightbox();
-    }
-    if (event.key === 'ArrowLeft') {
-      this.showPrev();
-    }
-    if (event.key === 'ArrowRight') {
-      this.showNext();
+    switch (event.key) {
+      case 'Escape':     this.closeLightbox(); break;
+      case 'ArrowLeft':  this.showPrev(); break;
+      case 'ArrowRight': this.showNext(); break;
     }
   }
 
@@ -191,9 +169,7 @@ export class LightboxManager {
     if (!galleryElement) {
       this.galleryItems = [];
       this.galleryIndex = -1;
-      if (this.lightbox) {
-        this.lightbox.classList.remove('has-gallery');
-      }
+      this.lightbox?.classList.remove('has-gallery');
       return;
     }
 
@@ -204,25 +180,16 @@ export class LightboxManager {
       .filter(Boolean)
       .map((node) => {
         const originalSrc = node.dataset.originalSrc || node.src || node.dataset.src || '';
-        // Сохраняем оригинальный путь для дальнейшего использования
-        if (!node.dataset.originalSrc) {
-          node.dataset.originalSrc = originalSrc;
-        }
-        return {
-          src: originalSrc,
-          alt: node.alt || ''
-        };
+        if (!node.dataset.originalSrc) node.dataset.originalSrc = originalSrc;
+        return { src: originalSrc, alt: node.alt || '' };
       })
       .filter((item) => item.src);
+
     this.galleryIndex = this.galleryItems.findIndex((item) => {
-      // Сравниваем по базовому имени файла, игнорируя разрешение
-      const itemBase = getMaxQualityPath(item.src);
-      const currentBase = getMaxQualityPath(currentSrc);
-      return itemBase === currentBase;
+      return getMaxQualityPath(item.src) === getMaxQualityPath(currentSrc);
     });
-    if (this.lightbox) {
-      this.lightbox.classList.toggle('has-gallery', this.galleryItems.length > 1);
-    }
+
+    this.lightbox?.classList.toggle('has-gallery', this.galleryItems.length > 1);
   }
 
   showPrev() {
@@ -241,24 +208,10 @@ export class LightboxManager {
     const item = this.galleryItems[this.galleryIndex];
     if (!item || !this.lightboxImg) return;
 
-    // Получаем путь к максимальному качеству
     const maxQualitySrc = getMaxQualityPath(item.src);
-
-    // Сначала показываем текущее изображение
     this.lightboxImg.src = item.src;
     this.lightboxImg.alt = item.alt;
-
-    // Затем загружаем версию высокого качества
-    if (this.lazyMediaManager && maxQualitySrc !== item.src) {
-      this.lightboxImg.style.opacity = '0.9';
-      this.lazyMediaManager.loadWithPriority(this.lightboxImg, maxQualitySrc)
-        .then(() => {
-          this.lightboxImg.style.opacity = '1';
-        })
-        .catch((error) => {
-          console.warn('Failed to load high quality image:', error);
-          this.lightboxImg.style.opacity = '1';
-        });
-    }
+    this._loadHighQuality(this.lightboxImg, maxQualitySrc, item.src);
   }
 }
+

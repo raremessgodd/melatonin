@@ -1,0 +1,84 @@
+/* ===============================================
+   Design Tokens — typed & animated custom properties
+   =============================================== */
+
+/* Typed numeric properties (animatable via @property) */
+@property --radius {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 10px;
+}
+
+@property --player-control-radius {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 10px;
+}
+
+@property --section-margin-bottom {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 40px;
+}
+
+:root {
+  /* ── Colors (oklch) ── */
+  --bg-color:          oklch(0% 0 0);           /* #000 */
+  --text-color:        oklch(88% 0 0);           /* #e0e0e0 */
+  --text-muted:        oklch(65% 0 0);           /* #a0a0a0 */
+  --card-bg:           oklch(10% 0 0);           /* #111 */
+  --card-border:       oklch(22% 0 0);           /* #333 */
+  --accent-color:      oklch(100% 0 0);          /* #fff */
+
+  /* Semantic surface tokens */
+  --color-surface:        oklch(8% 0 0);
+  --color-surface-raised: oklch(14% 0 0);
+  --color-border:         color-mix(in oklch, white 20%, transparent);
+  --color-overlay:        color-mix(in oklch, black 88%, transparent);
+  --color-overlay-light:  color-mix(in oklch, black 60%, transparent);
+
+  /* ── Spacing — fluid via clamp ── */
+  --spacing-unit:          clamp(12px, 2.5vw, 32px);
+  --radius:                clamp(4px, 1vw, 10px);
+  --player-control-radius: clamp(4px, 1vw, 10px);
+  --section-margin-bottom: clamp(15px, 3.5vw, 40px);
+
+  /* ── Other spacing (split into block/inline) ── */
+  --iframe-margin-block:  20px;
+  --iframe-margin-inline: 0px;
+  --image-margin-top:     clamp(32px, 5vw, 60px);
+
+  /* ── Player controls ── */
+  --player-control-bg:    var(--bg-color);
+  --player-control-color: var(--accent-color);
+  --player-max-width:     clamp(200px, 38vw, 480px);
+
+  /* ── Typography ── */
+  --font-primary:   'Space Grotesk', sans-serif;
+  --font-secondary: 'Syne', sans-serif;
+  --font-mono:      'Monaco', 'Menlo', 'Courier New', monospace;
+
+  /* ── Accent helpers ── */
+  --accent-text-style:     uppercase;
+  --accent-letter-spacing: clamp(1px, 0.3vw, 2px);
+
+  /* ── Terminal colors ── */
+  --color-terminal:       oklch(90% 0.25 145);   /* #00ff41 */
+  --color-terminal-error: oklch(55% 0.22 25);    /* #ff3333 */
+
+  /* ── Pill radius ── */
+  --radius-pill: 999px;
+
+  /* ── #5: Z-index scale ── */
+  --z-bg:        -1;
+  --z-content:    1;
+  --z-overlay:    5;
+  --z-header:    38;
+  --z-loader:    50;
+  --z-menu:     100;
+  --z-menu-content: 101;
+  --z-terminal: 200;
+  --z-slide-nav:  20;  /* прогресс-точки photo-stack, выше слайдов (max 10) */
+  --z-lightbox: 9999;
+  --z-lightbox-nav: 10000;
+}

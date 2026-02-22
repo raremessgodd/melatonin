@@ -1,0 +1,30 @@
+---
+/**
+ * Block.astro — диспетчер: выбирает нужный компонент по block.type.
+ * Клиентские менеджеры подхватывают data-* атрибуты уже в готовом HTML.
+ */
+import type { Block } from '../../types/sections.js';
+import TextBlock from './TextBlock.astro';
+import MediaBlock from './MediaBlock.astro';
+import AudioPlayerBlock from './AudioPlayerBlock.astro';
+import GridBlock from './GridBlock.astro';
+
+export interface Props {
+  block: Block;
+  layout?: string;
+}
+
+const { block, layout } = Astro.props;
+
+const isText = ['text', 'quote', 'list', 'buttons'].includes(block.type);
+const containerClass = ['panel__col', 'reveal', isText ? 'block--text' : 'block--media'].join(' ');
+const isQuad = layout === 'quad';
+const wrapperClass = isQuad ? 'quad reveal' : containerClass;
+---
+
+<div class={wrapperClass}>
+  {block.type === 'text' && <TextBlock block={block} />}
+  {(block.type === 'media' || block.type === 'video') && <MediaBlock block={block.type === 'video' ? { ...block, mediaType: 'video' } : block} />}
+  {block.type === 'player' && <AudioPlayerBlock block={block} />}
+  {block.type === 'grid' && <GridBlock block={block} />}
+</div>

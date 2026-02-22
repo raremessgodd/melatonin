@@ -1,0 +1,112 @@
+/* ─── Box model ─── */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  user-select: none;
+}
+
+/* ─── Body ─── */
+body {
+  margin: 0;
+  font-family: var(--font-primary);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+/* #8: @starting-style — страница появится даже если JS не добавит .is-loaded */
+@supports (transition-behavior: allow-discrete) {
+  @starting-style {
+    body { opacity: 0; }
+  }
+  body {
+    opacity: 1;
+    transition: opacity 0.6s ease;
+    transition-behavior: allow-discrete;
+  }
+  /* JS-класс перезаписывает — анимация срабатывает только при первой загрузке */
+  body.is-booting {
+    opacity: 0;
+    transition: none;
+  }
+}
+
+body.is-loaded {
+  opacity: 1;
+}
+
+/* ─── Общий паттерн блокировки скролла ─── */
+body.scroll-locked {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+/* Алиасы для обратной совместимости с JS-классами */
+body.menu-open     { overflow: hidden; position: fixed; width: 100%; }
+
+/* ─── HTML ─── */
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+
+  @media (prefers-reduced-motion: reduce) {
+    scroll-behavior: auto;
+  }
+}
+
+/* ─── Links ─── */
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+
+  &:is(:visited, :hover, :active) {
+    color: var(--accent-color);
+  }
+}
+
+/* ─── Typography — fluid scale via clamp ─── */
+:is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-secondary);
+  color: var(--accent-color);
+  text-transform: uppercase;
+  margin-block-start: 0;
+  margin-block-end: 8px;
+}
+
+h1 { font-size: clamp(1.8rem, 4.5vw, 4rem);  font-weight: 800; }
+h2 { font-size: clamp(1.2rem, 2.5vw, 2rem);  font-weight: 800; }
+h3 { font-size: clamp(1rem,   1.8vw, 1.5rem); }
+
+p {
+  font-size: clamp(0.9rem, 1.4vw, 1.15rem);
+  color: var(--text-muted);
+  margin-block-end: clamp(10px, 1.5vw, 20px);
+}
+
+/* Разрешаем выделение текста для контентных элементов */
+:is(h1, h2, h3, h4, h5, h6, p, span, li, a, blockquote, pre, code, label) {
+  user-select: text;
+}
+
+/* ─── Text selection ─── */
+::selection {
+  background-color: var(--text-color);
+  color: var(--bg-color);
+}
+
+/* ─── Text alignment utilities ─── */
+.text-center { text-align: center; }
+.text-right  { text-align: right; }
+.text-left   { text-align: left; cursor: pointer; }

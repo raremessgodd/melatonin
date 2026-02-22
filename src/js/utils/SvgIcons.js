@@ -1,96 +1,49 @@
-export function createPlayIcon() {
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', '0 0 24 24');
-  svg.setAttribute('class', 'video-player__icon');
-  svg.setAttribute('width', '16');
-  svg.setAttribute('height', '16');
-  svg.setAttribute('fill', 'currentColor');
+const NS = 'http://www.w3.org/2000/svg';
 
-  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  path.setAttribute('d', 'M8 5v14l11-7z');
-  svg.appendChild(path);
+/**
+ * @param {string} className
+ * @param {Array<{tag: string, attrs: Record<string, string>}>} shapes
+ */
+function createSvgIcon(className, shapes) {
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('class', className);
+  svg.setAttribute('fill', 'currentColor');
+  svg.setAttribute('aria-hidden', 'true');
+
+  shapes.forEach(({ tag, attrs }) => {
+    const el = document.createElementNS(NS, tag);
+    Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
+    svg.appendChild(el);
+  });
 
   return svg;
+}
+
+const PLAY_PATH  = 'M8 5v14l11-7z';
+const PAUSE_RECTS = [
+  { tag: 'rect', attrs: { x: '6',  y: '4', width: '4', height: '16' } },
+  { tag: 'rect', attrs: { x: '14', y: '4', width: '4', height: '16' } }
+];
+
+export function createPlayIcon() {
+  return createSvgIcon('video-player__icon', [{ tag: 'path', attrs: { d: PLAY_PATH } }]);
 }
 
 export function createPauseIcon() {
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', '0 0 24 24');
-  svg.setAttribute('class', 'video-player__icon');
-  svg.setAttribute('width', '16');
-  svg.setAttribute('height', '16');
-  svg.setAttribute('fill', 'currentColor');
-
-  const rect1 = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-  rect1.setAttribute('x', '6');
-  rect1.setAttribute('y', '4');
-  rect1.setAttribute('width', '4');
-  rect1.setAttribute('height', '16');
-
-  const rect2 = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-  rect2.setAttribute('x', '14');
-  rect2.setAttribute('y', '4');
-  rect2.setAttribute('width', '4');
-  rect2.setAttribute('height', '16');
-
-  svg.appendChild(rect1);
-  svg.appendChild(rect2);
-
-  return svg;
+  return createSvgIcon('video-player__icon', PAUSE_RECTS);
 }
 
 export function createFullscreenIcon() {
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', '0 0 24 24');
-  svg.setAttribute('class', 'video-player__icon');
-  svg.setAttribute('width', '16');
-  svg.setAttribute('height', '16');
-  svg.setAttribute('fill', 'currentColor');
-
-  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  path.setAttribute('d', 'M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z');
-  svg.appendChild(path);
-
-  return svg;
+  return createSvgIcon('video-player__icon', [
+    { tag: 'path', attrs: { d: 'M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z' } }
+  ]);
 }
 
 export function createAudioPlayIcon() {
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', '0 0 24 24');
-  svg.setAttribute('class', 'audio-player__icon');
-  svg.setAttribute('width', '18');
-  svg.setAttribute('height', '18');
-  svg.setAttribute('fill', 'currentColor');
-
-  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  path.setAttribute('d', 'M8 5v14l11-7z');
-  svg.appendChild(path);
-
-  return svg;
+  return createSvgIcon('audio-player__icon', [{ tag: 'path', attrs: { d: PLAY_PATH } }]);
 }
 
 export function createAudioPauseIcon() {
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', '0 0 24 24');
-  svg.setAttribute('class', 'audio-player__icon');
-  svg.setAttribute('width', '18');
-  svg.setAttribute('height', '18');
-  svg.setAttribute('fill', 'currentColor');
-
-  const rect1 = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-  rect1.setAttribute('x', '6');
-  rect1.setAttribute('y', '4');
-  rect1.setAttribute('width', '4');
-  rect1.setAttribute('height', '16');
-
-  const rect2 = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-  rect2.setAttribute('x', '14');
-  rect2.setAttribute('y', '4');
-  rect2.setAttribute('width', '4');
-  rect2.setAttribute('height', '16');
-
-  svg.appendChild(rect1);
-  svg.appendChild(rect2);
-
-  return svg;
+  return createSvgIcon('audio-player__icon', PAUSE_RECTS);
 }

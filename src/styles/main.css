@@ -1,0 +1,37 @@
+/* ===============================================
+   Fonts — локальные через @fontsource (без внешних запросов)
+   @import должны стоять до @layer по спецификации CSS
+   =============================================== */
+@import '@fontsource/space-grotesk/300.css';
+@import '@fontsource/space-grotesk/400.css';
+@import '@fontsource/space-grotesk/500.css';
+@import '@fontsource/syne/700.css';
+@import '@fontsource/syne/800.css';
+
+/* Base partials (imported before layer declaration is invalid in plain CSS,
+   but Vite resolves these at build time — kept here for explicitness) */
+@import 'base/variables.css';
+@import 'base/reset.css';
+@import 'base/animations.css';
+
+/* Layout */
+@import 'layout/page.css';
+
+/* Components */
+@import 'components/media.css';
+@import 'components/audio-player.css';
+@import 'components/lightbox.css';
+@import 'components/blocks.css';
+@import 'components/menu.css';
+@import 'components/terminal.css';
+
+/* Utilities */
+@import 'utilities/helpers.css';
+
+/* ===============================================
+   Cascade layers order declaration
+   (после всех @import — валидно в нативном CSS,
+    Vite/PostCSS корректно обрабатывает порядок)
+   =============================================== */
+@layer tokens, base, layout, components, utilities;
+

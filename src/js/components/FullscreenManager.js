@@ -1,21 +1,14 @@
 export class FullscreenManager {
   static toggleFullscreen(element) {
-    if (!document.fullscreenElement) {
-      if (element.requestFullscreen) {
-        element.requestFullscreen();
-      } else if (element.webkitRequestFullscreen) {
-        element.webkitRequestFullscreen();
-      } else if (element.msRequestFullscreen) {
-        element.msRequestFullscreen();
-      }
+    const isFullscreen = document.fullscreenElement ?? document.webkitFullscreenElement;
+
+    if (!isFullscreen) {
+      const request = element.requestFullscreen ?? element.webkitRequestFullscreen;
+      request?.call(element);
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      }
+      const exit = document.exitFullscreen ?? document.webkitExitFullscreen;
+      exit?.call(document);
     }
   }
 }
+

@@ -4,7 +4,7 @@
 
 /**
  * Определяет оптимальное разрешение изображения на основе размера контейнера
- * @param {string} basePath - базовый путь к файлу (например, 'assets/img/backgrounds/mi(1).jpg')
+ * @param {string} basePath - базовый путь к файлу (например, '/assets/img/backgrounds/mi(1).jpg')
  * @param {number} containerWidth - ширина контейнера в пикселях
  * @param {number} dpr - device pixel ratio (по умолчанию window.devicePixelRatio)
  * @returns {Object} объект с путями для src и srcset
@@ -90,13 +90,13 @@ export function isMobileDevice() {
 
 /**
  * Получает путь к HLS master.m3u8 для видео
- * @param {string} basePath - базовый путь к видеоресурсу (например, 'assets/video/promo_1')
+ * @param {string} basePath - базовый путь к видеоресурсу (например, '/assets/video/promo_1')
  * @returns {string|null} путь к master.m3u8 или null, если HLS недоступен
  */
 export function getHLSPath(basePath) {
   const fileName = basePath.split('/').pop();
   const baseName = fileName.includes('.') ? fileName.split('.').slice(0, -1).join('.') : fileName;
-  return `assets/video/hls/${baseName}/master.m3u8`;
+  return `/assets/video/hls/${baseName}/master.m3u8`;
 }
 
 /**

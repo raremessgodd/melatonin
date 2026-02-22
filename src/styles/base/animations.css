@@ -1,0 +1,47 @@
+/* ===============================================
+   Global @keyframes — единое место для анимаций
+   =============================================== */
+
+@keyframes boot-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes terminal-fade-in {
+  to { opacity: 1; }
+}
+
+@keyframes scanlines-move {
+  to { transform: translateY(4px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    text-shadow:
+      0 0 5px  color-mix(in oklch, var(--color-terminal) 80%, transparent),
+      0 0 10px color-mix(in oklch, var(--color-terminal) 60%, transparent),
+      0 0 20px color-mix(in oklch, var(--color-terminal) 40%, transparent),
+      0 0 40px color-mix(in oklch, var(--color-terminal) 20%, transparent);
+  }
+  50% {
+    text-shadow:
+      0 0 5px  var(--color-terminal),
+      0 0 10px color-mix(in oklch, var(--color-terminal) 80%, transparent),
+      0 0 20px color-mix(in oklch, var(--color-terminal) 60%, transparent),
+      0 0 40px color-mix(in oklch, var(--color-terminal) 30%, transparent);
+  }
+}
+
+@keyframes cursor-blink {
+  0%, 50%   { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes tempIconFade {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+

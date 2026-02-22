@@ -8,10 +8,10 @@ export class BackgroundCanvasManager {
       return BackgroundCanvasManager.imageCache.get(src);
     }
 
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve) => {
       const img = new Image();
-      img.crossOrigin = 'anonymous';
-
+      // Не используем crossOrigin — локальные изображения не требуют CORS
+      // canvas.getContext('2d') с non-tainted image работает нормально для one-origin
       img.onload = () => {
         if (img.decode) {
           img.decode().catch(() => {}).finally(() => resolve(img));
@@ -19,8 +19,8 @@ export class BackgroundCanvasManager {
           resolve(img);
         }
       };
-
-      img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
+      // При ошибке — резолвим null, не блокируем загрузку
+      img.onerror = () => resolve(null);
       img.src = src;
     });
 
@@ -34,30 +34,43 @@ export class BackgroundCanvasManager {
     this.ctx = this.canvas ? this.canvas.getContext('2d', { alpha: false }) : null;
     this.img = null;
     this.imageSrc = imageSrc;
-    
+
     this.tileW = 400;
     this.tileH = 140;
     this.animationFrame = null;
     this.pendingRender = false;
-    
+    this._resizeObserver = null;
+
     this.init();
   }
-  
+
   init() {
     if (!this.strip || !this.canvas || !this.ctx || !this.imageSrc) return;
-    
+
     this.setImage(this.imageSrc);
-    
-    window.addEventListener('resize', () => {
+
+    // ResizeObserver отслеживает только нужный элемент, не window
+    this._resizeObserver = new ResizeObserver(() => {
       if (this.img && this.img.complete) {
         this.resize();
       }
     });
+    this._resizeObserver.observe(this.strip);
   }
+
+  // ...existing code...
+
+  destroy() {
+    this.stopRendering();
+    this._resizeObserver?.disconnect();
+    this._resizeObserver = null;
+  }
+
 
   setImage(src) {
     BackgroundCanvasManager.loadImage(src)
       .then((img) => {
+        if (!img) return; // Загрузка не удалась
         this.img = img;
         this.resize();
         this.scheduleRender();
@@ -174,18 +187,16 @@ export class BackgroundCanvasManager {
     if (newImageSrc === this.imageSrc) {
       return Promise.resolve(true);
     }
-    
+
     this.imageSrc = newImageSrc;
     return BackgroundCanvasManager.loadImage(newImageSrc)
       .then((img) => {
+        if (!img) return false;
         this.img = img;
         this.resize();
         this.scheduleRender();
         return true;
       })
-      .catch((error) => {
-        console.error(error);
-        return false;
-      });
+      .catch(() => false);
   }
 }

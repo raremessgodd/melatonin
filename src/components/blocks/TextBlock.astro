@@ -1,0 +1,16 @@
+---
+import type { TextBlock } from '../../types/sections.js';
+
+export interface Props {
+  block: TextBlock;
+}
+
+const { block } = Astro.props;
+const Tag = block.titleTag ?? 'h2';
+---
+
+{block.title && <Tag class={block.titleClass ?? undefined}>{block.title}</Tag>}
+{block.description && (
+  <p class={block.descriptionClass ?? undefined}>{block.description}</p>
+)}
+

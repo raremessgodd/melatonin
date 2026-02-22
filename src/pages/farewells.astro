@@ -1,0 +1,21 @@
+---
+// src/pages/farewells.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import { farewellsSections } from '../data/farewellsSections.ts';
+---
+
+<BaseLayout
+  title="Farewells — melatonin*"
+  description="Farewells — альбом melatonin* о прощании со сном. Слушайте трек Till The End и смотрите живые концертные видео."
+  pageKey="farewells"
+  activePage="farewells"
+  bgImage="/assets/img/backgrounds/mi(1)_gr.jpg"
+  ogImage="/assets/img/album/album_cover.jpg"
+  bodyClass="subpage"
+>
+  <main id="content">
+    {farewellsSections.map((section) => <Section section={section} />)}
+  </main>
+</BaseLayout>
+

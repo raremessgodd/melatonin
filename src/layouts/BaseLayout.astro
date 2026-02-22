@@ -1,0 +1,140 @@
+---
+// src/layouts/BaseLayout.astro
+import '../styles/main.css';
+import { ViewTransitions } from 'astro:transitions';
+
+export interface Props {
+  title?: string;
+  /** Мета-описание страницы для SEO */
+  description?: string;
+  pageKey: string;
+  /** Активная страница для подсветки nav-ссылок: 'index' | 'about' | 'farewells' */
+  activePage?: string;
+  /** Фоновое изображение для canvas */
+  bgImage?: string;
+  /** Open Graph изображение (абсолютный URL или путь) */
+  ogImage?: string;
+  /** class на <body>, например 'subpage' */
+  bodyClass?: string;
+}
+
+const {
+  title = 'melatonin*',
+  description = 'Альтернативная группа из Москвы с элементами инди и шугейза. Мягкий женский вокал и экспериментальный инструментал.',
+  pageKey,
+  activePage = '',
+  bgImage = '/assets/img/backgrounds/mi(1).jpg',
+  ogImage = '/assets/img/album/album_cover.jpg',
+  bodyClass = '',
+} = Astro.props;
+
+const siteUrl = 'https://melatonin.ru';
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, siteUrl).href;
+---
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Melatonin" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="supports-loading" content="lazy" />
+  <meta name="page-key" content={pageKey} />
+
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalUrl} />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="melatonin*" />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImageUrl} />
+  <meta property="og:locale" content="ru_RU" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImageUrl} />
+
+  <link rel="icon" href="/assets/img/icons/sticker.ico" type="image/x-icon" />
+  <link rel="preload" as="image" href="/assets/img/icons/ico.jpg" fetchpriority="high" />
+
+  <slot name="preloads" />
+
+  <!-- Дополнительные стили страницы (например about.css) -->
+  <slot name="styles" />
+
+  <!-- View Transitions API — мгновенная навигация между страницами -->
+  <ViewTransitions />
+</head>
+
+<body data-body-class={bodyClass || ''} class="is-booting">
+
+  <div class="boot-loader" aria-live="polite" aria-label="Загрузка">
+    <div class="boot-loader__spinner" aria-hidden="true">
+      <img src="/assets/img/icons/ico.jpg" alt="" loading="eager" decoding="async" fetchpriority="high" />
+    </div>
+  </div>
+
+  <header class="page-title page-title--top">
+    <nav class="header-nav header-nav--pages" aria-label="Pages">
+      <a href="/farewells" class={`header-nav__link${activePage === 'farewells' ? ' active' : ''}`}>FAREWELLS</a>
+      <a href="/about" class={`header-nav__link${activePage === 'about' ? ' active' : ''}`}>ABOUT</a>
+    </nav>
+    <h1 id="scroll-to-top" class="page-title__heading">
+      <a href="/" class="page-title__link">MELATONIN*</a>
+    </h1>
+    <nav class="header-nav header-nav--social" aria-label="Social">
+      <a href="https://t.me/melatoninm" target="_blank" rel="noopener" class="header-nav__link">TELEGRAM</a>
+      <a href="https://www.instagram.com/mellattonnin" target="_blank" rel="noopener" class="header-nav__link">INSTAGRAM</a>
+      <a href="https://vk.ru/club234429917" target="_blank" rel="noopener" class="header-nav__link">VKONTAKTE</a>
+    </nav>
+    <button class="menu-trigger" id="menuTrigger" aria-label="Open menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+  </header>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu__content">
+      <a href="/farewells" class={`mobile-menu__link${activePage === 'farewells' ? ' active' : ''}`}>FAREWELLS</a>
+      <a href="/about" class={`mobile-menu__link${activePage === 'about' ? ' active' : ''}`}>ABOUT</a>
+      <div class="mobile-menu__divider"></div>
+      <a href="https://t.me/melatoninm" target="_blank" rel="noopener" class="mobile-menu__link">TELEGRAM</a>
+      <a href="https://www.instagram.com/mellattonnin" target="_blank" rel="noopener" class="mobile-menu__link">INSTAGRAM</a>
+      <a href="https://vk.ru/club234429917" target="_blank" rel="noopener" class="mobile-menu__link">VKONTAKTE</a>
+    </div>
+  </nav>
+
+  <div class="img-strip__grid" id="wall" aria-hidden="true">
+    <div class="img-strip" id="strip">
+      <img id="srcImg" data-src={bgImage} alt="" aria-hidden="true" />
+      <canvas id="stripCanvas" aria-hidden="true"></canvas>
+    </div>
+  </div>
+
+  <slot />
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" aria-hidden="true">
+    <span class="lightbox-close" role="button" tabindex="0" aria-label="Close">&times;</span>
+    <button class="lightbox-nav lightbox-nav--prev" data-lightbox-prev aria-label="Previous image">←</button>
+    <button class="lightbox-nav lightbox-nav--next" data-lightbox-next aria-label="Next image">→</button>
+    <img id="lightbox-img" src="" alt="" aria-hidden="true" />
+    <div id="lightbox-media" class="lightbox-media" aria-hidden="true"></div>
+  </div>
+
+  <script>
+    import '../js/main.js';
+  </script>
+
+</body>
+</html>
+

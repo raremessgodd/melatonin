@@ -1,0 +1,127 @@
+/* ─── Text utilities ─── */
+.text-uppercase       { text-transform: var(--accent-text-style); }
+.letter-spacing-wide  { letter-spacing: var(--accent-letter-spacing); }
+.accent-color         { color: var(--accent-color); }
+
+/* #6: объединяем .large-heading и .quad.block--text h1 в одну группу */
+.large-heading,
+.quad.block--text h1 {
+  font-size: clamp(1rem, 6cqw, 2.5rem);
+  line-height: 1.1;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+/* ─── Spacing utilities ─── */
+.mb-40            { margin-block-end: var(--section-margin-bottom); }
+/* #2: используем раздельные переменные для margin */
+.iframe-container {
+  margin-block: var(--iframe-margin-block);
+  margin-inline: var(--iframe-margin-inline);
+}
+.image-with-margin { margin-block-start: var(--image-margin-top); }
+
+/* ─── Reveal animation ─── */
+.reveal {
+  opacity: 0;
+  translate: 0 20px;
+  transition: opacity 0.8s ease, translate 0.8s ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    translate: 0 0;
+    opacity: 1;
+  }
+}
+
+/* Text columns: stretch to fill grid cell height, then center content */
+.panel__col.reveal,
+.reveal.block--text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: stretch;
+  text-shadow: 0 2px 12px color-mix(in oklch, black 55%, transparent);
+}
+
+.panel.is-visible .reveal {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* ─── Boot state ─── */
+body.is-booting { overflow: hidden; }
+
+/* ─── Staged loading ─── */
+body:not(.is-text-ready) .page-title {
+  opacity: 0;
+  translate: 0 -8px;
+  pointer-events: none;
+}
+
+body:not(.is-text-ready) #content { opacity: 0; }
+
+body.is-text-ready #content {
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+
+body:not(.is-text-ready) .panel .reveal {
+  opacity: 0;
+  translate: 0 20px;
+}
+
+/* Фикс: body-префикс обязателен — :not() без него матчит слишком широко */
+body:not(.is-media-ready) .block--media {
+  opacity: 0;
+  translate: 0 16px;
+  pointer-events: none;
+}
+
+.block--media {
+  transition: opacity 0.6s ease, translate 0.6s ease;
+}
+
+body.is-media-ready .block--media {
+  opacity: 1;
+  translate: 0 0;
+  pointer-events: auto;
+}
+
+/* ─── Staggered quad/column reveal ─── */
+.panel.is-visible {
+  & .quad:nth-child(2)       { transition-delay: 0.06s; }
+  & .quad:nth-child(3)       { transition-delay: 0.12s; }
+  & .quad:nth-child(4)       { transition-delay: 0.18s; }
+  & .panel__col:nth-child(2) { transition-delay: 0.12s; }
+}
+
+/* ─── Quad card ─── */
+.quad {
+  container-type: inline-size;
+  min-width: 0;
+  border-radius: clamp(6px, 1.5vw, 14px);
+  padding: clamp(5px, 1.2vw, 12px);
+  box-sizing: border-box;
+}
+
+/* Media quads need overflow:hidden for border-radius clipping */
+.quad.block--media {
+  overflow: hidden;
+}
+
+/* Children fill quad width; aspect-ratio drives their height */
+.quad > .block--media,
+.quad > .media-wrapper {
+  width: 100%;
+}
+
+/* #7: layout-правило для фото-грида внутри quad (перенесено из media.css) */
+@media (max-width: 480px) {
+  .panel__inner--quad .quad .grid-2-fill {
+    grid-template-columns: 1fr 1fr;
+
+    & .media-wrapper { width: 100%; }
+  }
+}
+

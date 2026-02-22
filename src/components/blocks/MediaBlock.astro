@@ -1,0 +1,102 @@
+---
+/**
+ * MediaBlock.astro — рендерит изображение или видео (статически при SSG).
+ * Клиентские менеджеры подхватывают data-* атрибуты для lazy-load и HLS.
+ */
+import type { MediaItem } from '../../types/sections.js';
+
+export interface Props {
+  block: MediaItem;
+}
+
+const { block } = Astro.props;
+
+// Путь к HLS master.m3u8 для видео
+function getHLSPath(src: string): string {
+  const baseName = src.split('/').pop() ?? '';
+  return `/assets/video/hls/${baseName}/master.m3u8`;
+}
+
+// Обложка видео: определяется клиентом по viewport — используем big как дефолт
+function getVideoPosterPath(src: string): string {
+  const baseName = src.split('/').pop() ?? '';
+  return `/assets/img/covers/${baseName}_cover_big.jpeg`;
+}
+
+// Responsive src: логика та же что в getResponsiveImagePaths, но без window (SSG)
+// На клиенте LazyMediaManager обновит src под реальный viewport через data-src
+function getResponsiveSrc(src: string): string {
+  const responsive = [
+    'album_cover','mi(1)_bl','mi(1)_gr','mi(1)_pu','mi(1)_yl','mi(1)',
+    'motri_afisha','perspektiva_afisha',
+    'live_motri_1','live_perspektiva_1','live_perspektiva_2','promo_1','promo_2',
+  ];
+  const hasVersions = responsive.some((f) => src.includes(f));
+  if (!hasVersions) return src;
+  const parts = src.split('.');
+  const ext = parts.pop();
+  return `${parts.join('.')}-640.${ext}`;
+}
+
+const isVideo = block.mediaType === 'video';
+const ratio = block.ratio ?? (isVideo ? '16-9' : undefined);
+const wrapperClass = ['media-wrapper', ratio ? `ratio-${ratio}` : '', isVideo ? 'video-player' : ''].filter(Boolean).join(' ');
+const posterPath = isVideo ? getVideoPosterPath(block.src) : undefined;
+const hlsSrc = isVideo ? getHLSPath(block.src) : undefined;
+// Мобильный src — будет обновлён LazyMediaManager на клиенте
+const mobileSrc = !isVideo ? getResponsiveSrc(block.src) : undefined;
+---
+
+<div
+  class={wrapperClass}
+  data-video-player={isVideo ? '' : undefined}
+  data-lightbox={block.lightbox ? '' : undefined}
+  role={block.lightbox ? 'button' : undefined}
+  tabindex={block.lightbox ? 0 : undefined}
+  aria-label={block.ariaLabel ?? undefined}
+>
+  {isVideo ? (
+    <>
+      <video
+        class="media-content"
+        data-video
+        data-hls-src={hlsSrc}
+        data-lazy-media="video"
+        poster={posterPath}
+        muted
+        loop
+        playsinline
+        preload="none"
+      />
+      <button type="button" class="video-player__center-toggle" aria-label="Воспроизведение">
+        <svg class="video-player__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </button>
+      <div class="video-player__controls">
+        <div class="video-player__seek-wrapper">
+          <input type="range" class="video-player__seek" min="0" max="100" step="0.1" value="0"
+            aria-label="Перемотка видео" data-video-seek />
+        </div>
+        <input type="range" class="video-player__volume" min="0" max="1" step="0.01" value="0.65"
+          aria-label="Громкость" data-video-volume />
+        <button type="button" class="video-player__fullscreen" aria-label="Полный экран" data-video-fullscreen>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M3 3h5M3 3v5M17 3h-5M17 3v5M3 17h5M3 17v-5M17 17h-5M17 17v-5" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+    </>
+  ) : (
+    <img
+      class={`media-content${block.fit ? ` ${block.fit}` : ''}`}
+      data-src={mobileSrc}
+      data-lazy-media="image"
+      alt={block.alt ?? ''}
+      loading={block.loading ?? 'lazy'}
+      decoding="async"
+    />
+  )}
+</div>
+
+

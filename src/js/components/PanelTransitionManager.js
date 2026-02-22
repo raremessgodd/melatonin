@@ -102,20 +102,17 @@ export class PanelTransitionManager {
   }
   
   setupNormalLayout() {
-    // Reset all panels to normal flow for scrolling
-    this.panels.forEach((panel, index) => {
-      panel.style.position = 'relative';
-      panel.style.top = 'auto';
-      panel.style.left = 'auto';
-      panel.style.width = '100%';
-      panel.style.height = 'auto';
-      panel.style.minHeight = '100vh';
-      panel.style.paddingTop = '';
-      panel.style.paddingBottom = '';
-      panel.style.opacity = '1';
-      panel.style.pointerEvents = 'auto';
-      panel.style.display = '';
-      panel.style.boxSizing = '';
+    this.panels.forEach((panel) => {
+      Object.assign(panel.style, {
+        position: 'relative',
+        top: 'auto',
+        left: 'auto',
+        width: '100%',
+        height: 'auto',
+        minHeight: '100vh',
+        opacity: '1',
+        pointerEvents: 'auto'
+      });
       panel.classList.add('is-visible');
     });
   }
@@ -170,53 +167,38 @@ export class PanelTransitionManager {
   }
   
   fadeCanvas(newCanvas, oldCanvas, newManager, oldManager, newIndex, onComplete) {
-    const duration = 200; // milliseconds - longer for smoother fade
+    const duration = 200;
     const startTime = performance.now();
-    const startOpacity = 0;
-    const endOpacity = 1;
-    
+
     // Ensure new canvas is on top
     newCanvas.style.zIndex = '2';
     oldCanvas.style.zIndex = '1';
-    
-    // Smooth easing function (ease-in-out cubic)
-    const easeInOutCubic = (t) => {
-      return t < 0.5
-        ? 4 * t * t * t
-        : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    };
-    
+
+    const easeInOutCubic = (t) =>
+      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
     const animate = (currentTime) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      
-      // Use smooth cubic easing
-      const easeProgress = easeInOutCubic(progress);
-      
-      const opacity = startOpacity + (endOpacity - startOpacity) * easeProgress;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+      const opacity = easeInOutCubic(progress);
+
       newCanvas.style.opacity = opacity;
       oldCanvas.style.opacity = 1 - opacity;
-      
+
       if (progress < 1) {
         requestAnimationFrame(animate);
       } else {
-        // Transition complete
         newCanvas.style.opacity = '1';
         oldCanvas.style.opacity = '0';
-        
-        // Stop any pending render on the old canvas
+
         oldManager.stopRendering();
-        
-        // Swap active canvas
+
         this.activeCanvas = this.activeCanvas === 'A' ? 'B' : 'A';
         this.currentBgIndex = newIndex;
         this.isTransitioning = false;
-        if (onComplete) {
-          onComplete();
-        }
+        onComplete?.();
       }
     };
-    
+
     requestAnimationFrame(animate);
   }
 
@@ -285,10 +267,7 @@ export class PanelTransitionManager {
             .finally(() => {
               active -= 1;
               completed += 1;
-              if (completed >= total) {
-                resolve();
-                return;
-              }
+              if (completed >= total) { resolve(); return; }
               launchNext();
             });
         }
@@ -296,5 +275,27 @@ export class PanelTransitionManager {
 
       launchNext();
     });
+  }
+
+  destroy() {
+    // Отключаем IntersectionObserver
+    if (this.observer) {
+      this.observer.disconnect();
+      this.observer = null;
+    }
+    // Останавливаем canvas-рендеринг
+    if (this.canvasManagerA) {
+      this.canvasManagerA.stopRendering?.();
+      this.canvasManagerA = null;
+    }
+    if (this.canvasManagerB) {
+      this.canvasManagerB.stopRendering?.();
+      this.canvasManagerB = null;
+    }
+    // Удаляем canvas-элементы
+    this.canvasA?.remove();
+    this.canvasB?.remove();
+    this.canvasA = null;
+    this.canvasB = null;
   }
 }

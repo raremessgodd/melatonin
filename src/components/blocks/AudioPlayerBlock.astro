@@ -1,0 +1,72 @@
+---
+import type { PlayerBlock } from '../../types/sections.js';
+
+export interface Props {
+  block: PlayerBlock;
+}
+
+const { block } = Astro.props;
+---
+
+<div
+  class="audio-player"
+  data-audio-player
+  data-audio-src={block.audioSrc}
+  data-artwork-src={block.artworkSrc}
+  data-track-title={block.trackTitle}
+  data-track-artist={block.trackArtist}
+>
+  <!-- Обложка + кнопка play поверх неё -->
+  <div class="audio-player__artwork" data-lightbox role="button" tabindex="0" aria-label="Обложка альбома">
+    <img
+      class="audio-player__cover"
+      src={block.artworkSrc}
+      alt="Album Artwork"
+      loading="lazy"
+      decoding="async"
+    />
+    <!-- Play/Pause поверх обложки -->
+    <button
+      class="audio-player__play-overlay amplitude-play-pause"
+      aria-label="Play/Pause"
+      onclick="event.stopPropagation()"
+    >
+      <span class="audio-player__icon audio-player__icon--play">
+        <svg width="20" height="20" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <polygon points="6,2 28,16 6,30" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="audio-player__icon audio-player__icon--pause">
+        <svg width="20" height="20" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect x="5" y="3" width="8" height="26" rx="2" fill="currentColor"/>
+          <rect x="19" y="3" width="8" height="26" rx="2" fill="currentColor"/>
+        </svg>
+      </span>
+    </button>
+  </div>
+
+  <!-- Нижняя панель: название + прогресс + время -->
+  <div class="audio-player__bar">
+    <div class="audio-player__info">
+      <span class="audio-player__title">{block.trackTitle}</span>
+      <span class="audio-player__artist">{block.trackArtist}</span>
+    </div>
+    <div class="audio-player__progress-row">
+      <span class="audio-player__time amplitude-current-time">0:00</span>
+      <div class="audio-player__seek-wrap">
+        <input
+          type="range"
+          class="audio-player__progress"
+          data-audio-progress
+          value="0"
+          min="0"
+          max="1000"
+          step="1"
+          aria-label="Перемотка"
+        />
+      </div>
+      <span class="audio-player__time amplitude-duration-time">0:00</span>
+    </div>
+  </div>
+</div>
+

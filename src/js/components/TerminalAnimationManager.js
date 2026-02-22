@@ -7,9 +7,7 @@ export class TerminalAnimationManager {
         this.terminal = document.getElementById('terminalContent');
         if (!this.terminal) return;
 
-        this.isTyping = false;
-        this.currentLine = null;
-        this.commandQueue = [];
+        this._destroyed = false;
 
         // Start the animation cycle
         this.startAnimation();
@@ -36,14 +34,11 @@ export class TerminalAnimationManager {
      * Types text character by character with a typing effect
      */
     async typeText(element, text, speed = 80) {
-        this.isTyping = true;
-
         for (let i = 0; i < text.length; i++) {
+            if (this._destroyed) return;
             element.textContent += text[i];
-            await this.sleep(speed + Math.random() * 40); // Slight variation for realism
+            await this.sleep(speed + Math.random() * 40);
         }
-
-        this.isTyping = false;
     }
 
     /**
@@ -82,6 +77,8 @@ export class TerminalAnimationManager {
      * Main animation sequence
      */
     async runAnimationSequence() {
+        if (this._destroyed) return;
+
         // Step 1: Show prompt with cursor
         const commandLine = this.createLine(true);
         this.terminal.appendChild(commandLine);
@@ -159,7 +156,7 @@ export class TerminalAnimationManager {
      * Stop the animation
      */
     destroy() {
-        this.isTyping = false;
+        this._destroyed = true;
         if (this.terminal) {
             this.clearTerminal();
         }

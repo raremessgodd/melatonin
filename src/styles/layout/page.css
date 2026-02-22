@@ -1,0 +1,171 @@
+/* ─── Page titles ─── */
+.page-title {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: var(--z-header);
+  background: var(--bg-color);
+  color: var(--accent-color);
+  padding-block: 12px;
+  padding-inline: 20px;
+  pointer-events: auto;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+
+/* ─── Boot loader ─── */
+.boot-loader {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-loader);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--bg-color);
+  color: var(--accent-color);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+  transition-behavior: allow-discrete;
+}
+
+/* Скрыт до инициализации JS (transition:persist между страницами) */
+.boot-loader[data-hidden] {
+  display: none;
+}
+
+body.is-bg-ready .boot-loader {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.boot-loader__spinner {
+  width: 120px;
+  height: 120px;
+  display: grid;
+  place-items: center;
+  animation: boot-spin 1.2s linear infinite;
+  filter: drop-shadow(0 10px 24px color-mix(in oklch, black 55%, transparent));
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+}
+
+/* ─── Main content panels ─── */
+.panel {
+  container-type: inline-size;
+  container-name: panel;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-block: clamp(2vh, 5svh, 6vh) clamp(4vh, 7svh, 8vh);
+  padding-inline: clamp(3vw, 5vw, 6vw);
+  padding-block-start: calc(clamp(2vh, 5svh, 6vh) + 60px);
+  box-sizing: border-box;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.panel__inner {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(16px, 2.5vw, 36px);
+  align-items: stretch;
+
+  @container panel (width < 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel__inner--stack {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(12px, 2vw, 28px);
+  align-items: start;
+}
+
+.panel__inner--quad {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: auto;
+  gap: clamp(6px, 1.5vw, 18px);
+  align-items: start;
+
+  @container panel (width < 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ─── Background canvas strip ─── */
+.img-strip__grid {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-auto-flow: row;
+  z-index: -1;
+}
+
+.img-strip {
+  --tile-w: 400px;
+  --tile-h: 140px;
+
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-color);
+}
+
+/* Source image — off-screen, invisible */
+#srcImg {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#stripCanvas,
+#stripCanvasA,
+#stripCanvasB {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#stripCanvasA,
+#stripCanvasB {
+  z-index: 1;
+}
+
+/* Tablets portrait — handled by container queries on panel__inner */
+@media (max-width: 768px) {
+  .page-title {
+    padding-block: 8px;
+    padding-inline: 12px;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    padding-block: 6px;
+    padding-inline: 10px;
+  }
+}

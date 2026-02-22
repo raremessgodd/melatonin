@@ -1,0 +1,236 @@
+/* ─── Audio Player — compact minimal ─── */
+.audio-player {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: clamp(240px, 40vw, 480px);
+  margin-inline: auto;
+  box-sizing: border-box;
+  background: var(--bg-color);
+  border-radius: var(--radius);
+  padding: clamp(10px, 2vw, 24px);
+}
+
+/* ── Обложка ── */
+.audio-player__artwork {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: block;
+}
+
+.audio-player__cover {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+/* ── Play-оверлей поверх обложки ── */
+.audio-player__play-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.audio-player__play-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: color-mix(in oklch, black 45%, transparent);
+  transition: opacity 0.2s ease;
+  opacity: 0;
+}
+
+/* Иконка внутри кружка */
+.audio-player__play-overlay .audio-player__icon {
+  position: relative;
+  z-index: 1;
+  width: clamp(36px, 6vw, 52px);
+  height: clamp(36px, 6vw, 52px);
+  border-radius: 50%;
+  background: color-mix(in oklch, black 55%, transparent);
+  border: 1.5px solid color-mix(in oklch, white 60%, transparent);
+  backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+/* hover на обложке — показываем оверлей */
+.audio-player__artwork:hover .audio-player__play-overlay {
+  opacity: 1;
+}
+.audio-player__artwork:hover .audio-player__play-overlay::before {
+  opacity: 1;
+}
+
+/* Во время воспроизведения — пауза всегда видна */
+.audio-player__play-overlay.is-playing {
+  opacity: 0.85;
+}
+.audio-player__artwork:hover .audio-player__play-overlay.is-playing {
+  opacity: 1;
+}
+
+.audio-player__play-overlay:hover .audio-player__icon,
+.audio-player__play-overlay:focus-visible .audio-player__icon {
+  transform: scale(1.08);
+  background: color-mix(in oklch, black 70%, transparent);
+}
+.audio-player__play-overlay:active .audio-player__icon {
+  transform: scale(0.95);
+}
+
+/* play/pause видимость — управляется классом is-playing на кнопке */
+.audio-player__icon--play  { display: flex; }
+.audio-player__icon--pause { display: none; }
+
+.audio-player__play-overlay.is-playing .audio-player__icon--play  { display: none; }
+.audio-player__play-overlay.is-playing .audio-player__icon--pause { display: flex; }
+
+/* ── Нижняя панель ── */
+.audio-player__bar {
+  padding-block-start: clamp(8px, 1.2vw, 14px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 0.8vw, 8px);
+}
+
+/* Название + артист */
+.audio-player__info {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.audio-player__title {
+  font-family: var(--font-secondary);
+  font-size: clamp(0.8rem, 1.8vw, 1.1rem);
+  font-weight: 700;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: var(--accent-letter-spacing);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+
+.audio-player__artist {
+  font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* Строка прогресса: время — бар — время */
+.audio-player__progress-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 1vw, 10px);
+}
+
+.audio-player__time {
+  font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Обёртка — увеличивает зону отклика по вертикали */
+.audio-player__seek-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding-block: 10px;   /* <— большая зона клика/тапа */
+  cursor: pointer;
+  min-width: 0;
+}
+
+/* Прогресс-бар (input[type=range]) */
+.audio-player__progress {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  border: none;
+  background: linear-gradient(
+    to right,
+    var(--accent-color) var(--range-fill, 0%),
+    var(--card-border)  var(--range-fill, 0%)
+  );
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+
+/* Thumb — кружок ползунка */
+.audio-player__progress::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.audio-player__progress::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Hover / active — увеличиваем thumb */
+.audio-player__seek-wrap:hover .audio-player__progress::-webkit-slider-thumb,
+.audio-player__progress:active::-webkit-slider-thumb {
+  transform: scale(1.35);
+  box-shadow: 0 0 0 4px color-mix(in oklch, var(--accent-color) 25%, transparent);
+}
+
+.audio-player__seek-wrap:hover .audio-player__progress::-moz-range-thumb,
+.audio-player__progress:active::-moz-range-thumb {
+  transform: scale(1.35);
+  box-shadow: 0 0 0 4px color-mix(in oklch, var(--accent-color) 25%, transparent);
+}
+
+/* Трек в Firefox */
+.audio-player__progress::-moz-range-track {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--card-border);
+}
+
+.audio-player__progress::-moz-range-progress {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--accent-color);
+}

@@ -1,0 +1,434 @@
+/* ─── Media containers ─── */
+.media-wrapper {
+  position: relative;
+  background-color: var(--bg-color);
+  border-radius: var(--radius);
+  overflow: hidden;
+  width: 100%;
+}
+
+/* ─── Native aspect-ratio (replaces padding-top hack) ─── */
+.ratio-21-9  { aspect-ratio: 21 / 9; }
+.ratio-16-9  { aspect-ratio: 16 / 9; }
+.ratio-16-10 { aspect-ratio: 16 / 10; }
+.ratio-4-3   { aspect-ratio: 4 / 3; }
+.ratio-1-1   { aspect-ratio: 1 / 1; }
+.ratio-3-4   { aspect-ratio: 3 / 4; }
+
+.media-content {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+
+  &.contain {
+    object-fit: contain;
+  }
+}
+
+/* ─── Video player ─── */
+.video-player {
+  position: relative;
+
+  & video {
+    background: color-mix(in oklch, var(--bg-color) 80%, white);
+    display: block;
+  }
+}
+
+/* Placeholder for unloaded video */
+.video-player video[preload="none"]:not([src]) {
+  background: color-mix(in oklch, var(--bg-color) 90%, white);
+}
+
+/* ─── Loading indicator ─── */
+.video-player__loading {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  translate: -50% -50%;
+  width: clamp(60px, 12vw, 90px);
+  height: clamp(60px, 12vw, 90px);
+  border-radius: 50%;
+  background: color-mix(in oklch, white 25%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 3;
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 8px 32px color-mix(in oklch, black 40%, transparent),
+    inset 0 0 0 1px var(--color-border);
+
+  &.is-visible { opacity: 1; }
+}
+
+.video-player__loading-spinner {
+  width: clamp(28px, 5vw, 40px);
+  height: clamp(28px, 5vw, 40px);
+  border: 3px solid color-mix(in oklch, white 30%, transparent);
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.video-player__loading-text { display: none; }
+
+/* #1: общая база для центрированных оверлей-кнопок плеера */
+.video-player__overlay-btn {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  translate: -50% -50%;
+  width: clamp(56px, 12vw, 90px);
+  height: clamp(56px, 12vw, 90px);
+  border-radius: var(--player-control-radius);
+  border: 1px solid var(--color-border);
+  background: var(--player-control-bg);
+  color: var(--player-control-color);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 32px color-mix(in oklch, black 50%, transparent);
+
+  & .video-player__icon {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* ─── Center play toggle ─── */
+.video-player__center-toggle {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  translate: -50% -50%;
+  width: clamp(56px, 12vw, 90px);
+  height: clamp(56px, 12vw, 90px);
+  border-radius: var(--player-control-radius);
+  border: 1px solid var(--color-border);
+  background: var(--player-control-bg);
+  color: var(--player-control-color);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 32px color-mix(in oklch, black 50%, transparent);
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: opacity 0.3s ease, scale 0.3s ease, box-shadow 0.3s ease;
+  z-index: 2;
+
+  & .video-player__icon { width: 28px; height: 28px; }
+
+  &:hover {
+    scale: 1.08;
+    box-shadow: 0 12px 48px color-mix(in oklch, black 70%, transparent);
+  }
+  &:active  { scale: 0.98; }
+  &:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+  }
+}
+
+/* Скрываем во время воспроизведения */
+.video-player.is-playing .video-player__center-toggle {
+  opacity: 0;
+  pointer-events: none;
+  scale: 0.85;
+}
+
+/* После первого нажатия — скрыт по умолчанию, появляется только при паузе */
+.video-player.has-played:not(.is-playing) .video-player__center-toggle {
+  opacity: 1;
+  pointer-events: auto;
+  scale: 1;
+}
+
+/* ─── Temp icon ─── */
+.video-player__temp-icon {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  translate: -50% -50%;
+  width: clamp(56px, 12vw, 90px);
+  height: clamp(56px, 12vw, 90px);
+  border-radius: var(--player-control-radius);
+  border: 1px solid var(--color-border);
+  background: var(--player-control-bg);
+  color: var(--player-control-color);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 32px color-mix(in oklch, black 50%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  animation: tempIconFade 0.6s ease-out;
+
+  & .video-player__icon { width: 28px; height: 28px; }
+}
+
+
+/* ─── Controls bar ─── */
+.video-player__controls {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding-block: 12px;
+  padding-inline: 14px;
+  background: linear-gradient(180deg, transparent 0%, color-mix(in oklch, black 70%, transparent) 100%);
+  opacity: 0;
+  pointer-events: none;
+  translate: 0 8px;
+  transition: opacity 0.25s ease, translate 0.25s ease;
+}
+
+.video-player:hover .video-player__controls,
+.video-player.is-playing:hover .video-player__controls,
+.video-player.is-lightbox .video-player__controls {
+  opacity: 1;
+  pointer-events: auto;
+  translate: 0 0;
+}
+
+.video-player:hover:not(.is-playing):not(.is-lightbox) .video-player__controls {
+  opacity: 0;
+  pointer-events: none;
+  translate: 0 8px;
+}
+
+/* Touch devices */
+.video-player.is-touch.is-playing .video-player__controls {
+  opacity: 1;
+  pointer-events: auto;
+  translate: 0 0;
+}
+
+.video-player.is-touch.is-playing.controls-hidden .video-player__controls {
+  opacity: 0;
+  pointer-events: none;
+  translate: 0 8px;
+}
+
+/* Lightbox — remove decoration from controls */
+.video-player.is-lightbox :is(
+  .video-player__center-toggle,
+  .video-player__temp-icon,
+  .video-player__fullscreen,
+  .video-player__toggle
+) {
+  border: none;
+  box-shadow: none;
+}
+
+/* ─── Control buttons ─── */
+.video-player__toggle,
+.video-player__fullscreen {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--player-control-radius);
+  border: 1px solid var(--color-border);
+  background: var(--player-control-bg);
+  color: var(--player-control-color);
+  font-size: 14px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+  }
+}
+
+.video-player__icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  display: block;
+}
+
+/* Hide toggle button — use center button instead */
+.video-player__toggle {
+  display: none;
+}
+
+/* ─── Seek bar ─── */
+.video-player__seek,
+.video-player__volume {
+  appearance: none;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklch, white 35%, transparent);
+  outline: none;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.video-player__seek-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  /* Larger touch target */
+  padding-block: 12px;
+  margin-block: -12px;
+}
+
+.video-player__seek {
+  width: 100%;
+  background: transparent;
+}
+
+/* Buffer indicator */
+.video-player__seek-buffer {
+  position: absolute;
+  top: 50%;
+  inset-inline-start: 0;
+  height: 4px;
+  translate: 0 -50%;
+  background: color-mix(in oklch, white 50%, transparent);
+  border-radius: var(--radius-pill);
+  pointer-events: none;
+  transition: width 0.3s ease;
+  z-index: 1;
+}
+
+/* Track background */
+.video-player__seek-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  inset-inline: 0;
+  height: 4px;
+  translate: 0 -50%;
+  background: color-mix(in oklch, white 35%, transparent);
+  border-radius: var(--radius-pill);
+  z-index: 0;
+}
+
+/* Hide volume */
+.video-player__volume,
+.video-player__volume-wrapper,
+.video-player__volume-fill {
+  display: none;
+}
+
+/* Seek thumb */
+.video-player__seek::-webkit-slider-thumb,
+.video-player__volume::-webkit-slider-thumb {
+  appearance: none;
+  width: clamp(12px, 2vw, 16px);
+  height: clamp(12px, 2vw, 16px);
+  border-radius: 50%;
+  background: var(--accent-color);
+  box-shadow: 0 0 0 4px color-mix(in oklch, white 18%, transparent);
+  cursor: pointer;
+}
+
+.video-player__seek::-moz-range-thumb,
+.video-player__volume::-moz-range-thumb {
+  width: clamp(12px, 2vw, 16px);
+  height: clamp(12px, 2vw, 16px);
+  border-radius: 50%;
+  background: var(--accent-color);
+  border: none;
+  box-shadow: 0 0 0 4px color-mix(in oklch, white 18%, transparent);
+  cursor: pointer;
+}
+
+/* ─── Grids ─── */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: clamp(5px, 2vw, 24px);
+  margin-block-end: clamp(16px, 4vw, 48px);
+}
+
+/* Always 2-column photo grid — do NOT stretch height, let aspect-ratio drive it */
+.grid-2-fill {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(5px, 1.5vw, 16px);
+  width: 100%;
+}
+
+.grid-2-fill .media-wrapper {
+  width: 100%;
+  /* no height:100% — aspect-ratio handles the height */
+
+  & .media-content {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* ─── Album grid ─── */
+.grid-album {
+  display: grid;
+  grid-template-columns: clamp(160px, 25vw, 350px) 1fr;
+  gap: clamp(8px, 3vw, 40px);
+  background-color: var(--bg-color);
+  padding: clamp(8px, 3vw, 40px);
+  border-radius: var(--radius);
+  border: 1px solid var(--card-border);
+  margin-block-end: clamp(16px, 5vw, 60px);
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    text-align: center;
+
+    & .media-wrapper {
+      max-width: 220px;
+      margin-inline: auto;
+    }
+  }
+}
+
+.album-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.album-media {
+  flex: 1;
+  margin-block-end: 20px;
+}
+
+/* album artwork — full width of the column, aspect-ratio drives height */
+.album-media .media-content {
+  width: 100%;
+  height: auto;
+  position: static;
+  object-fit: cover;
+  display: block;
+}
+
+.album-text {
+  flex: 0 0 auto;
+
+  & p {
+    margin-block: 0;
+    color: var(--text-color);
+  }
+}
+
+/* ─── Responsive overrides ─── */
+@media (max-width: 480px) {
+  .media-wrapper {
+    border-radius: var(--radius);
+    max-width: 100%;
+  }
+}

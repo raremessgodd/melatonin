@@ -1,0 +1,25 @@
+---
+import type { SectionData } from '../types/sections.js';
+import Block from './blocks/Block.astro';
+
+export interface Props {
+  section: SectionData;
+}
+
+const { section } = Astro.props;
+
+const innerClass = section.layout === 'quad'
+  ? 'panel__inner panel__inner--quad'
+  : section.layout === 'stack'
+    ? 'panel__inner panel__inner--stack'
+    : 'panel__inner';
+---
+
+<section class="panel" data-bg={section.bg ?? undefined}>
+  <div class={innerClass}>
+    {section.blocks.map((block) => (
+      <Block block={block} layout={section.layout} />
+    ))}
+  </div>
+</section>
+
